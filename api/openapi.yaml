@@ -1,0 +1,578 @@
+openapi: 3.0.0
+info:
+  title: GymBuddy AUTH
+  description: Software Engineering I Course 2024 GymBuddy AUTH API
+  termsOfService: http://swagger.io/terms/
+  version: 1.0.0
+servers:
+- url: http://gymbuddy.com
+paths:
+  /user/{username}/myreservations:
+    get:
+      summary: Returns the three upcoming reservations of a user
+      description: FR5 - The user must be able to see their reservations
+      operationId: getMyReservations
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful fetch of upcoming reservations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reservation'
+                x-content-type: application/json
+      x-swagger-router-controller: Default
+  /user/{username}/settings:
+    get:
+      summary: "Returns the bodyweight, gender, activated goals, desired bodyweight\
+        \ and desired workout frequency"
+      description: FR1  - The user must be able to edit their personal data
+      operationId: getPersonalInfo
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful fetch of personal information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalInfo'
+      x-swagger-router-controller: Default
+    put:
+      summary: "Updates the bodyweight, gender, activated goals, desired bodyweight\
+        \ and desired workout frequency"
+      description: FR1  - The user must be able to edit their personal data
+      operationId: updatePersonalInfo
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/PersonalInfo'
+      responses:
+        "200":
+          description: Successful personal info update
+      x-swagger-router-controller: Default
+  /user/{username}/settings/goals:
+    get:
+      summary: Returns true/false depending bodyweight goal progress
+      description: FR10 - The system must be able to notify the user when their goals
+        have been achieved
+      operationId: checkGoalsFromInfo
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: currentBodyWeight
+        in: query
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: number
+          format: float
+      responses:
+        "200":
+          description: Successful check - decision is returned
+          content:
+            application/json:
+              schema:
+                type: boolean
+                x-content-type: application/json
+      x-swagger-router-controller: Default
+  /user/{username}/reservations:
+    get:
+      summary: "Returns all the reservations' details for a specific day (time, available\
+        \ seats)"
+      description: FR2 - The user must be able to see the availability of a certain
+        date and time
+      operationId: getAvailableReservations
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: day
+        in: query
+        description: the day selected for a reservation
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful fetch of reservations' details
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reservation'
+                x-content-type: application/json
+      x-swagger-router-controller: Default
+    post:
+      summary: Submits a reservation for a selected day and time
+      description: FR3 - A user must be able to make a reservation
+      operationId: makeReservation
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: day
+        in: query
+        description: the selected day
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: string
+      - name: time
+        in: query
+        description: the selected time
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: string
+      - name: musclegroup
+        in: query
+        description: the muscle group the user will train
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Reservation'
+      responses:
+        "201":
+          description: Successful reservation
+      x-swagger-router-controller: Default
+    delete:
+      summary: Cancels a reservation by deleting it
+      description: FR4 - The user must be able to cancel a reservation
+      operationId: cancelReservation
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: day
+        in: query
+        description: the day of the reservation
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "202":
+          description: Deletion accepted
+      x-swagger-router-controller: Default
+  /user/{username}/planner:
+    get:
+      summary: Returns a list of the existing exercise progress entries for a selected
+        day
+      description: FR7 - The user must be able to track an exercise to Planner
+      operationId: getDayofPlanner
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: day
+        in: query
+        description: the selected day of the planner
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful fetch of exercise entries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DayofPlanner'
+      x-swagger-router-controller: Default
+  /user/{username}/planner/progress:
+    get:
+      summary: Returns name and notes for all available exercises to be displayed
+        at the drop down menu
+      description: FR7 - The user must be able to track an exercise to Planner
+      operationId: getDropDownMenuList
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful fetch of the Exercise Catalog
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExerciseCatalog'
+      x-swagger-router-controller: Default
+    put:
+      summary: Updates the progress entries of an existing exercise for a specific
+        day
+      description: FR7 - The user must be able to track an exercise to Planner
+      operationId: updateExerciseProgress
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: day
+        in: query
+        description: the selected day of the planner
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        $ref: '#/components/requestBodies/Exercise'
+      responses:
+        "200":
+          description: Successful update of exercise progress
+      x-swagger-router-controller: Default
+  /user/{username}/planner/progress/goals:
+    get:
+      summary: Checks if the user has reached their goals based on progress of the
+        selected exercise
+      description: FR10 - The system must be able to notify the user when his goals
+        have been achieved
+      operationId: checkGoalsFromProgress
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: day
+        in: query
+        description: the selected day of the planner
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Successful check - decision is returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: boolean
+                x-content-type: application/json
+      x-swagger-router-controller: Default
+  /user/{username}/planner/catalog:
+    get:
+      summary: Returns the catalog of existing exercises
+      description: FR8 - The user must be able to create a custom exercise / FR9 -
+        The user must be able to see his progress at an exercise
+      operationId: getExerciseCatalog
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful fetch of the exercise catalog
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExerciseCatalog'
+      x-swagger-router-controller: Default
+    post:
+      summary: Creates a new exercise and adds it to the catalog
+      description: FR8 - The user must be able to create a custom exercise
+      operationId: createCustomExercise
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Exercise'
+      responses:
+        "201":
+          description: Successful creation of exercise
+      x-swagger-router-controller: Default
+  /user/{username}/catalog/{exercise-name}:
+    get:
+      summary: "Returns the arrays of progress (weights, reps) for the chosen exercise\
+        \ so that the diagrams will be generated"
+      description: FR9 - The user must be able to see his progress at an exercise
+      operationId: getExerciseProgress
+      parameters:
+      - name: username
+        in: path
+        description: the username of the connected person
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: exercise-name
+        in: path
+        description: the chosen exercise
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/Exercise'
+      responses:
+        "200":
+          description: Successful fetch of progress entries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exercise'
+      x-swagger-router-controller: Default
+components:
+  schemas:
+    PersonalInfo:
+      required:
+      - bodyweight
+      - gender
+      - goalBodyWeightNum
+      - goalConsistencyNum
+      - goals
+      type: object
+      properties:
+        bodyweight:
+          type: number
+          format: float
+        gender:
+          type: string
+        goals:
+          type: array
+          items:
+            type: boolean
+        goalConsistencyNum:
+          type: integer
+          format: int32
+        goalBodyWeightNum:
+          type: integer
+          format: int32
+      example:
+        gender: gender
+        goalConsistencyNum: 6
+        goalBodyWeightNum: 1
+        bodyweight: 0.8008282
+        goals:
+        - true
+        - true
+    Exercise:
+      required:
+      - name
+      - notes
+      type: object
+      properties:
+        name:
+          type: string
+        notes:
+          type: string
+        weightPerDateEntries:
+          type: array
+          items:
+            type: number
+            format: float
+        repetitionsPerDateEntries:
+          type: array
+          items:
+            type: integer
+            format: int64
+      example:
+        notes: notes
+        name: name
+        weightPerDateEntries:
+        - 6.0274563
+        - 6.0274563
+        repetitionsPerDateEntries:
+        - 1
+        - 1
+    ExerciseCatalog:
+      required:
+      - exercises
+      type: object
+      properties:
+        exercises:
+          type: array
+          items:
+            $ref: '#/components/schemas/Exercise'
+      example:
+        exercises:
+        - notes: notes
+          name: name
+          weightPerDateEntries:
+          - 6.0274563
+          - 6.0274563
+          repetitionsPerDateEntries:
+          - 1
+          - 1
+        - notes: notes
+          name: name
+          weightPerDateEntries:
+          - 6.0274563
+          - 6.0274563
+          repetitionsPerDateEntries:
+          - 1
+          - 1
+    DayofPlanner:
+      required:
+      - currentDate
+      - exercisesList
+      type: object
+      properties:
+        currentDate:
+          type: integer
+          format: int32
+        exercisesList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Exercise'
+      example:
+        currentDate: 0
+        exercisesList:
+        - notes: notes
+          name: name
+          weightPerDateEntries:
+          - 6.0274563
+          - 6.0274563
+          repetitionsPerDateEntries:
+          - 1
+          - 1
+        - notes: notes
+          name: name
+          weightPerDateEntries:
+          - 6.0274563
+          - 6.0274563
+          repetitionsPerDateEntries:
+          - 1
+          - 1
+    Reservation:
+      required:
+      - date
+      - muscleGroup
+      - time
+      type: object
+      properties:
+        date:
+          type: string
+        time:
+          type: string
+        muscleGroup:
+          type: string
+        availability:
+          type: integer
+          format: int32
+        reservationsPerMuscleGroup:
+          type: array
+          items:
+            type: integer
+            format: int32
+      example:
+        date: date
+        reservationsPerMuscleGroup:
+        - 6
+        - 6
+        muscleGroup: muscleGroup
+        time: time
+        availability: 0
+  requestBodies:
+    PersonalInfo:
+      description: A json object containing the Personal info
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PersonalInfo'
+      required: true
+    Reservation:
+      description: A json object containing the Reservation info
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Reservation'
+      required: true
+    Exercise:
+      description: A json object containing the Exercise
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Exercise'
+      required: true
