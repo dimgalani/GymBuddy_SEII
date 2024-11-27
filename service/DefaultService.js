@@ -117,6 +117,7 @@ exports.createCustomExercise = function(body,username) {
  * day String the day selected for a reservation
  * returns List
  **/
+/*
 exports.getAvailableReservations = function(username,day) {
   return new Promise(function(resolve, reject) {
     var examples = {};
@@ -140,6 +141,50 @@ exports.getAvailableReservations = function(username,day) {
     }
   });
 }
+*/
+exports.getAvailableReservations = function (day, username) {
+  return new Promise(function (resolve, reject) {
+    console.log(`Got username ${username} and day ${day}`)
+    // Mock dataset: User reservations data
+    const reservations = {
+      john_doe: {
+        1: [
+          { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "time": "08:00 AM", "availability": 0 },
+          { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:00 AM", "availability": 1 }
+        ],
+        2: [
+          { "date": "2024-11-02", "reservationsPerMuscleGroup": [10, 11, 12, 13, 14], "time": "09:00 AM", "availability": 1 },
+          { "date": "2024-11-02", "reservationsPerMuscleGroup": [20, 19, 18, 17, 16], "time": "11:00 AM", "availability": 0 }
+        ]
+      },
+      jane_smith: {
+        1: [
+          { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "08:30 AM", "availability": 1 },
+          { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:30 AM", "availability": 0 }
+        ]
+      },
+      alice_wonder: {
+        1: [
+          { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "09:30 AM", "availability": 1 },
+          { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "11:30 AM", "availability": 0 }
+        ]
+      },
+      default: {
+        1: [
+          { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "12:00 PM", "availability": 0 }
+        ]
+      }
+    };
+
+    // Check if user and day data exists
+    if (reservations[username] && reservations[username][day]) {
+      resolve(reservations[username][day]); // Return the reservations for the user on the specified day
+    } else {
+      const error = new Error('Response code 400 (Bad Request): No reservations data found for the specified username and day.');
+      reject(error);
+    }
+  });
+};
 
 
 /**
