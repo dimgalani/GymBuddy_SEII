@@ -1,5 +1,13 @@
 'use strict';
 
+// Placeholder for user settings
+const DefaultSettings = {
+  bodyweight: 75.0,
+  gender: "male",
+  goals: [false, false], // Example: weight loss goal active, others not
+  goalConsistencyNum: 6,
+  goalBodyWeightNum: 1,
+};
 
 /**
  * Cancels a reservation by deleting it
@@ -24,17 +32,18 @@ exports.cancelReservation = function(username,day) {
  * currentBodyWeight Float 
  * returns Boolean
  **/
-exports.checkGoalsFromInfo = function(username,currentBodyWeight) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = true;
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
+// exports.checkGoalsFromInfo = function (username, currentBodyWeight) {
+//   return new Promise(function (resolve, reject) {
+//     const storedBodyWeight = DefaultSettings.bodyweight;
+
+//     // Check if the current weight is less than the stored weight
+//     if (currentBodyWeight < storedBodyWeight) {
+//       resolve("Congratulations");
+//     } else {
+//       resolve("Keep going!");
+//     }
+//   });
+// };
 
 
 /**
@@ -184,15 +193,15 @@ exports.getExerciseCatalog = function(username) {
     var examples = {};
     examples['application/json'] = {
   "exercises" : [ {
-    "notes" : "notes",
-    "name" : "name",
-    "weightPerDateEntries" : [ 6.0274563, 6.0274563 ],
-    "repetitionsPerDateEntries" : [ 1, 1 ]
+    "notes" : "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-do...",
+    "name" : "Lat Pull Down",
+    "weightPerDateEntries" : [ 40, 40 ],
+    "repetitionsPerDateEntries" : [ 8, 10]
   }, {
-    "notes" : "notes",
-    "name" : "name",
-    "weightPerDateEntries" : [ 6.0274563, 6.0274563 ],
-    "repetitionsPerDateEntries" : [ 1, 1 ]
+    "notes" : "It is a compound strength exercise. Targets several muscle groups. Setup: Stand with your feet hip-widt...",
+    "name" : "Deadlift",
+    "weightPerDateEntries" : [ 45, 45 ],
+    "repetitionsPerDateEntries" : [ 8, 10 ]
   } ]
 };
     if (Object.keys(examples).length > 0) {
@@ -330,9 +339,37 @@ exports.updateExerciseProgress = function(body,day,username) {
  * username String the username of the connected person
  * no response value expected for this operation
  **/
-exports.updatePersonalInfo = function(body,username) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
+exports.updatePersonalInfo = function (newSettings) {
+  return new Promise(function (resolve, reject) {
+    // Update the user's personal information, including bodyweight
+    // First, update the goals - if the user just activated the weight loss goal and achieved it, the message will be "Congratulations!"
+    DefaultSettings.goals = newSettings.goals;
+    // Before updating, call checkGoalsFromInfo to check if the goal has been achieved
+    const checkMessage = checkGoalsFromInfo(newSettings.bodyweight);    
+    
+    // Update the settings
+    DefaultSettings.bodyweight = newSettings.bodyweight;
+    DefaultSettings.gender = newSettings.gender;
+    DefaultSettings.goals = newSettings.goals;
+    DefaultSettings.goalConsistencyNum = newSettings.goalConsistencyNum;
+    DefaultSettings.goalBodyWeightNum = newSettings.goalBodyWeightNum; 
 
+    // Return the updated settings and the message from checkGoalsFromInfo
+    resolve({
+      updatedInfo: DefaultSettings,
+      message: checkMessage
+    });
+  });
+};
+
+// Automatically trigger the check when the bodyweight is updated
+function checkGoalsFromInfo(currentBodyWeight) {
+  const storedBodyWeight = DefaultSettings.bodyweight;
+
+  // Compare the current bodyweight with the stored bodyweight
+  if (DefaultSettings.goals[0] && currentBodyWeight < storedBodyWeight) {
+    return "Congratulations!";
+  } else {
+    return "Keep going! You're on the right track!";
+  }
+}
