@@ -45,6 +45,8 @@ exports.checkGoalsFromInfo = function(username,currentBodyWeight) {
  * day Integer the selected day of the planner
  * returns List
  **/
+
+/*
 exports.checkGoalsFromProgress = function(username,day) {
   return new Promise(function(resolve, reject) {
     var examples = {};
@@ -56,6 +58,40 @@ exports.checkGoalsFromProgress = function(username,day) {
     }
   });
 }
+*/
+exports.checkGoalsFromProgress = function (day, username) {
+  return new Promise(function (resolve, reject) {
+    // Mock dataset: User progress and goals
+    const userProgress = {
+      john_doe: {
+        1: [true, true, false, true, true],
+        2: [true, true, true, true, true],
+        3: [false, false, false, false, false],
+      },
+      jane_smith: {
+        1: [true, false, true, false, true],
+        2: [true, true, true, true, true],
+        3: [true, false, false, false, true],
+      },
+      alice_wonder: {
+        1: [false, false, false, false, false],
+        2: [true, true, true, false, true],
+        3: [true, true, true, true, true],
+      },
+      default: {
+        1: [false, false, false, false, false],
+      }
+    };
+
+    // Check if user and day data exists
+    if (userProgress[username] && userProgress[username][day]) {
+      resolve(userProgress[username][day]); // Return the progress for the user on the specified day
+    } else {
+      const error = new Error('Response code 400 (Bad Request): No progress data found for the specified username and day.');
+      reject(error);
+    }
+  });
+};
 
 
 /**

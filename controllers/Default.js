@@ -28,8 +28,9 @@ module.exports.checkGoalsFromProgress = function checkGoalsFromProgress (req, re
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
