@@ -61,7 +61,6 @@ exports.checkGoalsFromProgress = function(username,day) {
 */
 exports.checkGoalsFromProgress = function (day, username) {
   return new Promise(function (resolve, reject) {
-    // Mock dataset: User progress and goals
     const userProgress = {
       john_doe: {
         1: [true, true, false, true, true],
@@ -80,18 +79,28 @@ exports.checkGoalsFromProgress = function (day, username) {
       },
       default: {
         1: [false, false, false, false, false],
-      }
+      },
     };
 
-    // Check if user and day data exists
-    if (userProgress[username] && userProgress[username][day]) {
-      resolve(userProgress[username][day]); // Return the progress for the user on the specified day
+    if (!Number.isInteger(day) || typeof username !== 'string') {
+      // If the data types are incorrect
+      reject({
+        message: 'Response code 400 (Bad Request): Wrong data types for username or day.',
+        code: 400,
+      });
+    } else if (userProgress[username] && userProgress[username][day]) {
+      // If user and day data exist
+      resolve(userProgress[username][day]);
     } else {
-      const error = new Error('Response code 400 (Bad Request): No progress data found for the specified username and day.');
-      reject(error);
+      // If no progress data is found for the specified username and day
+      reject({
+        message: 'Response code 404 (Not Found): No progress data found for the specified username and day.',
+        code: 404,
+      });
     }
   });
 };
+
 
 
 /**
@@ -144,47 +153,47 @@ exports.getAvailableReservations = function(username,day) {
 */
 exports.getAvailableReservations = function (day, username) {
   return new Promise(function (resolve, reject) {
-    console.log(`Got username ${username} and day ${day}`)
     // Mock dataset: User reservations data
-    const reservations = {
-      john_doe: {
-        1: [
-          { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "time": "08:00 AM", "availability": 0 },
-          { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:00 AM", "availability": 1 }
-        ],
-        2: [
-          { "date": "2024-11-02", "reservationsPerMuscleGroup": [10, 11, 12, 13, 14], "time": "09:00 AM", "availability": 1 },
-          { "date": "2024-11-02", "reservationsPerMuscleGroup": [20, 19, 18, 17, 16], "time": "11:00 AM", "availability": 0 }
-        ]
-      },
-      jane_smith: {
-        1: [
-          { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "08:30 AM", "availability": 1 },
-          { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:30 AM", "availability": 0 }
-        ]
-      },
-      alice_wonder: {
-        1: [
-          { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "09:30 AM", "availability": 1 },
-          { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "11:30 AM", "availability": 0 }
-        ]
-      },
-      default: {
-        1: [
-          { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "12:00 PM", "availability": 0 }
-        ]
-      }
+    const usernames = ["john_doe", "alice_wonder", "jane_smith", "default"];
+    const availableReservations = {
+      1: [
+        { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "time": "08:00 AM", "availability": 0 },
+        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:00 AM", "availability": 1 }
+      ],
+      2: [
+        { "date": "2024-11-02", "reservationsPerMuscleGroup": [10, 11, 12, 13, 14], "time": "09:00 AM", "availability": 1 },
+        { "date": "2024-11-02", "reservationsPerMuscleGroup": [20, 19, 18, 17, 16], "time": "11:00 AM", "availability": 0 }
+      ],
+      3: [
+        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "08:30 AM", "availability": 1 },
+        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:30 AM", "availability": 0 }
+      ],
+      4: [
+        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "09:30 AM", "availability": 1 },
+        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "11:30 AM", "availability": 0 }
+      ],
+      5: [
+        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "12:00 PM", "availability": 0 }
+      ]
     };
 
-    // Check if user and day data exists
-    if (reservations[username] && reservations[username][day]) {
-      resolve(reservations[username][day]); // Return the reservations for the user on the specified day
+    // Check if username exists
+    if (!usernames.includes(username)) {
+      reject({
+        message: 'Response code 401 (Unauthorized): Not a valid username',
+        code: 401
+      });
+    } else if (availableReservations[day]) {
+      resolve(availableReservations[day]); // Return the reservations for the specified day
     } else {
-      const error = new Error('Response code 400 (Bad Request): No reservations data found for the specified username and day.');
-      reject(error);
+      reject({
+        message: 'Response code 404 (Not Found): No reservations found for the specified day.',
+        code: 404
+      });
     }
   });
 };
+
 
 
 /**

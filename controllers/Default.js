@@ -29,8 +29,7 @@ module.exports.checkGoalsFromProgress = function checkGoalsFromProgress (req, re
       utils.writeJson(res, response);
     })
     .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+      utils.writeJson(res, error.message, error.code);
     });
 };
 
@@ -49,8 +48,8 @@ module.exports.getAvailableReservations = function getAvailableReservations (req
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      utils.writeJson(res, error.message, error.code);
     });
 };
 
