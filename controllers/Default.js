@@ -68,8 +68,9 @@ module.exports.getDropDownMenuList = function getDropDownMenuList (req, res, nex
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
@@ -98,8 +99,9 @@ module.exports.getMyReservations = function getMyReservations (req, res, next, u
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
