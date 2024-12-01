@@ -45,7 +45,7 @@ test("GET /user/{username}/myreservations returns up to 3 upcoming reservations"
     //     t.is(typeof reservation.muscleGroup, "string");
     //     t.is(typeof reservation.time, "string");
     //     t.true(reservation.availability === 0 || reservation.availability === 1);
-    });
+    // });
 
     t.deepEqual(body, [
         { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "muscleGroup" : "muscleGroup", "time": "08:00 AM", "availability": 0 },
