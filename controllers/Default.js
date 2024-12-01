@@ -18,8 +18,9 @@ module.exports.checkGoalsFromInfo = function checkGoalsFromInfo (req, res, next,
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      // console.log(error);
+      utils.writeJson(res, error.message, error.code);
     });
 };
 

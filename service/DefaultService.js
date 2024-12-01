@@ -1,13 +1,46 @@
 'use strict';
 
-// Placeholder for user settings
-const DefaultSettings = {
-  bodyweight: 75.0,
-  gender: "male",
-  goals: [false, false], // Example: weight loss goal active, others not
-  goalConsistencyNum: 6,
-  goalBodyWeightNum: 1,
-};
+// // Placeholder for user settings
+// const DefaultSettings = {
+//   bodyweight: 75.0,
+//   gender: "male",
+//   goals: [false, false], // Example: weight loss goal active, others not
+//   goalConsistencyNum: 6,
+//   goalBodyWeightNum: 1,
+// };
+
+const UserSettings = [
+  {
+    username: "john_doe",
+    settings: {
+      bodyweight: null,
+      gender: "male",
+      goals: [true, false, true, true],
+      goalConsistencyNum: 5,
+      goalBodyWeightNum: 90.0,
+    },
+  },
+  {
+    username: "jane_smith",
+    settings: {
+      bodyweight: 65.0,
+      gender: "female",
+      goals: [false, true, true, true],
+      goalConsistencyNum: 7,
+      goalBodyWeightNum: 55.00,
+    },
+  },
+  {
+    username: "default",
+    settings: {
+      bodyweight: 75.00,
+      gender: "male",
+      goals: [false, false, false, false],
+      goalConsistencyNum: 6,
+      goalBodyWeightNum: 80.0,
+    },
+  },
+];
 
 /**
  * Cancels a reservation by deleting it
@@ -32,18 +65,73 @@ exports.cancelReservation = function(username,day) {
  * currentBodyWeight Float 
  * returns Boolean
  **/
-// exports.checkGoalsFromInfo = function (username, currentBodyWeight) {
-//   return new Promise(function (resolve, reject) {
-//     const storedBodyWeight = DefaultSettings.bodyweight;
+exports.checkGoalsFromInfo = function (currentBodyWeight, username) {
+  return new Promise(function (resolve, reject) {
+    // const storedBodyWeight = DefaultSettings.bodyweight;
+    // Find the user in the array
+    const user = UserSettings.find((user) => user.username === username);
+    
+    // Throw 401 error if the username is unknown
+    if (!user) {
+      reject({
+        message: 'Response code 401 (Unauthorized): Not a valid username',
+        code: 401,
+      });
+    }
 
-//     // Check if the current weight is less than the stored weight
-//     if (currentBodyWeight < storedBodyWeight) {
-//       resolve("Congratulations");
-//     } else {
-//       resolve("Keep going!");
-//     }
-//   });
-// };
+    // If the current body weight is not provided in the request
+    else if (!currentBodyWeight) {
+      reject({
+        message: 'Response code 400 (Bad Request): No currentBodyWeight parameter provided.',
+        code: 400,
+      });
+    }
+    else if (!Number.isInteger(currentBodyWeight)) {
+      // If the data types are incorrect
+      reject({
+        message: 'Response code 400 (Bad Request): Wrong data types for currentBodyWeight.',
+        code: 400,
+      });
+    }
+
+    // If the user has the weight loss/gain goal active //TODO: need to change the index to the correct one
+    else if (user.settings.goals[3]){ 
+      // Get the user's body weight
+      const storedBodyWeight = user.settings.bodyweight;
+      // If the user hasn't set his previous body weight - throw 404 error
+      if(storedBodyWeight === null){
+        reject({
+          message: 'Response code 404 (Not Found): Previous BodyWeight data not found',
+          code: 404,
+        });
+      }
+
+      const GoalBodyWeight = user.settings.goalBodyWeightNum;
+      // If the user hasn't set his goal body weight - throw 404 error
+      if(!GoalBodyWeight){
+        reject({
+          message: 'Response code 404 (Not Found): Goal body weight data not found',
+          code: 404,
+        });
+      }
+
+      // Check if the current weight is closer to the goal weight than the stored weight
+      if (Math.abs(GoalBodyWeight - currentBodyWeight) < Math.abs(GoalBodyWeight - storedBodyWeight)) {
+        // If the user has reached the goal or has exceeded it
+        if (currentBodyWeight === GoalBodyWeight || // If the user has reached the goal
+            (storedBodyWeight > GoalBodyWeight && currentBodyWeight < GoalBodyWeight) || // If the user wants to lose weight and has exceeded the goal
+            (storedBodyWeight < GoalBodyWeight && currentBodyWeight > GoalBodyWeight)) { // If the user wants to gain weight and has exceeded the goal
+          resolve({ message: "Victory Animation"});
+        }
+      } else {
+        // If the user has not reached the goal
+        resolve({ message: "No progress. Boo hoo :("});
+      }
+  } else{
+    // If the user does not have the weight loss/gain goal active
+    resolve({ message: "No weight loss gain goal active" });}
+  });
+}
 
 
 /**
@@ -339,37 +427,37 @@ exports.updateExerciseProgress = function(body,day,username) {
  * username String the username of the connected person
  * no response value expected for this operation
  **/
-exports.updatePersonalInfo = function (newSettings) {
+// Update personal info function
+exports.updatePersonalInfo = function ( newSettings, username,) {
   return new Promise(function (resolve, reject) {
-    // Update the user's personal information, including bodyweight
-    // First, update the goals - if the user just activated the weight loss goal and achieved it, the message will be "Congratulations!"
-    DefaultSettings.goals = newSettings.goals;
-    // Before updating, call checkGoalsFromInfo to check if the goal has been achieved
-    const checkMessage = checkGoalsFromInfo(newSettings.bodyweight);    
-    
-    // Update the settings
-    DefaultSettings.bodyweight = newSettings.bodyweight;
-    DefaultSettings.gender = newSettings.gender;
-    DefaultSettings.goals = newSettings.goals;
-    DefaultSettings.goalConsistencyNum = newSettings.goalConsistencyNum;
-    DefaultSettings.goalBodyWeightNum = newSettings.goalBodyWeightNum; 
+    // Find the user in the UserSettings array
+    const user = UserSettings.find((user) => user.username === username);
 
-    // Return the updated settings and the message from checkGoalsFromInfo
+    if (!user) {
+      reject({
+        message: 'Response code 401 (Unauthorized): Not a valid username',
+        code: 401,
+      });
+    }
+    if(!Number.isInteger(newSettings.bodyweight) || newSettings.bodyweight < 0 || !String(newSettings.gender) ||
+       !Array.isArray(newSettings.goals) || newSettings.goals.length !== 4 || !newSettings.goals.every((value) => typeof value === "boolean") ||
+       !Number.isInteger(newSettings.goalConsistencyNum) || !Number.isInteger(newSettings.goalBodyWeightNum) || newSettings.goalConsistencyNum < 0 || newSettings.goalBodyWeightNum < 0 ) {
+      reject({
+        message: 'Response code 400 (Bad Request): Wrong data types for bodyweight.',
+        code: 400,
+      });
+    }
+      
+    user.settings.goals = newSettings.goals;
+    // Update the user's settings
+    user.settings.bodyweight = newSettings.bodyweight;
+    user.settings.gender = newSettings.gender;
+    user.settings.goalConsistencyNum = newSettings.goalConsistencyNum;
+    user.settings.goalBodyWeightNum = newSettings.goalBodyWeightNum;
+
+    // Resolve with the updated settings and the message
     resolve({
-      updatedInfo: DefaultSettings,
-      message: checkMessage
+      updatedInfo: user.settings,
     });
   });
 };
-
-// Automatically trigger the check when the bodyweight is updated
-function checkGoalsFromInfo(currentBodyWeight) {
-  const storedBodyWeight = DefaultSettings.bodyweight;
-
-  // Compare the current bodyweight with the stored bodyweight
-  if (DefaultSettings.goals[0] && currentBodyWeight < storedBodyWeight) {
-    return "Congratulations!";
-  } else {
-    return "Keep going! You're on the right track!";
-  }
-}
