@@ -114,12 +114,13 @@ module.exports.getPersonalInfo = function getPersonalInfo (req, res, next, usern
 };
 
 module.exports.makeReservation = function makeReservation (req, res, next, body, day, time, musclegroup, username) {
+  console.log('here')
   Default.makeReservation(body, day, time, musclegroup, username)
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      utils.writeJson(res, error.message, error.code);
     });
 };
 

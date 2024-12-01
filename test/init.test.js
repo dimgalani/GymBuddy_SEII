@@ -95,7 +95,38 @@ test("GET /user/{usename}/reservations with Correct Request", async (t) => {
 	});
 	t.is(statusCode, 200);
 	t.deepEqual(body, [
-		{ "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "time": "08:00 AM", "availability": 0 },
-		{ "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:00 AM", "availability": 1 }
+		{ "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "time": "08:00 AM", "availability": 5 },
+		{ "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:00 AM", "availability": 10 }
 	  ]);  // Check with the mock data
 });
+
+////////////////////////
+// POST /reservations //
+////////////////////////
+
+test("POST /user/{username}/reservations with Correct Request", async (t) => {
+	const bodyData = {
+		date: "2024-11-01",
+	  	time: "10:00",
+	  	muscleGroup: "lower",
+	};
+
+	const searchParams = {
+	  	day: "2024-11-01",
+	  	time: "10:00",
+	  	musclegroup: "lower",
+	}
+ 
+	try {
+	  const { body, statusCode } = await t.context.got.post("user/john_doe/reservations", {
+		json: bodyData,
+		searchParams: searchParams
+	  });
+	  console.log("Response:", body);
+	  t.is(statusCode, 201);
+	} catch (error) {
+	  console.error("Error:", error.response?.body || error.message);
+	  t.fail(error.message);
+	}
+ });
+ 
