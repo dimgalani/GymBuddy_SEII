@@ -8,8 +8,9 @@ module.exports.cancelReservation = function cancelReservation (req, res, next, u
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
@@ -18,8 +19,9 @@ module.exports.checkGoalsFromInfo = function checkGoalsFromInfo (req, res, next,
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
@@ -29,7 +31,8 @@ module.exports.checkGoalsFromProgress = function checkGoalsFromProgress (req, re
       utils.writeJson(res, response);
     })
     .catch(function (error) {
-      utils.writeJson(res, error.message, error.code);
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
@@ -38,8 +41,9 @@ module.exports.createCustomExercise = function createCustomExercise (req, res, n
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
@@ -49,7 +53,8 @@ module.exports.getAvailableReservations = function getAvailableReservations (req
       utils.writeJson(res, response);
     })
     .catch(function (error) {
-      utils.writeJson(res, error.message, error.code);
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
@@ -58,8 +63,9 @@ module.exports.getDayofPlanner = function getDayofPlanner (req, res, next, usern
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
@@ -79,8 +85,9 @@ module.exports.getExerciseCatalog = function getExerciseCatalog (req, res, next,
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
@@ -89,8 +96,9 @@ module.exports.getExerciseProgress = function getExerciseProgress (req, res, nex
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
@@ -110,8 +118,9 @@ module.exports.getPersonalInfo = function getPersonalInfo (req, res, next, usern
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
@@ -120,8 +129,9 @@ module.exports.makeReservation = function makeReservation (req, res, next, body,
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
@@ -130,8 +140,9 @@ module.exports.updateExerciseProgress = function updateExerciseProgress (req, re
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
 
@@ -140,7 +151,8 @@ module.exports.updatePersonalInfo = function updatePersonalInfo (req, res, next,
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      console.log(error)
+      utils.writeJson(res, error, 400);
     });
 };
