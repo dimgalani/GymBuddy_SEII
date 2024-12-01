@@ -31,7 +31,6 @@ test("GET /user/{usename}/planner/catalog returns correct response and status co
 	t.true(Array.isArray(body.exercises), "Exercises should be an array");
 	t.is(body.exercises[0].name, "Lat Pull Down", "The first exercise name should be 'Lat Pull Down'");
 	t.is(body.exercises[0].notes, "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-do...", "The first exercise notes should be 'Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-do...'");
-	console.log(body);
 });
 
 /////////////////////////
@@ -57,7 +56,6 @@ test("PUT /user/{username}/settings updates the bodyweight and other settings", 
 
 	// Check for successful update response
 	t.is(statusCode, 200);
-	console.log("Full Response:", { body, statusCode });
 	t.deepEqual(updatedInfo, newPersonalInfo, "The updated personal info should match");
 
 });
@@ -112,7 +110,6 @@ test("GET /user/{usename}/settings/goals with Bad Request (not previous BodyWeig
 		throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
 	});
 	t.is(statusCode, 404);
-	console.log("Full Response:", { body, statusCode });
 });
 
 test("GET /user/{usename}/settings/goals with Bad Request (wrong currentBodyWeight datatype)", async (t) => {
@@ -123,5 +120,35 @@ test("GET /user/{usename}/settings/goals with Bad Request (wrong currentBodyWeig
 		throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
 	});
 	t.is(statusCode, 400);
-	console.log("Full Response:", { body, statusCode });
 });
+
+// ///////////////////////
+// POST /user/{username}/planner/catalog //
+// ///////////////////////
+
+test("POST /user/{username}/planner/catalog with Correct Request (Mock Data)", async (t) => {
+	const newExercise = {
+		name: "Bench Press",
+		notes: "Targets the pectoral muscles, triceps, and anterior deltoids. Setup: Lie on a flat bench with your feet flat on the floor. Grasp the barbell with your hands slightly wider than shoulder-width apart. Lower the bar to your chest, then press it back up to the starting position.",
+	};
+	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
+		json: newExercise,
+		responseType: "json",
+	});
+	t.is(statusCode, 201);
+	t.deepEqual(body.exercise, newExercise);
+});
+
+// test("POST /user/{username}/planner/catalog with Bad Request - Already existing exercise", async (t) => {
+// 	const newExercise = {
+// 		name: "Lat Pull Down",
+// 		notes: "blah blah blah",
+// 	};
+// 	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
+// 		json: newExercise,
+// 		responseType: "json",
+// 	});
+// 	console.log("Full Response:", { body, statusCode });
+// 	t.is(statusCode, 409);
+// 	t.deepEqual(body.exercise, newExercise);
+// });

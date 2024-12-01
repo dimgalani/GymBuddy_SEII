@@ -42,6 +42,21 @@ const UserSettings = [
   },
 ];
 
+const ExerciseCatalog = [
+  {
+    name: "Lat Pull Down",
+    notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-do...",
+    weightPerDateEntries: [40, 40],
+    repetitionsPerDateEntries: [8, 10],
+  },
+  {
+    name: "Deadlift",
+    notes: "It is a compound strength exercise. Targets several muscle groups. Setup: Stand with your feet hip-widt...",
+    weightPerDateEntries: [45, 45],
+    repetitionsPerDateEntries: [8, 10],
+  },
+];
+
 /**
  * Cancels a reservation by deleting it
  * FR4 - The user must be able to cancel a reservation
@@ -163,9 +178,32 @@ exports.checkGoalsFromProgress = function(username,day) {
  * username String the username of the connected person
  * no response value expected for this operation
  **/
-exports.createCustomExercise = function(body,username) {
+exports.createCustomExercise = function(body, username) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    // Check if the exercise already exists in the catalog
+    const existingExercise = ExerciseCatalog.find(exercise => exercise.name === body.name);
+
+    if (existingExercise !== undefined) {
+      // If the exercise already exists in the catalog
+      reject({
+        message: 'Response code 409 (Conflict): Exercise already exists in the catalog',
+        code: 409,
+      });
+      // resolve({
+      //   message: 'Exercise successfully added to the catalog',
+      //   exercise: ExerciseCatalog[ExerciseCatalog.length - 1],
+      //   code: 201,
+      // });
+
+    } else {
+      // Add the new exercise to the catalog
+      ExerciseCatalog.push(body);
+      resolve({
+        message: 'Exercise successfully added to the catalog',
+        exercise: ExerciseCatalog[ExerciseCatalog.length - 1],
+        code: 201,
+      });
+    }
   });
 }
 
@@ -448,13 +486,13 @@ exports.updatePersonalInfo = function ( newSettings, username,) {
       });
     }
       
-    user.settings.goals = newSettings.goals;
+    
     // Update the user's settings
     user.settings.bodyweight = newSettings.bodyweight;
     user.settings.gender = newSettings.gender;
     user.settings.goalConsistencyNum = newSettings.goalConsistencyNum;
     user.settings.goalBodyWeightNum = newSettings.goalBodyWeightNum;
-
+    user.settings.goals = newSettings.goals;
     // Resolve with the updated settings and the message
     resolve({
       updatedInfo: user.settings,

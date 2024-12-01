@@ -37,10 +37,10 @@ module.exports.checkGoalsFromProgress = function checkGoalsFromProgress (req, re
 module.exports.createCustomExercise = function createCustomExercise (req, res, next, body, username) {
   Default.createCustomExercise(body, username)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response.message, response.code);
     });
 };
 
