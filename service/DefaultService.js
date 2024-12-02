@@ -1,5 +1,53 @@
 'use strict';
 
+const usernames = ["john_doe", "alice_wonder", "jane_smith", "default"];
+const availableReservations = {
+  john_doe: [
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "muscleGroup": "muscleGroup", "time": "08:00 AM", "availability": 0 },
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "muscleGroup": "muscleGroup", "time": "10:00 AM", "availability": 1 },
+    { "date": "2024-11-02", "reservationsPerMuscleGroup": [10, 11, 12, 13, 14], "muscleGroup": "muscleGroup", "time": "09:00 AM", "availability": 1 }
+  ],
+  alice_wonder: [
+    { "date": "2024-11-02", "reservationsPerMuscleGroup": [10, 11, 12, 13, 14], "muscleGroup": "muscleGroup", "time": "09:00 AM", "availability": 1 },
+    { "date": "2024-11-02", "reservationsPerMuscleGroup": [20, 19, 18, 17, 16], "muscleGroup": "muscleGroup", "time": "11:00 AM", "availability": 0 }
+  ],
+  jane_smith: [
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "muscleGroup": "muscleGroup", "time": "08:30 AM", "availability": 1 },
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "muscleGroup": "muscleGroup", "time": "10:30 AM", "availability": 0 }
+  ],
+  default: []
+};
+
+const usersPlanner = {
+  john_doe: [{
+    1:[{
+      notes: "Felt strong",
+      name: "Bench Press",
+      weightPerDateEntries: [70, 80],
+      repetitionsPerDateEntries: [10, 10]
+    }],
+    2:[{
+      notes: "Felt strong",
+      name: "Squat",
+      weightPerDateEntries: [80, 80],
+      repetitionsPerDateEntries: [8, 10]
+    }]
+  }],
+  jane_smith: [{
+    1:[{
+      notes: "tough",
+      name: "Bench Press",
+      weightPerDateEntries: [100, 110],
+      repetitionsPerDateEntries: [5, 8]
+    }],
+    2:[{
+      notes: "strong",
+      name: "Squat",
+      weightPerDateEntries: [80, 90],
+      repetitionsPerDateEntries: [10, 15]
+    }]
+  }]
+};
 
 /**
  * Cancels a reservation by deleting it
@@ -239,7 +287,7 @@ exports.getDayofPlanner = function(username,day) {
  **/
 exports.getDropDownMenuList = function(username) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
+    const examples = {};
     examples['application/json'] = {
   "exercises" : [ 
     { "notes" : "note1", "name" : "exercise_1", "weightPerDateEntries" : [ 5, 6, 6, 8, 8], "repetitionsPerDateEntries" : [ 10, 10, 15, 10, 10 ] },
@@ -247,6 +295,12 @@ exports.getDropDownMenuList = function(username) {
     { "notes" : "note3", "name" : "exercise_3", "weightPerDateEntries" : [ 30, 35, 35, 40, 45], "repetitionsPerDateEntries" : [ 5, 5, 5, 5 ,8 ] }
   ]
 };
+    if (!usernames.includes(username)) {
+      return reject({
+        message: 'Response code 401 (Unauthorized): Not a valid username',
+        code: 401
+      });
+    }  
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
@@ -323,24 +377,6 @@ exports.getExerciseProgress = function(username,exerciseName) {
  **/
 exports.getMyReservations = function (username) {
   return new Promise(function (resolve, reject) {
-    const usernames = ["john_doe", "alice_wonder", "jane_smith", "default"];
-    const availableReservations = {
-      john_doe: [
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "muscleGroup": "muscleGroup", "time": "08:00 AM", "availability": 0 },
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "muscleGroup": "muscleGroup", "time": "10:00 AM", "availability": 1 },
-        { "date": "2024-11-02", "reservationsPerMuscleGroup": [10, 11, 12, 13, 14], "muscleGroup": "muscleGroup", "time": "09:00 AM", "availability": 1 }
-      ],
-      alice_wonder: [
-        { "date": "2024-11-02", "reservationsPerMuscleGroup": [10, 11, 12, 13, 14], "muscleGroup": "muscleGroup", "time": "09:00 AM", "availability": 1 },
-        { "date": "2024-11-02", "reservationsPerMuscleGroup": [20, 19, 18, 17, 16], "muscleGroup": "muscleGroup", "time": "11:00 AM", "availability": 0 }
-      ],
-      jane_smith: [
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "muscleGroup": "muscleGroup", "time": "08:30 AM", "availability": 1 },
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "muscleGroup": "muscleGroup", "time": "10:30 AM", "availability": 0 }
-      ],
-      default: []
-    };
-
     // Validate username
     if (!usernames.includes(username)) {
       return reject({
@@ -411,11 +447,40 @@ exports.makeReservation = function(body,day,time,musclegroup,username) {
  * username String the username of the connected person
  * no response value expected for this operation
  **/
-exports.updateExerciseProgress = function(body,day,username) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+exports.updateExerciseProgress = function (body, day, username) {
+  return new Promise(function (resolve, reject) {
+    // Validate username
+    if (!usernames.includes(username)) {
+      return reject({
+        message: "Response code 401 (Unauthorized): Not a valid username",
+        code: 401
+      });
+    }
+
+    // Get user's planner
+    const userEntries = usersPlanner[username][day-1];
+
+    // Find the exercise to update
+    // const exercise = userEntries.find((entry) => entry.name === body.name);
+
+    if (!exercise) {
+      return reject({ message: "Exercise not found", code: 404 });
+    }
+
+    // Update the exercise progress
+    userEntries.notes = body.notes;
+    userEntries.weightPerDateEntries = body.weightPerDateEntries;
+    userEntries.repetitionsPerDateEntries = body.repetitionsPerDateEntries;
+
+    // Resolve with success message and updated data
+    resolve({
+      updatedProgress: userEntries,
+      message: "Progress updated successfully"
+    });
   });
-}
+};
+
+
 
 
 /**

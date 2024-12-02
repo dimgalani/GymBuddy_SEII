@@ -8,9 +8,8 @@ module.exports.cancelReservation = function cancelReservation (req, res, next, u
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -19,9 +18,8 @@ module.exports.checkGoalsFromInfo = function checkGoalsFromInfo (req, res, next,
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -30,9 +28,8 @@ module.exports.checkGoalsFromProgress = function checkGoalsFromProgress (req, re
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -41,9 +38,8 @@ module.exports.createCustomExercise = function createCustomExercise (req, res, n
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -52,9 +48,8 @@ module.exports.getAvailableReservations = function getAvailableReservations (req
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -63,9 +58,8 @@ module.exports.getDayofPlanner = function getDayofPlanner (req, res, next, usern
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -74,9 +68,8 @@ module.exports.getDropDownMenuList = function getDropDownMenuList (req, res, nex
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -85,9 +78,8 @@ module.exports.getExerciseCatalog = function getExerciseCatalog (req, res, next,
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -96,9 +88,8 @@ module.exports.getExerciseProgress = function getExerciseProgress (req, res, nex
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -107,9 +98,8 @@ module.exports.getMyReservations = function getMyReservations (req, res, next, u
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -118,9 +108,8 @@ module.exports.getPersonalInfo = function getPersonalInfo (req, res, next, usern
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -129,9 +118,8 @@ module.exports.makeReservation = function makeReservation (req, res, next, body,
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -140,9 +128,8 @@ module.exports.updateExerciseProgress = function updateExerciseProgress (req, re
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };
 
@@ -151,8 +138,7 @@ module.exports.updatePersonalInfo = function updatePersonalInfo (req, res, next,
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      console.log(error)
-      utils.writeJson(res, error, 400);
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
 };

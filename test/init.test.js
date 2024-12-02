@@ -15,13 +15,15 @@ test.after.always((t) => {
 	t.context.server.close();
 });
 
-// /myreservations GET
+  //////////////////////////
+ // GET /myreservations  //
+//////////////////////////
 
 test("GET /user/{username}/myreservations with Bad Request Format", async (t) => {
     const { statusCode, body } = await t.context.got("user/default/myreservations", {
         throwHttpErrors: false,
         searchParams: {
-            day: "invalid_day" // Simulating an invalid query parameter
+            day: "invalid_day"
         }
     });
 
@@ -61,7 +63,21 @@ test("GET /user/{username}/myreservations returns empty array if no reservations
     t.deepEqual(body, []); // Empty array
 });
 
-// planner/progress GET
+test("GET /user/{username}/myreservations with invalid username", async (t) => {
+    const { statusCode, body } = await t.context.got("user/no_name/myreservations", {
+        throwHttpErrors: false,
+        searchParams: {
+            username: "john_doe"
+        }
+    });
+
+    t.is(statusCode, 401);
+
+});
+
+  //////////////////////////
+ // GET planner/progress //
+//////////////////////////
 
 test("GET /user/{usename}/planner/progress with Bad Request Format", async (t) => {
 	const { body, statusCode } = await t.context.got("user/default/planner/progress", {
@@ -97,3 +113,64 @@ test("GET /user/{username}/planner/progress returns exercise details successfull
         { "notes" : "note3", "name" : "exercise_3", "weightPerDateEntries" : [ 30, 35, 35, 40, 45], "repetitionsPerDateEntries" : [ 5, 5, 5, 5 ,8 ] }
     ]);
 });
+
+test("GET /user/{usename}/planner/progress with invalid username", async (t) => {
+	const { body, statusCode } = await t.context.got("user/default/planner/progress", {
+		throwHttpErrors: false,
+        searchParams: {
+            day: "invalid_day" // Simulating an invalid query parameter
+        }
+	});
+	t.is(statusCode, 401);
+});
+
+  //////////////////////////
+ // PUT planner/progress //
+//////////////////////////
+
+test("PUT /user/{username}/planner/progress updates exercise progress entries successfully", async (t) => {
+    // const username = "john_doe";
+    const day = 1;
+    const newProgress = {
+        notes: "Felt strong",
+        name: "Bench Press",
+        weightPerDateEntries: [70,80],
+        repetitionsPerDateEntries: [10,10]
+      };
+
+// Send the PUT request
+    const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress",
+        {
+            json: newProgress,
+            responseType: "json"
+        }
+    );
+
+    const { updatedProgress } = body;
+
+
+    t.is(statusCode, 200);
+	// console.log("Full Response:", { body, statusCode });
+	t.deepEqual(updatedProgress, newProgress, "The updated exercise progress should match");
+});
+
+    test("PUT /user/{username}/planner/progress exercise progress entries successfully", async (t) => {
+        const username = "john_doe";
+        const day = 1;
+        const newProgress = {
+            notes: 1,
+            name: "Bench Press",
+            weightPerDateEntries: "1234",
+            repetitionsPerDateEntries: [10]
+        };
+    
+    // Send the PUT request
+        const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress",
+            {
+                json: newProgress,
+                responseType: "json",
+                throwHttpErrors: false
+            });    
+    
+        t.is(statusCode, 400);
+    });
