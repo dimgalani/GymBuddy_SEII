@@ -137,9 +137,9 @@ module.exports.updateExerciseProgress = function updateExerciseProgress (req, re
 module.exports.updatePersonalInfo = function updatePersonalInfo (req, res, next, body, username) {
   Default.updatePersonalInfo(body, username)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     });
 };

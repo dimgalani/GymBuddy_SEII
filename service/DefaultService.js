@@ -8,7 +8,7 @@
 //   goalConsistencyNum: 6,
 //   goalBodyWeightNum: 1,
 // };
-
+const Usernames = ["john_doe", "alice_wonder", "jane_smith", "nathaniel_brooks", "adrian_carter","default"];
 const UserSettings = [
   {
     username: "john_doe",
@@ -35,9 +35,29 @@ const UserSettings = [
     settings: {
       bodyweight: 75.00,
       gender: "male",
-      goals: [false, false, false, false],
+      goals: [false, false, false, ],
       goalConsistencyNum: 6,
       goalBodyWeightNum: 80.0,
+    },
+  },
+  {
+    username: "nathaniel_brooks",
+    settings: {
+      bodyweight: 75.00,
+      gender: "male",
+      goals: [false, false, false, true],
+      goalConsistencyNum: 6,
+      goalBodyWeightNum: null,
+    },
+  },
+  {
+    username: "adrian_carter",
+    settings: {
+      bodyweight: 75.00,
+      gender: "male",
+      goals: [false, false, false, true],
+      goalConsistencyNum: 6,
+      goalBodyWeightNum: 90.00,
     },
   },
 ];
@@ -79,6 +99,7 @@ exports.cancelReservation = function(username,day) {
  * username String the username of the connected person
  * currentBodyWeight Float 
  * returns Boolean
+ * GET /user/{usename}/settings/goals
  **/
 exports.checkGoalsFromInfo = function (currentBodyWeight, username) {
   return new Promise(function (resolve, reject) {
@@ -88,6 +109,7 @@ exports.checkGoalsFromInfo = function (currentBodyWeight, username) {
     
     // Throw 401 error if the username is unknown
     if (!user) {
+      //* OK
       reject({
         message: 'Response code 401 (Unauthorized): Not a valid username',
         code: 401,
@@ -96,6 +118,7 @@ exports.checkGoalsFromInfo = function (currentBodyWeight, username) {
 
     // If the current body weight is not provided in the request
     else if (!currentBodyWeight) {
+      //* OK
       reject({
         message: 'Response code 400 (Bad Request): No currentBodyWeight parameter provided.',
         code: 400,
@@ -103,6 +126,7 @@ exports.checkGoalsFromInfo = function (currentBodyWeight, username) {
     }
     else if (!Number.isInteger(currentBodyWeight)) {
       // If the data types are incorrect
+      //* OK
       reject({
         message: 'Response code 400 (Bad Request): Wrong data types for currentBodyWeight.',
         code: 400,
@@ -115,6 +139,7 @@ exports.checkGoalsFromInfo = function (currentBodyWeight, username) {
       const storedBodyWeight = user.settings.bodyweight;
       // If the user hasn't set his previous body weight - throw 404 error
       if(storedBodyWeight === null){
+        //* OK
         reject({
           message: 'Response code 404 (Not Found): Previous BodyWeight data not found',
           code: 404,
@@ -124,6 +149,7 @@ exports.checkGoalsFromInfo = function (currentBodyWeight, username) {
       const GoalBodyWeight = user.settings.goalBodyWeightNum;
       // If the user hasn't set his goal body weight - throw 404 error
       if(!GoalBodyWeight){
+        //* OK
         reject({
           message: 'Response code 404 (Not Found): Goal body weight data not found',
           code: 404,
@@ -136,16 +162,42 @@ exports.checkGoalsFromInfo = function (currentBodyWeight, username) {
         if (currentBodyWeight === GoalBodyWeight || // If the user has reached the goal
             (storedBodyWeight > GoalBodyWeight && currentBodyWeight < GoalBodyWeight) || // If the user wants to lose weight and has exceeded the goal
             (storedBodyWeight < GoalBodyWeight && currentBodyWeight > GoalBodyWeight)) { // If the user wants to gain weight and has exceeded the goal
-          resolve({ message: "Victory Animation"});
+              resolve({ 
+                //* OK
+                message: "Victory Animation",
+                code: 200,
+              });
         }
-      } else {
-        // If the user has not reached the goal
-        resolve({ message: "No progress. Boo hoo :("});
+        else
+        {
+          // If the user is closer to the goal but has not reached it yet
+          resolve({ 
+            //* OK
+            message: "Keep trying. You are closer to your goal",
+            code: 200,
+          });
+        }
+      } 
+      else
+      {
+        // If the user is further from the goal
+        resolve({ 
+          //* OK
+          message: "You can do better! I believe in you!",
+          code: 200,
+        });
       }
-  } else{
-    // If the user does not have the weight loss/gain goal active
-    resolve({ message: "No weight loss gain goal active" });}
-  });
+  } 
+  else
+    {
+      // If the user does not have the weight loss/gain goal active
+      resolve({ 
+        //* OK
+        message: "No weight loss/gain goal active",
+        code: 200,
+      });
+    }
+});
 }
 
 
@@ -464,14 +516,15 @@ exports.updateExerciseProgress = function(body,day,username) {
  * body PersonalInfo A json object containing the Personal info
  * username String the username of the connected person
  * no response value expected for this operation
+ * PUT /user/{username}/settings
  **/
 // Update personal info function
 exports.updatePersonalInfo = function ( newSettings, username,) {
   return new Promise(function (resolve, reject) {
     // Find the user in the UserSettings array
     const user = UserSettings.find((user) => user.username === username);
-
     if (!user) {
+      console.log("user not found");
       reject({
         message: 'Response code 401 (Unauthorized): Not a valid username',
         code: 401,
@@ -480,8 +533,8 @@ exports.updatePersonalInfo = function ( newSettings, username,) {
     if(!Number.isInteger(newSettings.bodyweight) || newSettings.bodyweight < 0 || !String(newSettings.gender) ||
        !Array.isArray(newSettings.goals) || newSettings.goals.length !== 4 || !newSettings.goals.every((value) => typeof value === "boolean") ||
        !Number.isInteger(newSettings.goalConsistencyNum) || !Number.isInteger(newSettings.goalBodyWeightNum) || newSettings.goalConsistencyNum < 0 || newSettings.goalBodyWeightNum < 0 ) {
-      reject({
-        message: 'Response code 400 (Bad Request): Wrong data types for bodyweight.',
+        reject({
+        message: 'Response code 400 (Bad Request): Wrong data types.',
         code: 400,
       });
     }
@@ -495,7 +548,9 @@ exports.updatePersonalInfo = function ( newSettings, username,) {
     user.settings.goals = newSettings.goals;
     // Resolve with the updated settings and the message
     resolve({
-      updatedInfo: user.settings,
+      updatedInfo: user.settings, 
+      message: 'Response code 200 (OK). Settings successfully updated',
+      code: 200,
     });
   });
 };
