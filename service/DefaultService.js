@@ -1,14 +1,5 @@
 'use strict';
 
-// // Placeholder for user settings
-// const DefaultSettings = {
-//   bodyweight: 75.0,
-//   gender: "male",
-//   goals: [false, false], // Example: weight loss goal active, others not
-//   goalConsistencyNum: 6,
-//   goalBodyWeightNum: 1,
-// };
-const Usernames = ["john_doe", "alice_wonder", "jane_smith", "nathaniel_brooks", "adrian_carter","default"];
 const UserSettings = [
   {
     username: "john_doe",
@@ -229,6 +220,7 @@ exports.checkGoalsFromProgress = function(username,day) {
  * body Exercise A json object containing the Exercise
  * username String the username of the connected person
  * no response value expected for this operation
+ * POST /user/{username}/planner/catalog
  **/
 exports.createCustomExercise = function(body, username) {
   return new Promise(function(resolve, reject) {
@@ -241,12 +233,6 @@ exports.createCustomExercise = function(body, username) {
         exercise: existingExercise,
         code: 409,
       });
-      // resolve({
-      //   message: 'Exercise successfully added to the catalog',
-      //   exercise: ExerciseCatalog[ExerciseCatalog.length - 1],
-      //   code: 201,
-      // });
-
     } else {
       // Add the new exercise to the catalog
       ExerciseCatalog.push(body);
@@ -539,7 +525,6 @@ exports.updatePersonalInfo = function ( newSettings, username,) {
       });
     }
       
-    
     // Update the user's settings
     user.settings.bodyweight = newSettings.bodyweight;
     user.settings.gender = newSettings.gender;
