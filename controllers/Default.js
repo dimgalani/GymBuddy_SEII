@@ -40,7 +40,7 @@ module.exports.createCustomExercise = function createCustomExercise (req, res, n
       utils.writeJson(res, response, response.code);
     })
     .catch(function (response) {
-      utils.writeJson(res, response.message, response.code);
+      utils.writeJson(res, response, response.code);
     });
 };
 

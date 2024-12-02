@@ -182,11 +182,11 @@ exports.createCustomExercise = function(body, username) {
   return new Promise(function(resolve, reject) {
     // Check if the exercise already exists in the catalog
     const existingExercise = ExerciseCatalog.find(exercise => exercise.name === body.name);
-
     if (existingExercise !== undefined) {
       // If the exercise already exists in the catalog
       reject({
         message: 'Response code 409 (Conflict): Exercise already exists in the catalog',
+        exercise: existingExercise,
         code: 409,
       });
       // resolve({

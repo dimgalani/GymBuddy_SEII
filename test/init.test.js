@@ -139,16 +139,16 @@ test("POST /user/{username}/planner/catalog with Correct Request (Mock Data)", a
 	t.deepEqual(body.exercise, newExercise);
 });
 
-// test("POST /user/{username}/planner/catalog with Bad Request - Already existing exercise", async (t) => {
-// 	const newExercise = {
-// 		name: "Lat Pull Down",
-// 		notes: "blah blah blah",
-// 	};
-// 	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
-// 		json: newExercise,
-// 		responseType: "json",
-// 	});
-// 	console.log("Full Response:", { body, statusCode });
-// 	t.is(statusCode, 409);
-// 	t.deepEqual(body.exercise, newExercise);
-// });
+test("POST /user/{username}/planner/catalog with Bad Request - Already existing exercise", async (t) => {
+	const newExercise = {
+		name: "Lat Pull Down",
+		notes: "blah blah blah",
+	};
+	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
+		json: newExercise,
+		responseType: "json",
+		throwHttpErrors: false
+	});
+	t.is(statusCode, 409);
+	t.deepEqual(body.exercise.name, newExercise.name);
+});
