@@ -31,7 +31,6 @@ var writeJson = exports.writeJson = function(response, arg1, arg2) {
     payload = arg1;
   }
 
-  console.log(`Got code ${code} and payload ${payload}`)
   if(!code) {
     // if no response code given, we default to 200
     code = 200;

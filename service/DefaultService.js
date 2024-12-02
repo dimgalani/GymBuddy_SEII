@@ -61,11 +61,46 @@ const userReservations = {
  * day Long the day of the reservation
  * no response value expected for this operation
  **/
-exports.cancelReservation = function(username,day) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+exports.cancelReservation = function (day, time, username) {
+  return new Promise(function (resolve, reject) {
+    // Step 1: Validate data types
+    if (typeof username !== "string" || typeof day !== "string" || typeof time !== "string") {
+      return reject({
+        message: "Response code 400 (Bad Request): Invalid data types.",
+        code: 400
+      });
+    }
+
+    // Step 2: Check if the username exists
+    if (!userReservations[username]) {
+      return reject({
+        message: "Response code 401 (Unauthorized): Username not found.",
+        code: 401
+      });
+    }
+
+    // Step 3: Check if the reservation exists
+    const reservationIndex = userReservations[username].findIndex(
+      (reservation) => reservation.date === day && reservation.time === time
+    );
+
+    if (reservationIndex === -1) {
+      return reject({
+        message: "Response code 404 (Not Found): Reservation does not exist.",
+        code: 404
+      });
+    }
+
+    // Step 4: Delete the reservation
+    userReservations[username].splice(reservationIndex, 1);
+
+    // Return success response
+    resolve({
+      message: "Reservation successfully canceled.",
+      code: 202
+    });
   });
-}
+};
 
 
 /**
@@ -98,19 +133,6 @@ exports.checkGoalsFromInfo = function(username,currentBodyWeight) {
  * returns List
  **/
 
-/*
-exports.checkGoalsFromProgress = function(username,day) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ true, true ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
-*/
 exports.checkGoalsFromProgress = function (day, username) {
   return new Promise(function (resolve, reject) {
     const userProgress = {
@@ -178,31 +200,7 @@ exports.createCustomExercise = function(body,username) {
  * day String the day selected for a reservation
  * returns List
  **/
-/*
-exports.getAvailableReservations = function(username,day) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "date" : "date",
-  "reservationsPerMuscleGroup" : [ 6, 6 ],
-  "muscleGroup" : "muscleGroup",
-  "time" : "time",
-  "availability" : 0
-}, {
-  "date" : "date",
-  "reservationsPerMuscleGroup" : [ 6, 6 ],
-  "muscleGroup" : "muscleGroup",
-  "time" : "time",
-  "availability" : 0
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
-*/
+
 exports.getAvailableReservations = function (day, username) {
   return new Promise(function (resolve, reject) {
     // Check if username exists

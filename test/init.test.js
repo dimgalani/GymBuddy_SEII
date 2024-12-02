@@ -158,7 +158,7 @@ test("POST /user/{username}/reservations with Bad Request (Not existing username
  test("POST /user/{username}/reservations with Bad Request (Existing Reservation)", async (t) => {
 	const bodyData = {
 		date: "2024-11-01",
-	  	time: "08:00",
+	  	time: "10:00",
 	  	muscleGroup: "upper",
 	};
 	const { body, statusCode } = await t.context.got.post("user/john_doe/reservations", {
@@ -167,3 +167,51 @@ test("POST /user/{username}/reservations with Bad Request (Not existing username
 	});
 	t.is(statusCode, 409);
  });
+
+
+//////////////////////////
+// DELETE /reservations //
+//////////////////////////
+
+test("DELETE /user/{username}/reservations with Correct Request (Mock Data)", async (t) => {
+	const { body, statusCode } = await t.context.got.delete("user/john_doe/reservations", {
+		searchParams: {
+			day: "2024-11-01",
+			time: "08:00"
+		}, // Send query parameters
+	});
+	t.is(statusCode, 202);
+});
+
+test("DELETE /user/{username}/reservations with Bad Request (Invalid data types)", async (t) => {
+	const { body, statusCode } = await t.context.got.delete("user/john_doe/reservations", {
+		searchParams: {
+			day: undefined, // Invalid data type
+			time: false // Invalid data type
+		},
+		throwHttpErrors: false // Ensure the test doesn't throw on error response
+	});
+	t.is(statusCode, 400);
+});
+
+test("DELETE /user/{username}/reservations with Unauthorized Request (Non-existent username)", async (t) => {
+	const { body, statusCode } = await t.context.got.delete("user/non_existent_user/reservations", {
+		searchParams: {
+			day: "2024-11-01",
+			time: "08:00"
+		},
+		throwHttpErrors: false
+	});
+	t.is(statusCode, 401);
+});
+
+test("DELETE /user/{username}/reservations with Not Found (Non-existent reservation)", async (t) => {
+	const { body, statusCode } = await t.context.got.delete("user/john_doe/reservations", {
+		searchParams: {
+			day: "2024-11-01",
+			time: "20:00" // No reservation at this time
+		},
+		throwHttpErrors: false
+	});
+	t.is(statusCode, 404);
+});

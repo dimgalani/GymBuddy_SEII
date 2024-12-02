@@ -3,13 +3,13 @@
 var utils = require('../utils/writer.js');
 var Default = require('../service/DefaultService');
 
-module.exports.cancelReservation = function cancelReservation (req, res, next, username, day) {
-  Default.cancelReservation(username, day)
+module.exports.cancelReservation = function cancelReservation (req, res, next, username, day, time) {
+  Default.cancelReservation(username, day, time)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     });
 };
 
