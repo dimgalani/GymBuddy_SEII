@@ -95,8 +95,8 @@ test("GET /user/{usename}/reservations with Correct Request", async (t) => {
 	});
 	t.is(statusCode, 200);
 	t.deepEqual(body, [
-		{ "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "time": "08:00 AM", "availability": 5 },
-		{ "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:00 AM", "availability": 10 }
+		{ "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "time": "08:00", "availability": 50 },
+		{ "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:00", "availability": 50 }
 	  ]);  // Check with the mock data
 });
 
@@ -104,29 +104,66 @@ test("GET /user/{usename}/reservations with Correct Request", async (t) => {
 // POST /reservations //
 ////////////////////////
 
-test("POST /user/{username}/reservations with Correct Request", async (t) => {
+test("POST /user/{username}/reservations with Correct Request (Mock Data)", async (t) => {
 	const bodyData = {
 		date: "2024-11-01",
 	  	time: "10:00",
 	  	muscleGroup: "lower",
 	};
-
-	const searchParams = {
-	  	day: "2024-11-01",
-	  	time: "10:00",
-	  	musclegroup: "lower",
-	}
- 
-	try {
-	  const { body, statusCode } = await t.context.got.post("user/john_doe/reservations", {
-		json: bodyData,
-		searchParams: searchParams
-	  });
-	  console.log("Response:", body);
-	  t.is(statusCode, 201);
-	} catch (error) {
-	  console.error("Error:", error.response?.body || error.message);
-	  t.fail(error.message);
-	}
+	const { body, statusCode } = await t.context.got.post("user/john_doe/reservations", {
+		json: bodyData
+	});
+	t.is(statusCode, 201);
  });
  
+ test("POST /user/{username}/reservations with Bad Request (Invalid data type)", async (t) => {
+	const bodyData = {
+		date: 123,
+	  	time: 123,
+	  	muscleGroup: 123,
+	};
+	const { body, statusCode } = await t.context.got.post("user/john_doe/reservations", {
+		json: bodyData,
+		throwHttpErrors: false
+	});
+	t.is(statusCode, 400);
+ });
+
+ test("POST /user/{username}/reservations with Bad Request (Invalid muscle group)", async (t) => {
+	const bodyData = {
+		date: "2024-11-01",
+	  	time: "10:00",
+	  	muscleGroup: "legs",
+	};
+	const { body, statusCode } = await t.context.got.post("user/john_doe/reservations", {
+		json: bodyData,
+		throwHttpErrors: false
+	});
+	t.is(statusCode, 400);
+ });
+
+test("POST /user/{username}/reservations with Bad Request (Not existing username)", async (t) => {
+	const bodyData = {
+		date: "2024-11-01",
+	  	time: "10:00",
+	  	muscleGroup: "lower",
+	};
+	const { body, statusCode } = await t.context.got.post("user/no_name/reservations", {
+		json: bodyData,
+		throwHttpErrors: false
+	});
+	t.is(statusCode, 401);
+ });
+
+ test("POST /user/{username}/reservations with Bad Request (Existing Reservation)", async (t) => {
+	const bodyData = {
+		date: "2024-11-01",
+	  	time: "08:00",
+	  	muscleGroup: "upper",
+	};
+	const { body, statusCode } = await t.context.got.post("user/john_doe/reservations", {
+		json: bodyData,
+		throwHttpErrors: false
+	});
+	t.is(statusCode, 409);
+ });

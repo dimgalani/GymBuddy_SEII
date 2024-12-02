@@ -113,11 +113,12 @@ module.exports.getPersonalInfo = function getPersonalInfo (req, res, next, usern
     });
 };
 
-module.exports.makeReservation = function makeReservation (req, res, next, body, day, time, musclegroup, username) {
-  console.log('here')
-  Default.makeReservation(body, day, time, musclegroup, username)
+module.exports.makeReservation = function makeReservation (req, res, next, body, username) {
+  
+  Default.makeReservation(body, username)
     .then(function (response) {
-      utils.writeJson(res, response);
+      console.log('here')
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (error) {
       utils.writeJson(res, error.message, error.code);
