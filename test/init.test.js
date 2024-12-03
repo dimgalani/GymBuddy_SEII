@@ -65,10 +65,7 @@ test("GET /user/{username}/myreservations returns empty array if no reservations
 
 test("GET /user/{username}/myreservations with invalid username", async (t) => {
     const { statusCode, body } = await t.context.got("user/no_name/myreservations", {
-        throwHttpErrors: false,
-        searchParams: {
-            username: "john_doe"
-        }
+        throwHttpErrors: false
     });
 
     t.is(statusCode, 401);
@@ -108,18 +105,15 @@ test("GET /user/{username}/planner/progress returns exercise details successfull
     // });
 
     t.deepEqual(body.exercises, [
-        { "notes" : "note1", "name" : "exercise_1", "weightPerDateEntries" : [ 5, 6, 6, 8, 8], "repetitionsPerDateEntries" : [ 10, 10, 15, 10, 10 ] },
-        { "notes" : "note2", "name" : "exercise_2", "weightPerDateEntries" : [ 20, 25, 25, 25 ,30], "repetitionsPerDateEntries" : [ 15, 15, 15, 20, 15 ]  },
-        { "notes" : "note3", "name" : "exercise_3", "weightPerDateEntries" : [ 30, 35, 35, 40, 45], "repetitionsPerDateEntries" : [ 5, 5, 5, 5 ,8 ] }
+        { "notes" : "note1", "name" : "exercise_1", "weightPerDateEntries" : [ 5, 6, 6, 8, 8, 5, 6, 6, 8, 8], "repetitionsPerDateEntries" : [ 10, 10, 15, 10, 10 ] },
+        { "notes" : "note2", "name" : "exercise_2", "weightPerDateEntries" : [ 20, 25, 25, 25 ,30, 20, 25, 25, 25 ,30], "repetitionsPerDateEntries" : [ 15, 15, 15, 20, 15 ]  },
+        { "notes" : "note3", "name" : "exercise_3", "weightPerDateEntries" : [ 30, 35, 35, 40, 45, 30, 35, 35, 40, 45], "repetitionsPerDateEntries" : [ 5, 5, 5, 5 ,8 ] }
     ]);
 });
 
 test("GET /user/{usename}/planner/progress with invalid username", async (t) => {
-	const { body, statusCode } = await t.context.got("user/default/planner/progress", {
-		throwHttpErrors: false,
-        searchParams: {
-            day: "invalid_day" // Simulating an invalid query parameter
-        }
+	const { body, statusCode } = await t.context.got("user/no_name/planner/progress", {
+		throwHttpErrors: false
 	});
 	t.is(statusCode, 401);
 });
@@ -129,39 +123,36 @@ test("GET /user/{usename}/planner/progress with invalid username", async (t) => 
 //////////////////////////
 
 test("PUT /user/{username}/planner/progress updates exercise progress entries successfully", async (t) => {
-    // const username = "john_doe";
-    const day = 1;
-    const newProgress = {
-        notes: "Felt strong",
-        name: "Bench Press",
-        weightPerDateEntries: [70,80],
-        repetitionsPerDateEntries: [10,10]
-      };
+    const day = 8;
+    const name = "Bench Press";
+    const weight = 70;
+    const reps = 10;
 
-// Send the PUT request
-    const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress",
-        {
-            json: newProgress,
-            responseType: "json"
-        }
-    );
-
-    const { updatedProgress } = body;
-
-
+    console.log("Incoming Request: ", { day, name, weight, reps });
+  
+    // Send the PUT request
+    const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress", {
+      json: { day, name, weight, reps },
+      responseType: "json"
+    });
+  
+    // Validate the response
     t.is(statusCode, 200);
-	// console.log("Full Response:", { body, statusCode });
-	t.deepEqual(updatedProgress, newProgress, "The updated exercise progress should match");
-});
+  
+    // Ensure updated progress matches expectations
+    // const { updatedProgress } = body;
+    t.deepEqual(updatedProgress.weightPerDateEntries[day - 1], weight, "The updated exercise weight should match");
+    t.deepEqual(updatedProgress.repetitionsPerDateEntries[day - 1], reps, "The updated exercise reps should match");
+  });
+  
 
-    test("PUT /user/{username}/planner/progress exercise progress entries successfully", async (t) => {
+    test("PUT /user/{username}/planner/progress with bad request", async (t) => {
         const username = "john_doe";
-        const day = 1;
+        const day = 10;
         const newProgress = {
-            notes: 1,
             name: "Bench Press",
             weightPerDateEntries: "1234",
-            repetitionsPerDateEntries: [10]
+            repetitionsPerDateEntries: 10
         };
     
     // Send the PUT request
@@ -173,4 +164,28 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
             });    
     
         t.is(statusCode, 400);
+    });
+
+    test("PUT /user/{username}/planner/progress with invalid username", async (t) => {
+        // const username = "john_doe";
+        const day = 7;
+        const newProgress = {
+            name: "Squat",
+            weightPerDateEntries: 70,
+            repetitionsPerDateEntries: 10
+          };
+    
+    // Send the PUT request
+        const { body, statusCode } = await t.context.got.put("user/no_name/planner/progress",
+            {
+                throwHttpErrors: false,
+                json: newProgress,
+                responseType: "json"
+            }
+        );
+    
+        // const { updatedProgress } = body;
+    
+    
+        t.is(statusCode, 401);
     });

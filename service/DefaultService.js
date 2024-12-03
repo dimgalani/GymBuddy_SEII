@@ -18,36 +18,42 @@ const availableReservations = {
   default: []
 };
 
-const usersPlanner = {
-  john_doe: [{
-    1:[{
-      notes: "Felt strong",
-      name: "Bench Press",
-      weightPerDateEntries: [70, 80],
-      repetitionsPerDateEntries: [10, 10]
-    }],
-    2:[{
-      notes: "Felt strong",
-      name: "Squat",
-      weightPerDateEntries: [80, 80],
-      repetitionsPerDateEntries: [8, 10]
-    }]
-  }],
-  jane_smith: [{
-    1:[{
-      notes: "tough",
-      name: "Bench Press",
-      weightPerDateEntries: [100, 110],
-      repetitionsPerDateEntries: [5, 8]
-    }],
-    2:[{
-      notes: "strong",
-      name: "Squat",
-      weightPerDateEntries: [80, 90],
-      repetitionsPerDateEntries: [10, 15]
-    }]
-  }]
-};
+const usersPlanner = [
+  {
+    username: "john_doe",
+    exercise: {
+       notes: "Felt strong",
+       name: "Bench Press",
+       weightPerDateEntries: [70, 80, 80, 80, 85, 90, null, null, null, null],
+       repetitionsPerDateEntries: [10, 10, 10, 10, 10, null, null, null, null, null]
+     }
+  },
+     // ,
+     // {
+     //   notes: "Felt strong",
+     //   name: "Squat",
+     //   weightPerDateEntries: [80, 80, 80, 85, 85, null, null, null, null],
+     //   repetitionsPerDateEntries: [8, 8, 8, 8, 8, 8, null, null, null, null]
+     // }
+    // ,
+    {
+      username: "jane_smith",
+      exercise: {
+      
+       notes: "tough",
+       name: "Squat",
+       weightPerDateEntries: [100, 110, 110, 110, 110, 110, null, null, null, null],
+       repetitionsPerDateEntries: [5, 5, 5, 5, 5, 5, null, null, null, null]
+     }
+    }
+     // ,
+     // {
+       // notes: "strong",
+       // name: "Squat",
+       // weightPerDateEntries: [70, 70, 70, 70, 70, 75, null, null, null, null],
+       // repetitionsPerDateEntries: [10, 10, 10, 10, 10, null, null, null, null]
+     // }
+];
 
 /**
  * Cancels a reservation by deleting it
@@ -174,31 +180,6 @@ exports.createCustomExercise = function(body,username) {
  * day String the day selected for a reservation
  * returns List
  **/
-/*
-exports.getAvailableReservations = function(username,day) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "date" : "date",
-  "reservationsPerMuscleGroup" : [ 6, 6 ],
-  "muscleGroup" : "muscleGroup",
-  "time" : "time",
-  "availability" : 0
-}, {
-  "date" : "date",
-  "reservationsPerMuscleGroup" : [ 6, 6 ],
-  "muscleGroup" : "muscleGroup",
-  "time" : "time",
-  "availability" : 0
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
-*/
 exports.getAvailableReservations = function (day, username) {
   return new Promise(function (resolve, reject) {
     // Mock dataset: User reservations data
@@ -290,9 +271,9 @@ exports.getDropDownMenuList = function(username) {
     const examples = {};
     examples['application/json'] = {
   "exercises" : [ 
-    { "notes" : "note1", "name" : "exercise_1", "weightPerDateEntries" : [ 5, 6, 6, 8, 8], "repetitionsPerDateEntries" : [ 10, 10, 15, 10, 10 ] },
-    { "notes" : "note2", "name" : "exercise_2", "weightPerDateEntries" : [ 20, 25, 25, 25 ,30], "repetitionsPerDateEntries" : [ 15, 15, 15, 20, 15 ]  },
-    { "notes" : "note3", "name" : "exercise_3", "weightPerDateEntries" : [ 30, 35, 35, 40, 45], "repetitionsPerDateEntries" : [ 5, 5, 5, 5 ,8 ] }
+    { "notes" : "note1", "name" : "exercise_1", "weightPerDateEntries" : [ 5, 6, 6, 8, 8, 5, 6, 6, 8, 8], "repetitionsPerDateEntries" : [ 10, 10, 15, 10, 10 ] },
+    { "notes" : "note2", "name" : "exercise_2", "weightPerDateEntries" : [ 20, 25, 25, 25 ,30, 20, 25, 25, 25 ,30], "repetitionsPerDateEntries" : [ 15, 15, 15, 20, 15 ]  },
+    { "notes" : "note3", "name" : "exercise_3", "weightPerDateEntries" : [ 30, 35, 35, 40, 45, 30, 35, 35, 40, 45], "repetitionsPerDateEntries" : [ 5, 5, 5, 5 ,8 ] }
   ]
 };
     if (!usernames.includes(username)) {
@@ -447,34 +428,49 @@ exports.makeReservation = function(body,day,time,musclegroup,username) {
  * username String the username of the connected person
  * no response value expected for this operation
  **/
-exports.updateExerciseProgress = function (body, day, username) {
+exports.updateExerciseProgress = function (day, username, name, weight, reps) {
   return new Promise(function (resolve, reject) {
     // Validate username
-    if (!usernames.includes(username)) {
+    const user = usersPlanner.find((entry) => entry.username === username);
+
+    console.log("Incoming Request: ", { day, username, name, weight, reps });
+
+
+    if (!day || !name || !weight || !reps) {
+      reject({
+          message: "Missing required fields",
+          code: 400
+      });
+      return;
+  }
+  
+
+    if (!user) {
       return reject({
-        message: "Response code 401 (Unauthorized): Not a valid username",
+        message: "User not found",
         code: 401
       });
     }
 
-    // Get user's planner
-    const userEntries = usersPlanner[username][day-1];
+    const exercise  = user.exercise;
 
-    // Find the exercise to update
-    // const exercise = userEntries.find((entry) => entry.name === body.name);
+    if (!exercise || exercise.name !== name) {
+      return reject({
+        message: "Exercise not found for user",
+        code: 404
+      });
+    }
 
     if (!exercise) {
       return reject({ message: "Exercise not found", code: 404 });
     }
 
-    // Update the exercise progress
-    userEntries.notes = body.notes;
-    userEntries.weightPerDateEntries = body.weightPerDateEntries;
-    userEntries.repetitionsPerDateEntries = body.repetitionsPerDateEntries;
+    // Update the exercise progress for the specified day (adjusting for zero-based index)
+    userEntry.exercise.weightPerDateEntries[day - 1] = weight;
+    userEntry.exercise.repetitionsPerDateEntries[day - 1] = reps;
 
-    // Resolve with success message and updated data
     resolve({
-      updatedProgress: userEntries,
+      updatedProgress: user.exercise,
       message: "Progress updated successfully"
     });
   });

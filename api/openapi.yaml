@@ -288,8 +288,32 @@ paths:
         schema:
           type: integer
           format: int32
-      requestBody:
-        $ref: '#/components/requestBodies/Exercise'
+      - name: name
+        in: query
+        description: exercise name
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: string
+      - name: weight
+        in: query
+        description: the new weight
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: number
+          format: float
+      - name: reps
+        in: query
+        description: the new reps
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: integer
+          format: int32
       responses:
         "200":
           description: Successful update of exercise progress
