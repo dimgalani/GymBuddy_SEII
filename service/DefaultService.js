@@ -415,7 +415,7 @@ exports.getMyReservations = function(username) {
  * username String the username of the connected person
  * returns PersonalInfo
  **/
-exports.getPersonalInfo = function(username) {
+/*exports.getPersonalInfo = function(username) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -431,9 +431,55 @@ exports.getPersonalInfo = function(username) {
       resolve();
     }
   });
-}
+} */
 
-
+exports.getPersonalInfo = function (username) {
+    return new Promise(function (resolve, reject) {
+      const userData = {
+        john_doe: {
+          gender: "male",
+          goalConsistencyNum: 4,
+          goalBodyWeightNum: 75,
+          bodyweight: 80.5,
+          goals: [true, false, true],
+        },
+        jane_smith: {
+          gender: "female",
+          goalConsistencyNum: 5,
+          goalBodyWeightNum: 60,
+          bodyweight: 62.3,
+          goals: [true, true, true],
+        },
+        default: {
+          gender: "",
+          goalConsistencyNum: 0,
+          goalBodyWeightNum: 0,
+          bodyweight: 0,
+          goals: [],
+        },
+      };
+ 
+      // Invalid username
+      if (!usernames.includes(username)) {
+        reject({
+          message: "Unauthorized access. Invalid username.",
+          code: 401,
+        });
+        return;
+      }
+      // User data not found
+      if (!userData[username]) {
+        reject({
+          message: `No data found for username ${username}.`,
+          code: 404,
+        });
+        return;
+      }
+      // Valid user data
+      resolve(userData[username]);
+    });
+  };
+  
 /**
  * Submits a reservation for a selected day and time
  * FR3 - A user must be able to make a reservation
