@@ -34,7 +34,7 @@ test("GET /user/{usename}/planner/catalog/{exercise-name} with Bad Request (miss
 
 
 test("GET /user/{username}/planner/catalog/{exercise-name} with Bad Request (invalid username)", async (t) => {
-	const { body, statusCode } = await t.context.got("user/invalid_user/planner/catalog/Lat_Pull_Down", {
+	const { body, statusCode } = await t.context.got("user/invalid_user/planner/catalog/Lat-Pull-Down", {
 	  throwHttpErrors: false
 	});
 
@@ -44,7 +44,7 @@ test("GET /user/{username}/planner/catalog/{exercise-name} with Bad Request (inv
   
 
 test("GET /user/{usename}/planner/catalog/{exercise-name} with Correct Request (Mock Data)", async (t) => {
-	const { body, statusCode } = await t.context.got("user/john_doe/planner/catalog/Lat_Pull_Down", {
+	const { body, statusCode } = await t.context.got("user/john_doe/planner/catalog/Lat-Pull-Down", {
 	throwHttpErrors: false
 	});
 
@@ -58,7 +58,7 @@ test("GET /user/{usename}/planner/catalog/{exercise-name} with Correct Request (
 
 
 test("GET /user/{usename}/planner/catalog/{exercise-name} with Correct Request if there isn't any exercise progresσ recorded for an exercise", async (t) => {
-	const { body, statusCode } = await t.context.got("user/default/planner/catalog/any_exercise", {
+	const { body, statusCode } = await t.context.got("user/default/planner/catalog/any-exercise", {
 			throwHttpErrors: false
 	});
     t.is(statusCode, 200);
