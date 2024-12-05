@@ -124,7 +124,7 @@ exports.checkGoalsFromInfo = function (currentBodyWeight, username) {
       });
     }
 
-    // If the user has the weight loss/gain goal active //TODO: need to change the index to the correct one
+    // If the user has the weight loss/gain goal active
     else if (user.settings.goals[3]){ 
       // Get the user's body weight
       const storedBodyWeight = user.settings.bodyweight;
