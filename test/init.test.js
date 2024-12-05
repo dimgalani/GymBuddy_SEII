@@ -42,7 +42,7 @@ test("GET /user/{username}/planner/catalog/{exercise-name} with Bad Request (inv
 });
   
 
-test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request (Mock Data)", async (t) => {
+test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request", async (t) => {
 	const { body, statusCode } = await t.context.got("user/john_doe/planner/catalog/lat-pull-down", {
 		throwHttpErrors: false
 	});
@@ -67,7 +67,7 @@ test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request a
 		notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
 		weightPerDateEntries: [],
 		repetitionsPerDateEntries: [],
-	  });
+	});
 });
 //idk an theloume na einai bad request
 // parapempei se invalid exercise pou exoyme idi panw
