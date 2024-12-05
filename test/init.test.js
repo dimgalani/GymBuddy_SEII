@@ -70,21 +70,31 @@ test("GET /user/{usename}/planner/catalog/{exercise-name} with Correct Request i
 // GET /planner //
 ///////////////////////
 
- test("GET /user/{usename}/planner with Bad Request (no day parameter)", async (t) => {
-	const { body, statusCode } = await t.context.got("user/default/planner", {
-		throwHttpErrors: false
-	});
-	t.is(statusCode, 400);
+test("GET /user/{username}/planner with Bad Request (no day parameter)", async (t) => {
+    try {
+        const { body, statusCode } = await t.context.got("user/default/planner", {
+            throwHttpErrors: false,
+        });
+        console.log(body, statusCode);
+        t.is(statusCode, 400); // Expect a 400 Bad Request
+    } catch (error) {
+        console.error("Test failed:", error.message);
+        t.fail(error.message);
+    }
 });
 
-test("GET /user/{usename}/planner with Bad Request (no exercise progress entries for requested day)", async (t) => {
-	const { body, statusCode } = await t.context.got("user/john_doe/planner", {
-		searchParams: {
-			day: 5
-		},
-		throwHttpErrors: false
-	});
-	t.is(statusCode, 404);
+
+test("GET /user/{username}/planner with Bad Request or Not Found", async (t) => {
+    //try {
+        const { body, statusCode } = await t.context.got("user/john_doe/planner", {
+            searchParams: {
+                day: 5, // Testing for a missing planner day
+            },
+            throwHttpErrors: false,
+        });
+		t.is(statusCode, 404);
+
+        console.log(body, statusCode);
 });
 
 
@@ -95,36 +105,46 @@ test("GET /user/{usename}/planner with Bad Request (wrong day datatype)", async 
 		},
 		throwHttpErrors: false
 	});
+	console.log(body, statusCode);
 	t.is(statusCode, 400);
 });
 
 
 test("GET /user/{usename}/planner with Correct Request", async (t) => {
-	const { body, statusCode } = await t.context.got("user/john_doe/planner", {
-		searchParams: {
-			day: 1
-		}
-	});
-	t.is(statusCode, 200);
-	t.deepEqual(body, {
-		currentDate: 1,
-		exercisesList: [
-		  {
-			name: "Romanian Deadlift",
-			notes: "Focus on form",
-			weightPerDateEntries: [60, 65],
-			repetitionsPerDateEntries: [8, 12],
-		  },
-		  {
-			name: "Hip Thrust",
-			notes: "Keep back straight",
-			weightPerDateEntries: [80, 85],
-			repetitionsPerDateEntries: [10, 15],
-		  },
-		],
-	  });
-	});
-
+	try {
+		const { body, statusCode } = await t.context.got("user/john_doe/planner", {
+			searchParams: {
+				day: 1
+			},
+			throwHttpErrors: false
+		});
+		console.log("Response Body:", body);
+		console.log("Response Status Code:", statusCode);
+		t.is(statusCode, 200);
+		t.deepEqual(body, {
+			currentDate: 1,
+			exercisesList: [
+			{
+				name: "Romanian Deadlift",
+				notes: "Focus on form",
+				weightPerDateEntries: [60, 65],
+				repetitionsPerDateEntries: [8, 12],
+			},
+			{
+				name: "Hip Thrust",
+				notes: "Keep back straight",
+				weightPerDateEntries: [80, 85],
+				repetitionsPerDateEntries: [10, 15],
+			},
+			],
+		});
+	} catch (error) {
+		console.error("Test failed:", error.message);
+		// Log additional details to help debug
+		console.error("Error details:", error.response.body);
+		t.fail(error.message);
+	}
+});
 
 test("GET /user/{username}/planner with Default User", async (t) => {
 	const { body, statusCode } = await t.context.got("user/default/planner", {
@@ -132,12 +152,11 @@ test("GET /user/{username}/planner with Default User", async (t) => {
 		day: 1,
 		},
 	});
-	  
+	console.log(body, statusCode);
+	
 	t.is(statusCode, 200);
 	t.deepEqual(body, {
 		currentDate: 1,
 		exercisesList: [],
 	});
 });	
-
-
