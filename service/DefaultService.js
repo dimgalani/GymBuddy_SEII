@@ -301,13 +301,13 @@ exports.getExerciseCatalog = function(username) {
     return new Promise(function (resolve, reject) {
       const exerciseData = {
         john_doe: {
-          "Lat-Pull-Down": {
+          "lat-pull-down": {
             name: "Lat Pull Down",
             notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-down machine with your knees securely under the pads. Adjust the thigh pads to fit comfortably against your thighs. Grasp the wide bar with an overhand grip, hands slightly wider than shoulder-width apart.",
             weightPerDateEntries: [40.0, 42.5, 45.0],
             repetitionsPerDateEntries: [10, 12, 14],
           },
-          "Hip-Thrust": {
+          "hip-thrust": {
             name: "Hip Thrust",
             notes: "Engage glutes throughout the lift. Focus on keeping your upper back against the bench and avoid arching your lower back.",
             weightPerDateEntries: [80, 85, 90],
@@ -315,27 +315,27 @@ exports.getExerciseCatalog = function(username) {
           },
         },
         alice_wonders: {
-          "Bulgarian-Split-Squat": {
+          "bulgarian-split-squat": {
             name: "Bulgarian Split Squat",
             notes: "Targets quads, glutes, and hamstrings. Place your rear foot on an elevated surface and keep your front knee tracking over your toes.",
             weightPerDateEntries: [45, 50, 55],
             repetitionsPerDateEntries: [10, 12, 10],
           },
           "Deadlift": {
-            name: "Deadlift",
+            name: "deadlift",
             notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
             weightPerDateEntries: [100, 110, 120],
             repetitionsPerDateEntries: [5, 6, 5],
           },
         },
         jane_smith: {
-          "Bulgarian-Split-Squat": {
+          "bulgarian-split-squat": {
             name: "Bulgarian Split Squat",
             notes: "Targets quads, glutes, and hamstrings. Place your rear foot on an elevated surface and keep your front knee tracking over your toes.",
             weightPerDateEntries: [40, 45, 50],
             repetitionsPerDateEntries: [12, 12, 12],
           },
-          "Smith-Machine-Squats": {
+          "smith-machine-squats": {
             name: "Smith Machine Squats",
             notes: "Keep the bar positioned over the midfoot and engage your core for stability during the descent and ascent.",
             weightPerDateEntries: [100, 110, 115],
