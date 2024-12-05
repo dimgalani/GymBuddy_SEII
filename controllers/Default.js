@@ -56,10 +56,10 @@ module.exports.getAvailableReservations = function getAvailableReservations (req
 module.exports.getDayofPlanner = function getDayofPlanner (req, res, next, username, day) {
   Default.getDayofPlanner(username, day)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     });
 };
 
@@ -86,10 +86,10 @@ module.exports.getExerciseCatalog = function getExerciseCatalog (req, res, next,
 module.exports.getExerciseProgress = function getExerciseProgress (req, res, next, username, exerciseName) {
   Default.getExerciseProgress(username, exerciseName)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     });
 };
 
