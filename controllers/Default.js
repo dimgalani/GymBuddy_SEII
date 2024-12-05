@@ -106,10 +106,10 @@ module.exports.getMyReservations = function getMyReservations (req, res, next, u
 module.exports.getPersonalInfo = function getPersonalInfo (req, res, next, username) {
   Default.getPersonalInfo(username)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     });
 };
 
