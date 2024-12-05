@@ -396,7 +396,6 @@ paths:
         explode: false
         schema:
           type: string
-          $ref: '#/components/schemas/Exercise'
       responses:
         "200":
           description: Successful fetch of progress entries

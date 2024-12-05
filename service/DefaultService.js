@@ -321,7 +321,7 @@ exports.getExerciseCatalog = function(username) {
             weightPerDateEntries: [45, 50, 55],
             repetitionsPerDateEntries: [10, 12, 10],
           },
-          "Deadlift": {
+          "deadlift": {
             name: "deadlift",
             notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
             weightPerDateEntries: [100, 110, 120],
@@ -341,6 +341,12 @@ exports.getExerciseCatalog = function(username) {
             weightPerDateEntries: [100, 110, 115],
             repetitionsPerDateEntries: [8, 8, 8],
           },
+          "deadlift": {
+            name: "deadlift",
+            notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
+            weightPerDateEntries: [],
+            repetitionsPerDateEntries: [],
+          }
         },
         default: {}, // Default user has no exercise data
       };

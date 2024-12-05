@@ -20,16 +20,15 @@ test.after.always((t) => {
 // GET /catalog/{exercise-name} //
 ///////////////////////// 
 
-test("GET /user/{usename}/planner/catalog/{exercise-name} with Bad Request (missing exercise_name parameter)", async (t) => {
-	const { body, statusCode } = await t.context.got("user/default/planner/catalog/", {
-		 // No additional path parameters added to simulate a missing 'exercise-name'
+
+// auto to test den eixe polu noima me katholou exercise name giati uparxei antistoixo endpoint
+// vazo kalitera askisi pou den einai valid px no_exercise
+test("GET /user/{usename}/planner/catalog/{exercise-name} with Bad Request (invalid exercise_name parameter)", async (t) => {
+	const { body, statusCode } = await t.context.got("user/default/planner/catalog/no_exercise", {
 		throwHttpErrors: false 
 	});
 
-	console.log(body);
-
-	t.is(statusCode, 400);
-	t.true(body.error.includes("exercise_name is required")); //verify that the response body from the server contains a specific error message
+	t.is(statusCode, 404);
 });
 
 
@@ -58,31 +57,32 @@ test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request (
 	  });
 });
 
-
-test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request if there isn't any exercise progresσ recorded for an exercise", async (t) => {
-	const { body, statusCode } = await t.context.got("user/default/planner/catalog/any_exercise", {
+test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request and no exercise progress", async (t) => {
+	const { body, statusCode } = await t.context.got("user/jane_smith/planner/catalog/deadlift", {
 		throwHttpErrors: false
 	});
-    	t.is(statusCode, 200);
-    	t.deepEqual(body, {});
+	t.is(statusCode, 200);
+	t.deepEqual(body, {
+		name: "deadlift",
+		notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
+		weightPerDateEntries: [],
+		repetitionsPerDateEntries: [],
+	  });
 });
 //idk an theloume na einai bad request
+// parapempei se invalid exercise pou exoyme idi panw
+// an exo ena adeio exercise log, px den exo kanei pote squats, thewritika uparxei idi stin basi me kena arrays
 
 ///////////////////////
 // GET /planner //
 ///////////////////////
 
 test("GET /user/{username}/planner with Bad Request (no day parameter)", async (t) => {
-    try {
-        const { body, statusCode } = await t.context.got("user/default/planner", {
-            throwHttpErrors: false,
-        });
-        console.log(body, statusCode);
-        t.is(statusCode, 400); // Expect a 400 Bad Request
-    } catch (error) {
-        console.error("Test failed:", error.message);
-        t.fail(error.message);
-    }
+	const { body, statusCode } = await t.context.got("user/default/planner", {
+		throwHttpErrors: false,
+	});
+	t.is(statusCode, 400); // Expect a 400 Bad Request
+    
 });
 
 
@@ -95,8 +95,6 @@ test("GET /user/{username}/planner with Bad Request or Not Found", async (t) => 
             throwHttpErrors: false,
         });
 		t.is(statusCode, 404);
-
-        console.log(body, statusCode);
 });
 
 
@@ -107,7 +105,6 @@ test("GET /user/{usename}/planner with Bad Request (wrong day datatype)", async 
 		},
 		throwHttpErrors: false
 	});
-	console.log(body, statusCode);
 	t.is(statusCode, 400);
 });
 
@@ -120,8 +117,6 @@ test("GET /user/{usename}/planner with Correct Request", async (t) => {
 			},
 			throwHttpErrors: false
 		});
-		console.log("Response Body:", body);
-		console.log("Response Status Code:", statusCode);
 		t.is(statusCode, 200);
 		t.deepEqual(body, {
 			currentDate: 1,
@@ -154,7 +149,6 @@ test("GET /user/{username}/planner with Default User", async (t) => {
 		day: 1,
 		},
 	});
-	console.log(body, statusCode);
 	
 	t.is(statusCode, 200);
 	t.deepEqual(body, {
