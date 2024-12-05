@@ -20,7 +20,7 @@ test.after.always((t) => {
 // GET /catalog/{exercise-name} //
 ///////////////////////// 
 
-test("GET /user/{usename}/planner/catalog/{exercise-name} with Bad Request (missing exercise-name parameter)", async (t) => {
+test("GET /user/{usename}/planner/catalog/{exercise-name} with Bad Request (missing exercise_name parameter)", async (t) => {
 	const { body, statusCode } = await t.context.got("user/default/planner/catalog/", {
 		 // No additional path parameters added to simulate a missing 'exercise-name'
 		throwHttpErrors: false 
@@ -29,12 +29,12 @@ test("GET /user/{usename}/planner/catalog/{exercise-name} with Bad Request (miss
 	console.log(body);
 
 	t.is(statusCode, 400);
-	t.true(body.error.includes("exercise-name is required")); //verify that the response body from the server contains a specific error message
+	t.true(body.error.includes("exercise_name is required")); //verify that the response body from the server contains a specific error message
 });
 
 
 test("GET /user/{username}/planner/catalog/{exercise-name} with Bad Request (invalid username)", async (t) => {
-	const { body, statusCode } = await t.context.got("user/invalid_user/planner/catalog/Lat-Pull-Down", {
+	const { body, statusCode } = await t.context.got("user/invalid_user/planner/catalog/lat-pull-down", {
 	  throwHttpErrors: false
 	});
 
@@ -43,26 +43,28 @@ test("GET /user/{username}/planner/catalog/{exercise-name} with Bad Request (inv
 });
   
 
-test("GET /user/{usename}/planner/catalog/{exercise-name} with Correct Request (Mock Data)", async (t) => {
-	const { body, statusCode } = await t.context.got("user/john_doe/planner/catalog/Lat-Pull-Down", {
-	throwHttpErrors: false
+test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request (Mock Data)", async (t) => {
+	const { body, statusCode } = await t.context.got("user/john_doe/planner/catalog/lat-pull-down", {
+		throwHttpErrors: false
 	});
 
 	t.is(statusCode, 200);
 
 	t.deepEqual(body, {
+		name: "Lat Pull Down",
+	 	notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-down machine with your knees securely under the pads. Adjust the thigh pads to fit comfortably against your thighs. Grasp the wide bar with an overhand grip, hands slightly wider than shoulder-width apart.",
 		weightPerDateEntries: [40.0, 42.5, 45.0],
 		repetitionsPerDateEntries: [10, 12, 14],
 	  });
 });
 
 
-test("GET /user/{usename}/planner/catalog/{exercise-name} with Correct Request if there isn't any exercise progresσ recorded for an exercise", async (t) => {
-	const { body, statusCode } = await t.context.got("user/default/planner/catalog/any-exercise", {
-			throwHttpErrors: false
+test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request if there isn't any exercise progresσ recorded for an exercise", async (t) => {
+	const { body, statusCode } = await t.context.got("user/default/planner/catalog/any_exercise", {
+		throwHttpErrors: false
 	});
-    t.is(statusCode, 200);
-    t.deepEqual(body, {});
+    	t.is(statusCode, 200);
+    	t.deepEqual(body, {});
 });
 //idk an theloume na einai bad request
 
