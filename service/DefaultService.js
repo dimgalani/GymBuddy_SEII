@@ -52,6 +52,27 @@ const userReservations = {
   ]
 };
 
+// Mock dataset: user goals for progress
+const userProgress = {
+  john_doe: {
+    1: [true, true, false, true, true],
+    2: [true, true, true, true, true],
+    3: [false, false, false, false, false],
+  },
+  jane_smith: {
+    1: [true, false, true, false, true],
+    2: [true, true, true, true, true],
+    3: [true, false, false, false, true],
+  },
+  alice_wonder: {
+    1: [false, false, false, false, false],
+    2: [true, true, true, false, true],
+    3: [true, true, true, true, true],
+  },
+  default: {
+    1: [false, false, false, false, false],
+  },
+};
 
 /**
  * Cancels a reservation by deleting it
@@ -134,28 +155,7 @@ exports.checkGoalsFromInfo = function(username,currentBodyWeight) {
  **/
 
 exports.checkGoalsFromProgress = function (day, username) {
-  return new Promise(function (resolve, reject) {
-    const userProgress = {
-      john_doe: {
-        1: [true, true, false, true, true],
-        2: [true, true, true, true, true],
-        3: [false, false, false, false, false],
-      },
-      jane_smith: {
-        1: [true, false, true, false, true],
-        2: [true, true, true, true, true],
-        3: [true, false, false, false, true],
-      },
-      alice_wonder: {
-        1: [false, false, false, false, false],
-        2: [true, true, true, false, true],
-        3: [true, true, true, true, true],
-      },
-      default: {
-        1: [false, false, false, false, false],
-      },
-    };
-
+  return new Promise(function (resolve, reject) {   
     if (!Number.isInteger(day) || typeof username !== 'string') {
       // If the data types are incorrect
       reject({
@@ -164,7 +164,10 @@ exports.checkGoalsFromProgress = function (day, username) {
       });
     } else if (userProgress[username] && userProgress[username][day]) {
       // If user and day data exist
-      resolve(userProgress[username][day]);
+      resolve({
+          message: userProgress[username][day],
+          code: 200
+      });
     } else {
       // If no progress data is found for the specified username and day
       reject({
@@ -174,7 +177,6 @@ exports.checkGoalsFromProgress = function (day, username) {
     }
   });
 };
-
 
 
 /**

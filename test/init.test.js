@@ -53,7 +53,7 @@ test("GET /user/{usename}/progress/goals with Correct Request (Mock Data)", asyn
 		}
 	});
 	t.is(statusCode, 200);
-	t.deepEqual(body, [true, true, true, true, true]);  // Check with the mock data
+	t.deepEqual(body, {message: [true, true, true, true, true], code: 200});  // Check with the mock data
 });
 
 ///////////////////////

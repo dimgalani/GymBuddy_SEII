@@ -26,7 +26,7 @@ module.exports.checkGoalsFromInfo = function checkGoalsFromInfo (req, res, next,
 module.exports.checkGoalsFromProgress = function checkGoalsFromProgress (req, res, next, username, day) {
   Default.checkGoalsFromProgress(username, day)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (error) {
       utils.writeJson(res, error.message, error.code);
