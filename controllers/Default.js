@@ -123,8 +123,19 @@ module.exports.makeReservation = function makeReservation (req, res, next, body,
     });
 };
 
-module.exports.updateExerciseProgress = function updateExerciseProgress (req, res, next, body, day, username) {
-  Default.updateExerciseProgress(body, day, username)
+module.exports.updateExerciseProgress = function updateExerciseProgress (req, res, next, username, day, name, weight, reps) {
+  console.log("hello Default");
+
+  // username = req.params.username;
+
+  // day = req.query.day;
+  // name = req.query.name;
+  // weight = req.query.weight;
+  // reps = req.query.reps;
+
+
+  console.log("Default",{ day, name, weight, reps, username});
+  Default.updateExerciseProgress(username, day, name, weight, reps)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
     })

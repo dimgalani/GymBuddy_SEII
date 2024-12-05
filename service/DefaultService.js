@@ -428,12 +428,18 @@ exports.makeReservation = function(body,day,time,musclegroup,username) {
  * username String the username of the connected person
  * no response value expected for this operation
  **/
-exports.updateExerciseProgress = function (day, username, name, weight, reps) {
+exports.updateExerciseProgress = function (username, day, name, weight, reps) {
   return new Promise(function (resolve, reject) {
+
+    // day = parseInt(day, 10); // Ensure day is an integer
+    // weight = parseFloat(weight); // Ensure weight is a float
+    // reps = parseInt(reps, 10); // Ensure reps is an integer
+
+    console.log("Requested DefaultService.js: ", { day, name, weight, reps, username});
     // Validate username
     const user = usersPlanner.find((entry) => entry.username === username);
-
-    console.log("Incoming Request: ", { day, username, name, weight, reps });
+    console.log("hello");
+    console.log("Requested: DefaultService", { day, name, weight, reps, username});
 
 
     if (!day || !name || !weight || !reps) {
@@ -443,7 +449,6 @@ exports.updateExerciseProgress = function (day, username, name, weight, reps) {
       });
       return;
   }
-  
 
     if (!user) {
       return reject({
@@ -471,7 +476,8 @@ exports.updateExerciseProgress = function (day, username, name, weight, reps) {
 
     resolve({
       updatedProgress: user.exercise,
-      message: "Progress updated successfully"
+      message: "Progress updated successfully",
+      code: 200
     });
   });
 };

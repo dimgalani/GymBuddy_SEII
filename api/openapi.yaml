@@ -233,7 +233,8 @@ paths:
         style: form
         explode: false
         schema:
-          type: string
+          type: integer
+          format: int32
       responses:
         "200":
           description: Successful fetch of exercise entries
