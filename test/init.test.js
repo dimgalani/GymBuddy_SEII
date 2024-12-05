@@ -16,13 +16,49 @@ test.after.always((t) => {
 	t.context.server.close();
 });
 
+///////////////////////
+// GET /settings //
+///////////////////////
+
+test("GET /user/{username}/settings with Correct Request", async (t) => {
+	const { body, statusCode } = await t.context.got("user/john_doe/settings", {
+	  throwHttpErrors: false,
+	});
+	console.log(body, statusCode);
+
+	t.is(statusCode, 200); // Ensure the status code is 200
+	t.deepEqual(body, {
+	  gender: "male",
+	  goalConsistencyNum: 4,
+	  goalBodyWeightNum: 75,
+	  bodyweight: 80.5,
+	  goals: [true, false, true],
+	}); // Verify the response body matches expected data
+  });
+
+ test("GET /user/{username}/settings with Bad Request (invalid username)", async (t) => {
+	const { body, statusCode } = await t.context.got("user/invalid_user/settings", {
+	  throwHttpErrors: false,
+	});
+  
+	t.is(statusCode, 401); // Unauthorized
+	//t.true(body.error.includes("Invalid username")); // Verify error message
+  });  
+
+
+  test("GET /user/{username}/settings with No Data Found", async (t) => {
+	const { body, statusCode } = await t.context.got("user/alice_wonders/settings", {
+	  throwHttpErrors: false,
+	});
+  
+	t.is(statusCode, 404); // Not Found
+  }); 
+
+
 /////////////////////////
 // GET /catalog/{exercise-name} //
 ///////////////////////// 
 
-
-// auto to test den eixe polu noima me katholou exercise name giati uparxei antistoixo endpoint
-// vazo kalitera askisi pou den einai valid px no_exercise
 test("GET /user/{usename}/planner/catalog/{exercise-name} with Bad Request (invalid exercise_name parameter)", async (t) => {
 	const { body, statusCode } = await t.context.got("user/default/planner/catalog/no_exercise", {
 		throwHttpErrors: false 
@@ -41,7 +77,6 @@ test("GET /user/{username}/planner/catalog/{exercise-name} with Bad Request (inv
   
 });
   
-
 test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request", async (t) => {
 	const { body, statusCode } = await t.context.got("user/john_doe/planner/catalog/lat-pull-down", {
 		throwHttpErrors: false
