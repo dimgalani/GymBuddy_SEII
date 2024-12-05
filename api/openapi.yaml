@@ -373,7 +373,7 @@ paths:
         "201":
           description: Successful creation of exercise
       x-swagger-router-controller: Default
-  /user/{username}/catalog/{exercise-name}:
+  /user/{username}/planner/catalog/{exercise_name}:
     get:
       summary: "Returns the arrays of progress (weights, reps) for the chosen exercise\
         \ so that the diagrams will be generated"
@@ -388,13 +388,14 @@ paths:
         explode: false
         schema:
           type: string
-      - name: exercise-name
+      - name: exercise_name
         in: path
         description: the chosen exercise
         required: true
         style: simple
         explode: false
         schema:
+          type: string
           $ref: '#/components/schemas/Exercise'
       responses:
         "200":
