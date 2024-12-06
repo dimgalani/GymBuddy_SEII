@@ -3,13 +3,13 @@
 var utils = require('../utils/writer.js');
 var Default = require('../service/DefaultService');
 
-module.exports.cancelReservation = function cancelReservation (req, res, next, username, day) {
-  Default.cancelReservation(username, day)
+module.exports.cancelReservation = function cancelReservation (req, res, next, username, day, time) {
+  Default.cancelReservation(username, day, time)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     });
 };
 
@@ -27,10 +27,10 @@ module.exports.checkGoalsFromInfo = function checkGoalsFromInfo (req, res, next,
 module.exports.checkGoalsFromProgress = function checkGoalsFromProgress (req, res, next, username, day) {
   Default.checkGoalsFromProgress(username, day)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      utils.writeJson(res, error.message, error.code);
     });
 };
 
@@ -49,8 +49,8 @@ module.exports.getAvailableReservations = function getAvailableReservations (req
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      utils.writeJson(res, error.message, error.code);
     });
 };
 
@@ -114,13 +114,15 @@ module.exports.getPersonalInfo = function getPersonalInfo (req, res, next, usern
     });
 };
 
-module.exports.makeReservation = function makeReservation (req, res, next, body, day, time, musclegroup, username) {
-  Default.makeReservation(body, day, time, musclegroup, username)
+module.exports.makeReservation = function makeReservation (req, res, next, body, username) {
+  
+  Default.makeReservation(body, username)
     .then(function (response) {
-      utils.writeJson(res, response);
+      console.log('here')
+      utils.writeJson(res, response, response.code);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      utils.writeJson(res, error.message, error.code);
     });
 };
 
