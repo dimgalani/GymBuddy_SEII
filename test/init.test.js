@@ -166,3 +166,25 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
     
         t.is(statusCode, 401);
     });
+
+    test("PUT /user/{username}/planner/progress with non-existing exercise name", async (t) => {
+        const day = 8;
+        const name = "Bench_Press";
+        const weight = 70;
+        const reps = 10;
+    
+    // Send the PUT request
+        const { body, statusCode } = await t.context.got.put("user/jane_smith/planner/progress",{
+                throwHttpErrors: false,
+                searchParams: {
+                    day: day,
+                    name: name,
+                    weight: weight,
+                    reps: reps
+                },
+                responseType: "json"
+            }
+        );
+    
+        t.is(statusCode, 404);
+    });
