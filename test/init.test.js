@@ -220,8 +220,8 @@ test("POST /user/{username}/planner/catalog with Bad Request - Already existing 
 	t.deepEqual(body.exercise.name, newExercise.name);
 });
 
-/////////////////////////
-// GET /progress/goals //
+  /////////////////////////
+ // GET /progress/goals //
 /////////////////////////
 
 test("GET /user/{usename}/progress/goals with Bad Request (no day parameter)", async (t) => {
@@ -396,6 +396,7 @@ test("DELETE /user/{username}/reservations with Bad Request (Invalid data types)
 		},
 		throwHttpErrors: false // Ensure the test doesn't throw on error response
 	});
+	t.is(statusCode, 400)
 });
 
   //////////////////////////
@@ -421,10 +422,9 @@ test("GET /user/{username}/myreservations returns up to 3 upcoming reservations"
     t.is(statusCode, 200);
 
     t.deepEqual(body, [
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "muscleGroup" : "muscleGroup", "time": "08:00 AM", "availability": 0 },
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "muscleGroup" : "muscleGroup", "time": "10:00 AM", "availability": 1 },
-        { "date": "2024-11-02", "reservationsPerMuscleGroup": [10, 11, 12, 13, 14], "muscleGroup" : "muscleGroup", "time": "09:00 AM", "availability": 1 }
-          
+        { date: "2024-11-02", muscleGroup: "lower", time: "10:00" },
+    	{ date: "2024-11-03", muscleGroup: "core", time: "12:00" },
+    	{ date: "2024-11-04", muscleGroup: "cardio", time: "06:00" }          
     ]);
 });
 
@@ -463,7 +463,9 @@ test("DELETE /user/{username}/reservations with Unauthorized Request (Non-existe
 			day: "2024-11-01",
 			time: "08:00"
 		},
+		throwHttpErrors: false, 
 	});
+	t.is(statusCode, 401);
 });
 
 test("GET /user/{username}/planner/progress returns exercise details successfully", async (t) => {

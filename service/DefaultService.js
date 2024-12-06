@@ -114,12 +114,7 @@ const userReservations = {
     { date: "2024-11-03", muscleGroup: "core", time: "13:30" },
     { date: "2024-11-04", muscleGroup: "upper", time: "17:00" }
   ],
-  default: [
-    { date: "2024-11-01", muscleGroup: "core", time: "09:00" },
-    { date: "2024-11-02", muscleGroup: "upper", time: "10:00" },
-    { date: "2024-11-03", muscleGroup: "lower", time: "03:00" },
-    { date: "2024-11-04", muscleGroup: "cardio", time: "19:00" }
-  ]
+  default: []
 };
 
 // Mock dataset: user goals for progress
@@ -350,8 +345,8 @@ exports.checkGoalsFromProgress = function (day, username) {
       });
     } else {
       reject({
-        message: 'Response code 400 (Bad Request): Wrong data types for username or day.',
-        code: 400,
+        message: 'Response code 404 (Not Found): No progress data found for the specified username and day.',
+        code: 404,
       });
     }
   });
@@ -570,7 +565,7 @@ exports.getMyReservations = function (username) {
     }
 
     // Get reservations for the username or return empty array if none
-    const reservations = availableReservations[username] || [];
+    const reservations = userReservations[username].slice(-3);
     resolve(reservations);
   });
 };
