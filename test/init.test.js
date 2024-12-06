@@ -149,7 +149,6 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
     t.is(statusCode, 200);
   
     // Ensure updated progress matches expectations
-    // const { updatedProgress } = body;
     t.deepEqual(body.updatedProgress.weightPerDateEntries[day - 1], weight, "The updated exercise weight should match");
     t.deepEqual(body.updatedProgress.repetitionsPerDateEntries[day - 1], reps, "The updated exercise reps should match");
   });
