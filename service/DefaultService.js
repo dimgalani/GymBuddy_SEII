@@ -2,6 +2,8 @@
 
 const { use } = require("..");
 
+const usernames = ["john_doe", "alice_wonder", "jane_smith", "default"];
+
 const UserSettings = [
   {
     username: "john_doe",
@@ -68,6 +70,45 @@ const ExerciseCatalog = [
     weightPerDateEntries: [45, 45],
     repetitionsPerDateEntries: [8, 10],
   },
+];
+
+const availableReservations = {
+  john_doe: [
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "muscleGroup": "muscleGroup", "time": "08:00 AM", "availability": 0 },
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "muscleGroup": "muscleGroup", "time": "10:00 AM", "availability": 1 },
+    { "date": "2024-11-02", "reservationsPerMuscleGroup": [10, 11, 12, 13, 14], "muscleGroup": "muscleGroup", "time": "09:00 AM", "availability": 1 }
+  ],
+  alice_wonder: [
+    { "date": "2024-11-02", "reservationsPerMuscleGroup": [10, 11, 12, 13, 14], "muscleGroup": "muscleGroup", "time": "09:00 AM", "availability": 1 },
+    { "date": "2024-11-02", "reservationsPerMuscleGroup": [20, 19, 18, 17, 16], "muscleGroup": "muscleGroup", "time": "11:00 AM", "availability": 0 }
+  ],
+  jane_smith: [
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "muscleGroup": "muscleGroup", "time": "08:30 AM", "availability": 1 },
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "muscleGroup": "muscleGroup", "time": "10:30 AM", "availability": 0 }
+  ],
+  default: []
+};
+
+const usersPlanner = [
+  {
+    username: "john_doe",
+    exercise: {
+       notes: "note1",
+       name: "Bench_Press",
+       weightPerDateEntries: [70, 80, 80, 80, 85, 90, null, null, null, null],
+       repetitionsPerDateEntries: [10, 10, 10, 10, 10, null, null, null, null, null]
+     }
+  },
+    {
+      username: "jane_smith",
+      exercise: {
+      
+       notes: "note2",
+       name: "Squat",
+       weightPerDateEntries: [100, 110, 110, 110, 110, 110, null, null, null, null],
+       repetitionsPerDateEntries: [5, 5, 5, 5, 5, 5, null, null, null, null]
+     }
+    }
 ];
 
 /**
@@ -202,6 +243,8 @@ exports.checkGoalsFromInfo = function (currentBodyWeight, username) {
  * day Integer the selected day of the planner
  * returns List
  **/
+
+/*
 exports.checkGoalsFromProgress = function(username,day) {
   return new Promise(function(resolve, reject) {
     var examples = {};
@@ -213,6 +256,19 @@ exports.checkGoalsFromProgress = function(username,day) {
     }
   });
 }
+*/
+exports.checkGoalsFromProgress = function(username,day) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ true, true ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
 
 
 /**
@@ -281,6 +337,7 @@ exports.getAvailableReservations = function(username,day) {
 }
 
 
+
 /**
  * Returns a list of the existing exercise progress entries for a selected day
  * FR7 - The user must be able to track an exercise to Planner
@@ -324,20 +381,20 @@ exports.getDayofPlanner = function(username,day) {
  **/
 exports.getDropDownMenuList = function(username) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
+    const examples = {};
     examples['application/json'] = {
-  "exercises" : [ {
-    "notes" : "notes",
-    "name" : "name",
-    "weightPerDateEntries" : [ 6.0274563, 6.0274563 ],
-    "repetitionsPerDateEntries" : [ 1, 1 ]
-  }, {
-    "notes" : "notes",
-    "name" : "name",
-    "weightPerDateEntries" : [ 6.0274563, 6.0274563 ],
-    "repetitionsPerDateEntries" : [ 1, 1 ]
-  } ]
+  "exercises" : [ 
+    { "notes" : "note1", "name" : "exercise_1", "weightPerDateEntries" : [ 5, 6, 6, 8, 8, 5, 6, 6, 8, 8], "repetitionsPerDateEntries" : [ 10, 10, 15, 10, 10 ] },
+    { "notes" : "note2", "name" : "exercise_2", "weightPerDateEntries" : [ 20, 25, 25, 25 ,30, 20, 25, 25, 25 ,30], "repetitionsPerDateEntries" : [ 15, 15, 15, 20, 15 ]  },
+    { "notes" : "note3", "name" : "exercise_3", "weightPerDateEntries" : [ 30, 35, 35, 40, 45, 30, 35, 35, 40, 45], "repetitionsPerDateEntries" : [ 5, 5, 5, 5 ,8 ] }
+  ]
 };
+    if (!usernames.includes(username)) {
+      return reject({
+        message: 'Response code 401 (Unauthorized): Not a valid username',
+        code: 401
+      });
+    }  
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
@@ -419,29 +476,23 @@ exports.getExerciseProgress = function(username,exerciseName) {
  * username String the username of the connected person
  * returns List
  **/
-exports.getMyReservations = function(username) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "date" : "date",
-  "reservationsPerMuscleGroup" : [ 6, 6 ],
-  "muscleGroup" : "muscleGroup",
-  "time" : "time",
-  "availability" : 0
-}, {
-  "date" : "date",
-  "reservationsPerMuscleGroup" : [ 6, 6 ],
-  "muscleGroup" : "muscleGroup",
-  "time" : "time",
-  "availability" : 0
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.getMyReservations = function (username) {
+  return new Promise(function (resolve, reject) {
+    // Validate username
+    if (!usernames.includes(username)) {
+      return reject({
+        message: 'Response code 401 (Unauthorized): Not a valid username',
+        code: 401
+      });
     }
+
+    // Get reservations for the username or return empty array if none
+    const reservations = availableReservations[username] || [];
+    resolve(reservations);
   });
-}
+};
+
+
 
 
 /**
@@ -497,11 +548,53 @@ exports.makeReservation = function(body,day,time,musclegroup,username) {
  * username String the username of the connected person
  * no response value expected for this operation
  **/
-exports.updateExerciseProgress = function(body,day,username) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+exports.updateExerciseProgress = function (day, name, weight, reps, username) {
+  return new Promise(function (resolve, reject) {
+    // Validate username
+    const user = usersPlanner.find((entry) => entry.username === username);
+
+
+    if (!day || !name || !weight || !reps) {
+      reject({
+          message: "Missing required fields",
+          code: 400
+      });
+      return;
+  }
+
+    if (!user) {
+      return reject({
+        message: "User not found",
+        code: 401
+      });
+    }
+
+    const exercise  = user.exercise;
+
+    if (!exercise || exercise.name !== name) {
+      return reject({
+        message: "Exercise not found for user",
+        code: 404
+      });
+    }
+
+    if (!exercise) {
+      return reject({ message: "Exercise not found", code: 404 });
+    }
+
+    // Update the exercise progress for the specified day (adjusting for zero-based index)
+    user.exercise.weightPerDateEntries[day - 1] = weight;
+    user.exercise.repetitionsPerDateEntries[day - 1] = reps;
+
+    resolve({
+      updatedProgress: user.exercise,
+      message: "Progress updated successfully",
+      code: 200
+    });
   });
-}
+};
+
+
 
 
 /**
