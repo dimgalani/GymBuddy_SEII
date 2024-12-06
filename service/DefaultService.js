@@ -98,47 +98,17 @@ exports.checkGoalsFromProgress = function(username,day) {
   });
 }
 */
-exports.checkGoalsFromProgress = function (day, username) {
-  return new Promise(function (resolve, reject) {
-    const userProgress = {
-      john_doe: {
-        1: [true, true, false, true, true],
-        2: [true, true, true, true, true],
-        3: [false, false, false, false, false],
-      },
-      jane_smith: {
-        1: [true, false, true, false, true],
-        2: [true, true, true, true, true],
-        3: [true, false, false, false, true],
-      },
-      alice_wonder: {
-        1: [false, false, false, false, false],
-        2: [true, true, true, false, true],
-        3: [true, true, true, true, true],
-      },
-      default: {
-        1: [false, false, false, false, false],
-      },
-    };
-
-    if (!Number.isInteger(day) || typeof username !== 'string') {
-      // If the data types are incorrect
-      reject({
-        message: 'Response code 400 (Bad Request): Wrong data types for username or day.',
-        code: 400,
-      });
-    } else if (userProgress[username] && userProgress[username][day]) {
-      // If user and day data exist
-      resolve(userProgress[username][day]);
+exports.checkGoalsFromProgress = function(username,day) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ true, true ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
     } else {
-      // If no progress data is found for the specified username and day
-      reject({
-        message: 'Response code 404 (Not Found): No progress data found for the specified username and day.',
-        code: 404,
-      });
+      resolve();
     }
   });
-};
+}
 
 
 
@@ -165,48 +135,29 @@ exports.createCustomExercise = function(body,username) {
  * day String the day selected for a reservation
  * returns List
  **/
-exports.getAvailableReservations = function (day, username) {
-  return new Promise(function (resolve, reject) {
-    // Mock dataset: User reservations data
-    const usernames = ["john_doe", "alice_wonder", "jane_smith", "default"];
-    const availableReservations = {
-      1: [
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "time": "08:00 AM", "availability": 0 },
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:00 AM", "availability": 1 }
-      ],
-      2: [
-        { "date": "2024-11-02", "reservationsPerMuscleGroup": [10, 11, 12, 13, 14], "time": "09:00 AM", "availability": 1 },
-        { "date": "2024-11-02", "reservationsPerMuscleGroup": [20, 19, 18, 17, 16], "time": "11:00 AM", "availability": 0 }
-      ],
-      3: [
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "08:30 AM", "availability": 1 },
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:30 AM", "availability": 0 }
-      ],
-      4: [
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "09:30 AM", "availability": 1 },
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "11:30 AM", "availability": 0 }
-      ],
-      5: [
-        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "12:00 PM", "availability": 0 }
-      ]
-    };
-
-    // Check if username exists
-    if (!usernames.includes(username)) {
-      reject({
-        message: 'Response code 401 (Unauthorized): Not a valid username',
-        code: 401
-      });
-    } else if (availableReservations[day]) {
-      resolve(availableReservations[day]); // Return the reservations for the specified day
+exports.getAvailableReservations = function(username,day) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ {
+  "date" : "date",
+  "reservationsPerMuscleGroup" : [ 6, 6 ],
+  "muscleGroup" : "muscleGroup",
+  "time" : "time",
+  "availability" : 0
+}, {
+  "date" : "date",
+  "reservationsPerMuscleGroup" : [ 6, 6 ],
+  "muscleGroup" : "muscleGroup",
+  "time" : "time",
+  "availability" : 0
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
     } else {
-      reject({
-        message: 'Response code 404 (Not Found): No reservations found for the specified day.',
-        code: 404
-      });
+      resolve();
     }
   });
-};
+}
 
 
 

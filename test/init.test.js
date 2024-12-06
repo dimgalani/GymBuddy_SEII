@@ -104,8 +104,6 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
     const name = "Bench_Press";
     const weight = 70;
     const reps = 10;
-
-    console.log("Incoming Request: ", { day, name, weight, reps });
   
     // Send the PUT request
     const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress", {
@@ -117,10 +115,6 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
         },
         responseType: "json"
     });
-    
-    console.log("BODY",body);
-
-    console.log(" Request: ", { day, name, weight, reps  });
 
     // Validate the response
     t.is(statusCode, 200);
