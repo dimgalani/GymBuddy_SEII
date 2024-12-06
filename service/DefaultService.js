@@ -22,37 +22,22 @@ const usersPlanner = [
   {
     username: "john_doe",
     exercise: {
-       notes: "Felt strong",
-       name: "Bench Press",
+       notes: "note1",
+       name: "Bench_Press",
        weightPerDateEntries: [70, 80, 80, 80, 85, 90, null, null, null, null],
        repetitionsPerDateEntries: [10, 10, 10, 10, 10, null, null, null, null, null]
      }
   },
-     // ,
-     // {
-     //   notes: "Felt strong",
-     //   name: "Squat",
-     //   weightPerDateEntries: [80, 80, 80, 85, 85, null, null, null, null],
-     //   repetitionsPerDateEntries: [8, 8, 8, 8, 8, 8, null, null, null, null]
-     // }
-    // ,
     {
       username: "jane_smith",
       exercise: {
       
-       notes: "tough",
+       notes: "note2",
        name: "Squat",
        weightPerDateEntries: [100, 110, 110, 110, 110, 110, null, null, null, null],
        repetitionsPerDateEntries: [5, 5, 5, 5, 5, 5, null, null, null, null]
      }
     }
-     // ,
-     // {
-       // notes: "strong",
-       // name: "Squat",
-       // weightPerDateEntries: [70, 70, 70, 70, 70, 75, null, null, null, null],
-       // repetitionsPerDateEntries: [10, 10, 10, 10, 10, null, null, null, null]
-     // }
 ];
 
 /**
@@ -428,18 +413,10 @@ exports.makeReservation = function(body,day,time,musclegroup,username) {
  * username String the username of the connected person
  * no response value expected for this operation
  **/
-exports.updateExerciseProgress = function (username, day, name, weight, reps) {
+exports.updateExerciseProgress = function (day, name, weight, reps, username) {
   return new Promise(function (resolve, reject) {
-
-    // day = parseInt(day, 10); // Ensure day is an integer
-    // weight = parseFloat(weight); // Ensure weight is a float
-    // reps = parseInt(reps, 10); // Ensure reps is an integer
-
-    console.log("Requested DefaultService.js: ", { day, name, weight, reps, username});
     // Validate username
     const user = usersPlanner.find((entry) => entry.username === username);
-    console.log("hello");
-    console.log("Requested: DefaultService", { day, name, weight, reps, username});
 
 
     if (!day || !name || !weight || !reps) {
@@ -471,8 +448,8 @@ exports.updateExerciseProgress = function (username, day, name, weight, reps) {
     }
 
     // Update the exercise progress for the specified day (adjusting for zero-based index)
-    userEntry.exercise.weightPerDateEntries[day - 1] = weight;
-    userEntry.exercise.repetitionsPerDateEntries[day - 1] = reps;
+    user.exercise.weightPerDateEntries[day - 1] = weight;
+    user.exercise.repetitionsPerDateEntries[day - 1] = reps;
 
     resolve({
       updatedProgress: user.exercise,

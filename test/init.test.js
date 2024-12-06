@@ -123,9 +123,8 @@ test("GET /user/{usename}/planner/progress with invalid username", async (t) => 
 //////////////////////////
 
 test("PUT /user/{username}/planner/progress updates exercise progress entries successfully", async (t) => {
-    // const username = "john_doe";
     const day = 8;
-    const name = "Bench Press";
+    const name = "Bench_Press";
     const weight = 70;
     const reps = 10;
 
@@ -133,15 +132,13 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
   
     // Send the PUT request
     const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress", {
-        throwHttpErrors: false,
         searchParams: {
-            day: 7,
-            name: "Squats",
-            weight: 60,
-            reps: 15
+            day: day,
+            name: name,
+            weight: weight,
+            reps: reps
         },
-        json: { day, name, weight, reps},
-        responseType: "json",
+        responseType: "json"
     });
     
     console.log("BODY",body);
@@ -149,7 +146,7 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
     console.log(" Request: ", { day, name, weight, reps  });
 
     // Validate the response
-    t.is(statusCode, 400);
+    t.is(statusCode, 200);
   
     // Ensure updated progress matches expectations
     // const { updatedProgress } = body;
@@ -158,46 +155,47 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
   });
   
 
-    // test("PUT /user/{username}/planner/progress with bad request", async (t) => {
-    //     const username = "john_doe";
-    //     const day = 10;
-    //     const newProgress = {
-    //         name: "Bench Press",
-    //         weightPerDateEntries: "1234",
-    //         repetitionsPerDateEntries: 10
-    //     };
+    test("PUT /user/{username}/planner/progress with bad request", async (t) => {
+        const day = 10;
+        const newProgress = {
+            name: "Bench Press",
+            weightPerDateEntries: "1234",
+            repetitionsPerDateEntries: 10
+        };
     
-    // // Send the PUT request
-    //     const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress",
-    //         {
-    //             json: newProgress,
-    //             responseType: "json",
-    //             throwHttpErrors: false
-    //         });    
+    // Send the PUT request
+        const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress",
+            {
+                json: newProgress,
+                responseType: "json",
+                throwHttpErrors: false
+            });    
     
-    //     t.is(statusCode, 400);
-    // });
+        t.is(statusCode, 400);
+    });
 
-    // test("PUT /user/{username}/planner/progress with invalid username", async (t) => {
-    //     // const username = "john_doe";
-    //     const day = 7;
-    //     const newProgress = {
-    //         name: "Squat",
-    //         weightPerDateEntries: 70,
-    //         repetitionsPerDateEntries: 10
-    //       };
+    test("PUT /user/{username}/planner/progress with invalid username", async (t) => {
+        const day = 8;
+        const name = "Bench_Press";
+        const weight = 70;
+        const reps = 10;
     
-    // // Send the PUT request
-    //     const { body, statusCode } = await t.context.got.put("user/no_name/planner/progress",
-    //         {
-    //             throwHttpErrors: false,
-    //             json: newProgress,
-    //             responseType: "json"
-    //         }
-    //     );
+    // Send the PUT request
+        const { body, statusCode } = await t.context.got.put("user/no_name/planner/progress",
+            {
+                throwHttpErrors: false,
+                searchParams: {
+                    day: day,
+                    name: name,
+                    weight: weight,
+                    reps: reps
+                },
+                responseType: "json"
+            }
+        );
     
-    //     // const { updatedProgress } = body;
+        // const { updatedProgress } = body;
     
     
-    //     t.is(statusCode, 401);
-    // });
+        t.is(statusCode, 401);
+    });
