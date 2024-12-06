@@ -1,5 +1,7 @@
 'use strict';
 
+const { use } = require("..");
+
 const UserSettings = [
   {
     username: "john_doe",
@@ -351,6 +353,7 @@ exports.getDropDownMenuList = function(username) {
  *
  * username String the username of the connected person
  * returns ExerciseCatalog
+ * GET /user/{username}/planner/catalog
  **/
 exports.getExerciseCatalog = function(username) {
   return new Promise(function(resolve, reject) {
@@ -368,6 +371,12 @@ exports.getExerciseCatalog = function(username) {
     "repetitionsPerDateEntries" : [ 8, 10 ]
   } ]
 };
+    if(username === "invalid-user"){
+      reject({
+        message: 'Response code 401 (Unauthorized): Not a valid username',
+        code: 401,
+      });
+    }
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {

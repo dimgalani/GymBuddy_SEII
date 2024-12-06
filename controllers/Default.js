@@ -77,10 +77,10 @@ module.exports.getDropDownMenuList = function getDropDownMenuList (req, res, nex
 module.exports.getExerciseCatalog = function getExerciseCatalog (req, res, next, username) {
   Default.getExerciseCatalog(username)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     });
 };
 

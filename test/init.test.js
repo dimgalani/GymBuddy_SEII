@@ -33,6 +33,14 @@ test("GET /user/{usename}/planner/catalog returns correct response and status co
 	t.is(body.exercises[0].notes, "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-do...", "The first exercise notes should be 'Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-do...'");
 });
 
+test("GET /user/{usename}/planner/catalog Bad request - invalid username", async (t) => {
+	const { body, statusCode } = await t.context.got("user/invalid-user/planner/catalog",{
+		throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
+	});
+	//t.is(body.message, "Exercises Catalogue");
+	t.is(statusCode, 401);
+});
+
 /////////////////////////
 // PUT /settings //
 /////////////////////////
