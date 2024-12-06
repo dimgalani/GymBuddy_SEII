@@ -18,8 +18,9 @@ module.exports.checkGoalsFromInfo = function checkGoalsFromInfo (req, res, next,
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error) {
+      // console.log(error);
+      utils.writeJson(res, error.message, error.code);
     });
 };
 
@@ -36,10 +37,10 @@ module.exports.checkGoalsFromProgress = function checkGoalsFromProgress (req, re
 module.exports.createCustomExercise = function createCustomExercise (req, res, next, body, username) {
   Default.createCustomExercise(body, username)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     });
 };
 
@@ -76,10 +77,10 @@ module.exports.getDropDownMenuList = function getDropDownMenuList (req, res, nex
 module.exports.getExerciseCatalog = function getExerciseCatalog (req, res, next, username) {
   Default.getExerciseCatalog(username)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     });
 };
 
@@ -136,9 +137,9 @@ module.exports.updateExerciseProgress = function updateExerciseProgress (req, re
 module.exports.updatePersonalInfo = function updatePersonalInfo (req, res, next, body, username) {
   Default.updatePersonalInfo(body, username)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, response.code);
     });
 };
