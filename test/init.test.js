@@ -37,18 +37,6 @@ test("GET /user/{username}/myreservations returns up to 3 upcoming reservations"
 
     t.is(statusCode, 200);
 
-    // t.true(Array.isArray(body)); // Response is an array
-    // t.true(body.length <= 3);    // Response contains at most 3 reservations
-
-    // // Validate the structure of each reservation object
-    // body.forEach((reservation) => {
-    //     t.truthy(reservation.date);
-    //     t.true(Array.isArray(reservation.reservationsPerMuscleGroup));
-    //     t.is(typeof reservation.muscleGroup, "string");
-    //     t.is(typeof reservation.time, "string");
-    //     t.true(reservation.availability === 0 || reservation.availability === 1);
-    // });
-
     t.deepEqual(body, [
         { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "muscleGroup" : "muscleGroup", "time": "08:00 AM", "availability": 0 },
         { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "muscleGroup" : "muscleGroup", "time": "10:00 AM", "availability": 1 },
@@ -92,17 +80,6 @@ test("GET /user/{username}/planner/progress returns exercise details successfull
     t.is(statusCode, 200);
     
     t.true(Array.isArray(body.exercises)); // response contains an "exercises" array
-
-    // Check that each exercise has the correct structure
-    // body.exercises.forEach((exercise) => {
-    //     // Validate each field in the exercise object
-    //     t.is(typeof exercise.name, "string");
-    //     t.is(typeof exercise.notes, "string");
-    //     t.true(Array.isArray(exercise.weightPerDateEntries));
-    //     t.true(exercise.weightPerDateEntries.every(weight => typeof weight === "number"));
-    //     t.true(Array.isArray(exercise.repetitionsPerDateEntries));
-    //     t.true(exercise.repetitionsPerDateEntries.every(rep => typeof rep === "number"));
-    // });
 
     t.deepEqual(body.exercises, [
         { "notes" : "note1", "name" : "exercise_1", "weightPerDateEntries" : [ 5, 6, 6, 8, 8, 5, 6, 6, 8, 8], "repetitionsPerDateEntries" : [ 10, 10, 15, 10, 10 ] },
@@ -192,9 +169,6 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
                 responseType: "json"
             }
         );
-    
-        // const { updatedProgress } = body;
-    
     
         t.is(statusCode, 401);
     });
