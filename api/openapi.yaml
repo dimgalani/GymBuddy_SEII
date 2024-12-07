@@ -402,7 +402,7 @@ paths:
         style: simple
         explode: false
         schema:
-          $ref: '#/components/schemas/Exercise'
+          type: string
       responses:
         "200":
           description: Successful fetch of progress entries
