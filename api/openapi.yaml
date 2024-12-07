@@ -4,8 +4,8 @@ info:
   description: Software Engineering I Course 2024 GymBuddy AUTH API
   termsOfService: http://swagger.io/terms/
   version: 1.0.0
-servers:
-- url: http://gymbuddy.com
+# servers:
+# - url: http://gymbuddy.com
 paths:
   /user/{username}/myreservations:
     get:
@@ -155,30 +155,6 @@ paths:
         explode: false
         schema:
           type: string
-      - name: day
-        in: query
-        description: the selected day
-        required: true
-        style: form
-        explode: false
-        schema:
-          type: string
-      - name: time
-        in: query
-        description: the selected time
-        required: true
-        style: form
-        explode: false
-        schema:
-          type: string
-      - name: musclegroup
-        in: query
-        description: the muscle group the user will train
-        required: true
-        style: form
-        explode: false
-        schema:
-          type: string
       requestBody:
         $ref: '#/components/requestBodies/Reservation'
       responses:
@@ -205,8 +181,15 @@ paths:
         style: form
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
+      - name: time
+        in: query
+        description: the time of the reservation
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: string
       responses:
         "202":
           description: Deletion accepted
@@ -289,8 +272,32 @@ paths:
         schema:
           type: integer
           format: int32
-      requestBody:
-        $ref: '#/components/requestBodies/Exercise'
+      - name: name
+        in: query
+        description: exercise name
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: string
+      - name: weight
+        in: query
+        description: the new weight
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: number
+          format: float
+      - name: reps
+        in: query
+        description: the new reps
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: integer
+          format: int32
       responses:
         "200":
           description: Successful update of exercise progress
