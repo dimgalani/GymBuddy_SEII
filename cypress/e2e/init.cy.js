@@ -63,3 +63,16 @@ describe('API Download URL Tests', () => {
     cy.get('h2.title pre.version').last().should('contain.text', 'OAS3');
   });
 });
+
+describe('Reservation API Tests', () => {
+  // Visit the page before each test
+  beforeEach(() => {
+    cy.visit('http://localhost:8080/docs');
+  });
+
+  it('Finds 9 elements with the class "opblock opblock-get"', () => {
+    // Locate all elements with the specified class
+    cy.get('.opblock.opblock-get')
+      .should('have.length', 9); // Assert that exactly 9 elements are found
+  });
+});
