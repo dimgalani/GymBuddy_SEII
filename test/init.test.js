@@ -1,3 +1,4 @@
+
 const http = require('node:http');
 const test = require('ava');
 const got = require('got');
@@ -35,6 +36,45 @@ test("GET /user/{usename}/planner/catalog Bad request - invalid username", async
 	//t.is(body.message, "Exercises Catalogue");
 	t.is(statusCode, 401);
 });
+
+
+///////////////////////
+// GET /settings //
+///////////////////////
+
+test("GET /user/{username}/settings with Correct Request", async (t) => {
+	const { body, statusCode } = await t.context.got("user/john_doe/settings", {
+	  throwHttpErrors: false,
+	});
+
+	t.is(statusCode, 200); // Ensure the status code is 200
+	t.deepEqual(body, {
+	  gender: "male",
+	  goalConsistencyNum: 4,
+	  goalBodyWeightNum: 75,
+	  bodyweight: 80.5,
+	  goals: [true, false, true],
+	}); // Verify the response body matches expected data
+  });
+
+ test("GET /user/{username}/settings with Bad Request (invalid username)", async (t) => {
+	const { body, statusCode } = await t.context.got("user/invalid_user/settings", {
+	  throwHttpErrors: false,
+	});
+  
+	t.is(statusCode, 401); // Unauthorized
+	//t.true(body.error.includes("Invalid username")); // Verify error message
+  });  
+
+
+  test("GET /user/{username}/settings with No Data Found", async (t) => {
+	const { body, statusCode } = await t.context.got("user/alice_wonder/settings", {
+	  throwHttpErrors: false,
+	});
+  
+	t.is(statusCode, 404); // Not Found
+  }); 
+
 
   ///////////////////
  // PUT /settings //
@@ -399,6 +439,84 @@ test("DELETE /user/{username}/reservations with Bad Request (Invalid data types)
 	t.is(statusCode, 400)
 });
 
+
+///////////////////////
+// GET /planner //
+///////////////////////
+
+test("GET /user/{username}/planner with Bad Request (no day parameter)", async (t) => {
+	const { body, statusCode } = await t.context.got("user/default/planner", {
+		throwHttpErrors: false,
+	});
+	t.is(statusCode, 400); // Expect a 400 Bad Request
+    
+});
+
+
+test("GET /user/{username}/planner with Bad Request or Not Found", async (t) => {
+    //try {
+        const { body, statusCode } = await t.context.got("user/john_doe/planner", {
+            searchParams: {
+                day: 5,
+            },
+            throwHttpErrors: false,
+        });
+		t.is(statusCode, 404);
+});
+
+
+test("GET /user/{usename}/planner with Bad Request (wrong day datatype)", async (t) => {
+	const { body, statusCode } = await t.context.got("user/default/planner", {
+		searchParams: {
+			day: "invalid_day"
+		},
+		throwHttpErrors: false
+	});
+	t.is(statusCode, 400);
+});
+
+
+test("GET /user/{usename}/planner with Correct Request", async (t) => {
+		const { body, statusCode } = await t.context.got("user/john_doe/planner", {
+			searchParams: {
+				day: 1
+			},
+			throwHttpErrors: false
+		});
+		t.is(statusCode, 200);
+		t.deepEqual(body, {
+			currentDate: 1,
+			exercisesList: [
+			{
+				name: "Romanian Deadlift",
+				notes: "Focus on form",
+				weightPerDateEntries: [60, 65],
+				repetitionsPerDateEntries: [8, 12],
+			},
+			{
+				name: "Hip Thrust",
+				notes: "Keep back straight",
+				weightPerDateEntries: [80, 85],
+				repetitionsPerDateEntries: [10, 15],
+			},
+			],
+		});
+});
+
+test("GET /user/{username}/planner with Default User", async (t) => {
+	const { body, statusCode } = await t.context.got("user/default/planner", {
+		searchParams: {
+		day: 1,
+		},
+	});
+	
+	t.is(statusCode, 200);
+	t.deepEqual(body, {
+		currentDate: 1,
+		exercisesList: [],
+	});
+});	
+
   //////////////////////////
  // GET /myreservations  //
 //////////////////////////
@@ -592,3 +710,53 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
     
         t.is(statusCode, 404);
     });
+
+/////////////////////////
+// GET /catalog/{exercise-name} //
+///////////////////////// 
+
+test("GET /user/{usename}/planner/catalog/{exercise-name} with Bad Request (invalid exercise_name parameter)", async (t) => {
+	const { body, statusCode } = await t.context.got("user/default/planner/catalog/no_exercise", {
+		throwHttpErrors: false 
+	});
+
+	t.is(statusCode, 404);
+});
+
+
+test("GET /user/{username}/planner/catalog/{exercise-name} with Bad Request (invalid username)", async (t) => {
+	const { body, statusCode } = await t.context.got("user/invalid_user/planner/catalog/lat-pull-down", {
+	  throwHttpErrors: false
+	});
+
+	t.is(statusCode, 401);
+  
+});
+  
+test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request", async (t) => {
+	const { body, statusCode } = await t.context.got("user/john_doe/planner/catalog/lat-pull-down", {
+		throwHttpErrors: false
+	});
+
+	t.is(statusCode, 200);
+
+	t.deepEqual(body, {
+		name: "Lat Pull Down",
+	 	notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-down machine with your knees securely under the pads. Adjust the thigh pads to fit comfortably against your thighs. Grasp the wide bar with an overhand grip, hands slightly wider than shoulder-width apart.",
+		weightPerDateEntries: [40.0, 42.5, 45.0],
+		repetitionsPerDateEntries: [10, 12, 14],
+	  });
+});
+
+test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request and no exercise progress", async (t) => {
+	const { body, statusCode } = await t.context.got("user/jane_smith/planner/catalog/deadlift", {
+		throwHttpErrors: false
+	});
+	t.is(statusCode, 200);
+	t.deepEqual(body, {
+		name: "deadlift",
+		notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
+		weightPerDateEntries: [],
+		repetitionsPerDateEntries: [],
+	});
+});
