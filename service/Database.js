@@ -4,13 +4,13 @@ const usernames = ["john_doe", "alice_wonder", "jane_smith", "default"];
 // Mock dataset: User settings
 const UserSettings = [
   {
-    username: "john_doe",
+    username: "john_doe", // The username of the user
     settings: {
-      bodyweight: null,
-      gender: "male",
-      goals: [true, false, true, true],
-      goalConsistencyNum: 5,
-      goalBodyWeightNum: 90.0,
+      bodyweight: null, // The bodyweight of the user
+      gender: "male", // Gender of the user
+      goals: [true, false, true, true], // The goals of the user [strength, reps increase, workout consistency, bodyweight]
+      goalConsistencyNum: 5, // The goal consistency of the user
+      goalBodyWeightNum: 90.0, // The goal bodyweight of the user
     },
   },
   {
@@ -59,13 +59,13 @@ const UserSettings = [
 const ExerciseCatalog = [
   {
     name: "Lat Pull Down",
-    notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-do...",
-    weightPerDateEntries: [40, 40],
-    repetitionsPerDateEntries: [8, 10],
+    notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back.",
+    weightPerDateEntries: [40, 40], // The weight per date entries
+    repetitionsPerDateEntries: [8, 10], // The repetitions per date entries
   },
   {
     name: "Deadlift",
-    notes: "It is a compound strength exercise. Targets several muscle groups. Setup: Stand with your feet hip-widt...",
+    notes: "It is a compound strength exercise. Targets several muscle groups.",
     weightPerDateEntries: [45, 45],
     repetitionsPerDateEntries: [8, 10],
   },
@@ -74,6 +74,7 @@ const ExerciseCatalog = [
 // Mock dataset: Available reservations
 const availableReservations = {
   1: [
+    // Reservation for the first day
     { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "time": "08:00", "availability": 50 },
     { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:00", "availability": 50 }
   ],
@@ -97,7 +98,7 @@ const availableReservations = {
 // Mock dataset: reservations per user
 const userReservations = {
   john_doe: [
-    { date: "2024-11-01", muscleGroup: "upper", time: "08:00" },
+    { date: "2024-11-01", muscleGroup: "upper", time: "08:00" }, // Reservation for John Doe
     { date: "2024-11-02", muscleGroup: "lower", time: "10:00" },
     { date: "2024-11-03", muscleGroup: "core", time: "12:00" },
     { date: "2024-11-04", muscleGroup: "cardio", time: "06:00" }
@@ -153,7 +154,6 @@ const usersPlanner = [
     {
       username: "jane_smith",
       exercise: {
-      
        notes: "note2",
        name: "Squat",
        weightPerDateEntries: [100, 110, 110, 110, 110, 110, null, null, null, null],
