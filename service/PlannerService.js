@@ -1,4 +1,5 @@
 'use strict';
+const { usernames, UserSettings, ExerciseCatalog, userReservations, availableReservations, userProgress, usersPlanner } = require("./Database");
 /**
  * Returns a list of the existing exercise progress entries for a selected day
  * FR7 - The user must be able to track an exercise to Planner
