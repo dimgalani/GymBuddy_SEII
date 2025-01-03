@@ -90,7 +90,7 @@ exports.getExerciseProgress = function (username, exerciseName) {
       john_doe: {
         "lat-pull-down": {
           name: "Lat Pull Down",
-          notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-down machine with your knees securely under the pads. Adjust the thigh pads to fit comfortably against your thighs. Grasp the wide bar with an overhand grip, hands slightly wider than shoulder-width apart.",
+          notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back.",
           weightPerDateEntries: [40.0, 42.5, 45.0],
           repetitionsPerDateEntries: [10, 12, 14],
         },

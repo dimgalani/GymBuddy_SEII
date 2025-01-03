@@ -13,12 +13,12 @@ const { usernames, ExerciseCatalog } = require("./Database");
       var examples = {};
       examples['application/json'] = {
     "exercises" : [ {
-      "notes" : "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-do...",
+      "notes" : "Targets the latissimus dorsi muscles, which are the large muscles of the back.",
       "name" : "Lat Pull Down",
       "weightPerDateEntries" : [ 40, 40 ],
       "repetitionsPerDateEntries" : [ 8, 10]
     }, {
-      "notes" : "It is a compound strength exercise. Targets several muscle groups. Setup: Stand with your feet hip-widt...",
+      "notes" : "It is a compound strength exercise. Targets several muscle groups.",
       "name" : "Deadlift",
       "weightPerDateEntries" : [ 45, 45 ],
       "repetitionsPerDateEntries" : [ 8, 10 ]
