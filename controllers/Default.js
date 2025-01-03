@@ -4,7 +4,7 @@ var utils = require('../utils/writer.js');
 var Default = require('../service/DefaultService');
 
 // Cancel a reservation for a user on a specific day and time
-module.exports.cancelReservation = function cancelReservation (req, res, next, username, day, time) {
+module.exports.cancelReservation = function cancelReservation (_, res, __, username, day, time) {
   Default.cancelReservation(username, day, time)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -15,7 +15,7 @@ module.exports.cancelReservation = function cancelReservation (req, res, next, u
 };
 
 // Check user goals based on current body weight
-module.exports.checkGoalsFromInfo = function checkGoalsFromInfo (req, res, next, username, currentBodyWeight) {
+module.exports.checkGoalsFromInfo = function checkGoalsFromInfo (_, res, __, username, currentBodyWeight) {
   Default.checkGoalsFromInfo(username, currentBodyWeight)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -26,7 +26,7 @@ module.exports.checkGoalsFromInfo = function checkGoalsFromInfo (req, res, next,
 };
 
 // Check goals based on progress for a specific day
-module.exports.checkGoalsFromProgress = function checkGoalsFromProgress (req, res, next, username, day) {
+module.exports.checkGoalsFromProgress = function checkGoalsFromProgress (_, res, __, username, day) {
   Default.checkGoalsFromProgress(username, day)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -37,7 +37,7 @@ module.exports.checkGoalsFromProgress = function checkGoalsFromProgress (req, re
 };
 
 // Create a custom exercise for a user
-module.exports.createCustomExercise = function createCustomExercise (req, res, next, body, username) {
+module.exports.createCustomExercise = function createCustomExercise (_, res, __, body, username) {
   Default.createCustomExercise(body, username)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -48,7 +48,7 @@ module.exports.createCustomExercise = function createCustomExercise (req, res, n
 };
 
 // Get available reservations for a specific day
-module.exports.getAvailableReservations = function getAvailableReservations (req, res, next, username, day) {
+module.exports.getAvailableReservations = function getAvailableReservations (_, res, __, username, day) {
   Default.getAvailableReservations(username, day)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -59,7 +59,7 @@ module.exports.getAvailableReservations = function getAvailableReservations (req
 };
 
 // Get user's planner for a specific day
-module.exports.getDayofPlanner = function getDayofPlanner (req, res, next, username, day) {
+module.exports.getDayofPlanner = function getDayofPlanner (_, res, __, username, day) {
   Default.getDayofPlanner(username, day)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -70,7 +70,7 @@ module.exports.getDayofPlanner = function getDayofPlanner (req, res, next, usern
 };
 
 // Get the dropdown menu list for a user
-module.exports.getDropDownMenuList = function getDropDownMenuList (req, res, next, username) {
+module.exports.getDropDownMenuList = function getDropDownMenuList (_, res, __, username) {
   Default.getDropDownMenuList(username)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -81,7 +81,7 @@ module.exports.getDropDownMenuList = function getDropDownMenuList (req, res, nex
 };
 
 // Get the exercise catalog for a user
-module.exports.getExerciseCatalog = function getExerciseCatalog (req, res, next, username) {
+module.exports.getExerciseCatalog = function getExerciseCatalog (_, res, __, username) {
   Default.getExerciseCatalog(username)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -92,7 +92,7 @@ module.exports.getExerciseCatalog = function getExerciseCatalog (req, res, next,
 };
 
 // Get progress for a specific exercise of a user
-module.exports.getExerciseProgress = function getExerciseProgress (req, res, next, username, exerciseName) {
+module.exports.getExerciseProgress = function getExerciseProgress (_, res, __, username, exerciseName) {
   Default.getExerciseProgress(username, exerciseName)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -103,7 +103,7 @@ module.exports.getExerciseProgress = function getExerciseProgress (req, res, nex
 };
 
 // Get all reservations made by the user
-module.exports.getMyReservations = function getMyReservations (req, res, next, username) {
+module.exports.getMyReservations = function getMyReservations (_, res, __, username) {
   Default.getMyReservations(username)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -114,7 +114,7 @@ module.exports.getMyReservations = function getMyReservations (req, res, next, u
 };
 
 // Get personal information of a user
-module.exports.getPersonalInfo = function getPersonalInfo (req, res, next, username) {
+module.exports.getPersonalInfo = function getPersonalInfo (_, res, __, username) {
   Default.getPersonalInfo(username)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -125,7 +125,7 @@ module.exports.getPersonalInfo = function getPersonalInfo (req, res, next, usern
 };
 
 // Make a reservation for a user
-module.exports.makeReservation = function makeReservation (req, res, next, body, username) {
+module.exports.makeReservation = function makeReservation (_, res, __, body, username) {
   Default.makeReservation(body, username)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -136,7 +136,7 @@ module.exports.makeReservation = function makeReservation (req, res, next, body,
 };
 
 // Update progress for a specific exercise
-module.exports.updateExerciseProgress = function updateExerciseProgress (req, res, next, day, name, weight, reps, username) {
+module.exports.updateExerciseProgress = function updateExerciseProgress (_, res, __, day, name, weight, reps, username) {
   Default.updateExerciseProgress(day, name, weight, reps, username)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -147,7 +147,7 @@ module.exports.updateExerciseProgress = function updateExerciseProgress (req, re
 };
 
 // Update personal information for a user
-module.exports.updatePersonalInfo = function updatePersonalInfo (req, res, next, body, username) {
+module.exports.updatePersonalInfo = function updatePersonalInfo (_, res, __, body, username) {
   Default.updatePersonalInfo(body, username)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
