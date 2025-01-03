@@ -2,7 +2,7 @@
 
 const { use } = require("..");
 
-const { usernames, UserSettings, ExerciseCatalog, userReservations, availableReservations, userProgress, usersPlanner } = require("./Database");
+const { usernames, UserSettings } = require("./Database");
 
 /**
  * Returns the bodyweight, gender, activated goals, desired bodyweight and desired workout frequency

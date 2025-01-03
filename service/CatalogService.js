@@ -1,5 +1,5 @@
 'use strict';
-const { usernames, UserSettings, ExerciseCatalog, userReservations, availableReservations, userProgress, usersPlanner } = require("./Database");
+const { usernames, ExerciseCatalog } = require("./Database");
 /**
  * Returns the catalog of existing exercises
  * FR8 - The user must be able to create a custom exercise / FR9 - The user must be able to see his progress at an exercise

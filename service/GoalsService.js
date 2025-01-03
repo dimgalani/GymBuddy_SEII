@@ -1,5 +1,5 @@
 'use strict';
-const { usernames, UserSettings, ExerciseCatalog, userReservations, availableReservations, userProgress, usersPlanner } = require("./Database");
+const { UserSettings, userProgress } = require("./Database");
 /**
  * Returns true/false depending bodyweight goal progress
  * FR10 - The system must be able to notify the user when their goals have been achieved

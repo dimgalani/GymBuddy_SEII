@@ -1,5 +1,5 @@
 'use strict';
-const { usernames, UserSettings, ExerciseCatalog, userReservations, availableReservations, userProgress, usersPlanner } = require("./Database");
+const { usernames, userReservations, availableReservations } = require("./Database");
 /**
  * Cancels a reservation by deleting it
  * FR4 - The user must be able to cancel a reservation

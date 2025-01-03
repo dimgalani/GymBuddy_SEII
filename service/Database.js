@@ -1,5 +1,7 @@
+// Purpose: Mock data for the database
 const usernames = ["john_doe", "alice_wonder", "jane_smith", "default"];
 
+// Mock dataset: User settings
 const UserSettings = [
   {
     username: "john_doe",
@@ -53,6 +55,7 @@ const UserSettings = [
   },
 ];
 
+// Mock dataset: Exercise catalog
 const ExerciseCatalog = [
   {
     name: "Lat Pull Down",
@@ -67,6 +70,7 @@ const ExerciseCatalog = [
     repetitionsPerDateEntries: [8, 10],
   },
 ];
+
 // Mock dataset: Available reservations
 const availableReservations = {
   1: [
@@ -135,6 +139,7 @@ const userProgress = {
   },
 };
 
+// Mock dataset: user planner
 const usersPlanner = [
   {
     username: "john_doe",
@@ -157,6 +162,7 @@ const usersPlanner = [
     }
 ];
 
+// Export the mock data
 module.exports = {
     usernames,
     UserSettings,
