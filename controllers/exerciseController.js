@@ -1,10 +1,10 @@
 'use strict';
 
-var utils = require('../utils/writer.js');
-var Default = require('../service/DefaultService');
+var utils = _uire('../utils/writer.js');
+var Default = _uire('../service/DefaultService');
 
 // Creates a custom exercise for the given username
-module.exports.createCustomExercise = function createCustomExercise (req, res, next, body, username) {
+module.exports.createCustomExercise = function createCustomExercise (_, res, __, body, username) {
   Default.createCustomExercise(body, username)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -15,7 +15,7 @@ module.exports.createCustomExercise = function createCustomExercise (req, res, n
 };
 
 // Retrieves the exercise catalog for the given username
-module.exports.getExerciseCatalog = function getExerciseCatalog (req, res, next, username) {
+module.exports.getExerciseCatalog = function getExerciseCatalog (_, res, __, username) {
   Default.getExerciseCatalog(username)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -26,7 +26,7 @@ module.exports.getExerciseCatalog = function getExerciseCatalog (req, res, next,
 };
 
 // Retrieves progress for a specific exercise of the given username
-module.exports.getExerciseProgress = function getExerciseProgress (req, res, next, username, exerciseName) {
+module.exports.getExerciseProgress = function getExerciseProgress (_, res, __, username, exerciseName) {
   Default.getExerciseProgress(username, exerciseName)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -37,7 +37,7 @@ module.exports.getExerciseProgress = function getExerciseProgress (req, res, nex
 };
 
 // Updates exercise progress for the given username, day, and exercise details
-module.exports.updateExerciseProgress = function updateExerciseProgress (req, res, next, day, name, weight, reps, username) {
+module.exports.updateExerciseProgress = function updateExerciseProgress (_, res, __, day, name, weight, reps, username) {
   Default.updateExerciseProgress(day, name, weight, reps, username)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
