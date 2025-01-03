@@ -1,7 +1,7 @@
 'use strict';
 
 // Import functions from other services
-var { cancelReservation, makeReservation, getAvailableReservations, getMyReservations } = require('./reservationController');
+var { cancelReservation, makeReservation, getAvailableReservations, getMyReservations, getDayofPlanner} = require('./reservationController');
 var { checkGoalsFromInfo, checkGoalsFromProgress } = require('./goalController');
 var { createCustomExercise, getExerciseCatalog, getExerciseProgress, updateExerciseProgress } = require('./exerciseController');
 var { getPersonalInfo, updatePersonalInfo, getDropDownMenuList} = require('./personalInfoController');
@@ -12,6 +12,7 @@ module.exports = {
   makeReservation,
   getAvailableReservations,
   getMyReservations,
+  getDayofPlanner,
   checkGoalsFromInfo,
   checkGoalsFromProgress,
   createCustomExercise,
