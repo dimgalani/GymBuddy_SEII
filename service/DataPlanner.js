@@ -51,7 +51,7 @@ const exerciseData = {
     default: {}, // Default user has no exercise data
   };
 // Description: This file contains the data for the planner and exercises.  
-  const dayofPlannerData = {
+const dayofPlannerData = {
     john_doe: {
       1: {
         currentDate: 1,
@@ -96,7 +96,7 @@ const exerciseData = {
         exercisesList: [], // Empty exercisesList for the default user
       },
     },
-  };
+};
 // Description: This file contains the data for the planner and exercises.
 const usersPlanner = [
     {
@@ -118,7 +118,7 @@ const usersPlanner = [
          repetitionsPerDateEntries: [5, 5, 5, 5, 5, 5, null, null, null, null]
        }
       }
-  ];
+];
 
 module.exports = {
     exerciseData,
