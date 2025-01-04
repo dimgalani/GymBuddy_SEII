@@ -1,11 +1,26 @@
-const test = require("ava");
-const { setupTests } = require("./init.test");
+const http = require('node:http');
+const test = require('ava');
+const got = require('got');
+
+const { app, startServer } = require('../test_setup');  // Import both app and startServer
+
+test.before(async (t) => {
+    t.context.server = http.createServer(app);
+    const server = t.context.server.listen();
+    const { port } = server.address();
+
+    t.context.got = got.extend({ responseType: "json", prefixUrl: `http://localhost:${port}` });
+});
+
+test.after((t) => {
+    t.context.server.close();
+});
 
 ///////////////////////
 // GET /reservations //
 ///////////////////////
 
-test("GET /user/{usename}/reservations with Bad Request (no day parameter)", async (t) => {
+test("GET /user/{username}/reservations with Bad Request (no day parameter)", async (t) => {
     const { body, statusCode } = await t.context.got("user/default/reservations", {
         throwHttpErrors: false // Prevent `got` from rejecting the promise on 400 responses
     });
