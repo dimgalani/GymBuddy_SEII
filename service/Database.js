@@ -1,153 +1,120 @@
-// Purpose: Mock data for a fitness-related application. 
-// This file contains mock datasets for user settings, exercise catalog, 
-// available reservations, user reservations, and user progress.
-
-// Mock dataset: Usernames
+// Purpose: Mock data for the database
 const usernames = ["john_doe", "alice_wonder", "jane_smith", "default"];
 
-// Mock dataset: User settings
-const userSettings = [
-  createUserSettings("john_doe", { bodyweight: null, gender: "male", goals: [true, false, true, true], goalConsistencyNum: 5, goalBodyWeightNum: 90.0 }),
-  createUserSettings("jane_smith", { bodyweight: 65.0, gender: "female", goals: [false, true, true, true], goalConsistencyNum: 7, goalBodyWeightNum: 55.0 }),
-  createUserSettings("default", { bodyweight: 75.0, gender: "male", goals: [false, false, false], goalConsistencyNum: 6, goalBodyWeightNum: 80.0 }),
-  createUserSettings("nathaniel_brooks", { bodyweight: 75.0, gender: "male", goals: [false, false, false, true], goalConsistencyNum: 6, goalBodyWeightNum: null }),
-  createUserSettings("adrian_carter", { bodyweight: 75.0, gender: "male", goals: [false, false, false, true], goalConsistencyNum: 6, goalBodyWeightNum: 90.0 }),
-];
-
-/**
- * Creates a user settings object.
- * @param {string} username - The username of the user.
- * @param {Object} settings - An object containing user settings.
- * @returns {Object} User settings object.
- */
-function createUserSettings(username, settings) {
-  return { username, settings };
+// Function to create user settings
+function createUserSettings(username, bodyweight, gender, goals, goalConsistencyNum, goalBodyWeightNum) {
+  return {
+    username,
+    settings: {
+      bodyweight,
+      gender,
+      goals,
+      goalConsistencyNum,
+      goalBodyWeightNum,
+    },
+  };
 }
+
+// Mock dataset: User settings
+const UserSettings = [
+  createUserSettings("john_doe", null, "male", [true, false, true, true], 5, 90.0),
+  createUserSettings("jane_smith", 65.0, "female", [false, true, true, true], 7, 55.0),
+  createUserSettings("default", 75.0, "male", [false, false, false], 6, 80.0),
+  createUserSettings("nathaniel_brooks", 75.0, "male", [false, false, false, true], 6, null),
+  createUserSettings("adrian_carter", 75.0, "male", [false, false, false, true], 6, 90.0),
+];
 
 // Mock dataset: Exercise catalog
-const exerciseCatalog = [
-  createExercise("Lat Pull Down", "Targets the latissimus dorsi muscles.", [40, 40], [8, 10]),
-  createExercise("Deadlift", "Compound exercise targeting multiple muscle groups.", [45, 45], [8, 10]),
+const ExerciseCatalog = [
+  {
+    name: "Lat Pull Down",
+    notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back.",
+    weightPerDateEntries: [40, 40], // The weight per date entries
+    repetitionsPerDateEntries: [8, 10], // The repetitions per date entries
+  },
+  {
+    name: "Deadlift",
+    notes: "It is a compound strength exercise. Targets several muscle groups.",
+    weightPerDateEntries: [45, 45],
+    repetitionsPerDateEntries: [8, 10],
+  },
 ];
-
-/**
- * Creates an exercise entry.
- * @param {string} name - Name of the exercise.
- * @param {string} notes - Notes describing the exercise.
- * @param {number[]} weightEntries - Array of weights recorded.
- * @param {number[]} repsEntries - Array of repetitions recorded.
- * @returns {Object} Exercise entry object.
- */
-function createExercise(name, notes, weightEntries, repsEntries) {
-  return { name, notes, weightPerDateEntries: weightEntries, repetitionsPerDateEntries: repsEntries };
-}
 
 // Mock dataset: Available reservations
 const availableReservations = {
   1: [
-    createReservation("2024-11-01", [1, 2, 3, 4, 5], "08:00", 50),
-    createReservation("2024-11-01", [0, 0, 0, 0, 0], "10:00", 50),
+    // Reservation for the first day
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "time": "08:00", "availability": 50 },
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:00", "availability": 50 }
   ],
   2: [
-    createReservation("2024-11-02", [10, 11, 12, 13, 14], "09:00", 50),
-    createReservation("2024-11-02", [20, 19, 18, 17, 16], "11:00", 50),
+    { "date": "2024-11-02", "reservationsPerMuscleGroup": [10, 11, 12, 13, 14], "time": "09:00", "availability": 50 },
+    { "date": "2024-11-02", "reservationsPerMuscleGroup": [20, 19, 18, 17, 16], "time": "11:00", "availability": 50 }
   ],
   3: [
-    createReservation("2024-11-01", [0, 0, 0, 0, 0], "08:30", 50),
-    createReservation("2024-11-01", [0, 0, 0, 0, 0], "10:30", 50),
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "08:30", "availability": 50 },
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:30", "availability": 50 }
   ],
   4: [
-    createReservation("2024-11-01", [0, 0, 0, 0, 0], "09:30", 50),
-    createReservation("2024-11-01", [0, 0, 0, 0, 0], "11:30", 50),
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "09:30", "availability": 50 },
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "11:30", "availability": 50 }
   ],
   5: [
-    createReservation("2024-11-01", [0, 0, 0, 0, 0], "12:00", 50),
-  ],
+    { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "12:00", "availability": 50 }
+  ]
 };
 
-/**
- * Creates a reservation entry.
- * @param {string} date - Date of the reservation.
- * @param {number[]} reservationsPerGroup - Array of reservation counts per muscle group.
- * @param {string} time - Time of the reservation.
- * @param {number} availability - Total availability for the time slot.
- * @returns {Object} Reservation entry object.
- */
-function createReservation(date, reservationsPerGroup, time, availability) {
-  return { date, reservationsPerMuscleGroup: reservationsPerGroup, time, availability };
-}
-
-// Mock dataset: User reservations
+// Mock dataset: reservations per user
 const userReservations = {
   john_doe: [
-    createUserReservation("2024-11-01", "upper", "08:00"),
-    createUserReservation("2024-11-02", "lower", "10:00"),
-    createUserReservation("2024-11-03", "core", "12:00"),
-    createUserReservation("2024-11-04", "cardio", "06:00"),
+    { date: "2024-11-01", muscleGroup: "upper", time: "08:00" }, // Reservation for John Doe
+    { date: "2024-11-02", muscleGroup: "lower", time: "10:00" },
+    { date: "2024-11-03", muscleGroup: "core", time: "12:00" },
+    { date: "2024-11-04", muscleGroup: "cardio", time: "06:00" }
   ],
   alice_wonder: [
-    createUserReservation("2024-11-01", "cardio", "07:00"),
-    createUserReservation("2024-11-02", "core", "09:30"),
-    createUserReservation("2024-11-03", "upper", "11:00"),
-    createUserReservation("2024-11-04", "lower", "16:30"),
+    { date: "2024-11-01", muscleGroup: "cardio", time: "07:00" },
+    { date: "2024-11-02", muscleGroup: "core", time: "09:30" },
+    { date: "2024-11-03", muscleGroup: "upper", time: "11:00" },
+    { date: "2024-11-04", muscleGroup: "lower", time: "16:30" }
   ],
   jane_smith: [
-    createUserReservation("2024-11-01", "lower", "08:30"),
-    createUserReservation("2024-11-02", "cardio", "11:00"),
-    createUserReservation("2024-11-03", "core", "13:30"),
-    createUserReservation("2024-11-04", "upper", "17:00"),
+    { date: "2024-11-01", muscleGroup: "lower", time: "08:30" },
+    { date: "2024-11-02", muscleGroup: "cardio", time: "11:00" },
+    { date: "2024-11-03", muscleGroup: "core", time: "13:30" },
+    { date: "2024-11-04", muscleGroup: "upper", time: "17:00" }
   ],
-  default: [],
+  default: []
 };
 
-/**
- * Creates a user reservation entry.
- * @param {string} date - Date of the reservation.
- * @param {string} muscleGroup - Muscle group targeted in the reservation.
- * @param {string} time - Time of the reservation.
- * @returns {Object} User reservation entry object.
- */
-function createUserReservation(date, muscleGroup, time) {
-  return { date, muscleGroup, time };
-}
-
-// Mock dataset: User progress
+// Mock dataset: user goals for progress
 const userProgress = {
-  john_doe: createUserProgress({
+  john_doe: {
     1: [true, true, false, true, true],
     2: [true, true, true, true, true],
     3: [false, false, false, false, false],
-  }),
-  jane_smith: createUserProgress({
+  },
+  jane_smith: {
     1: [true, false, true, false, true],
     2: [true, true, true, true, true],
     3: [true, false, false, false, true],
-  }),
-  alice_wonder: createUserProgress({
+  },
+  alice_wonder: {
     1: [false, false, false, false, false],
     2: [true, true, true, false, true],
     3: [true, true, true, true, true],
-  }),
-  default: createUserProgress({
+  },
+  default: {
     1: [false, false, false, false, false],
-  }),
+  },
 };
-
-/**
- * Creates a user progress object.
- * @param {Object} progress - Progress data by week.
- * @returns {Object} User progress object.
- */
-function createUserProgress(progress) {
-  return progress;
-}
 
 // Export the mock data
 module.exports = {
-  usernames,
-  userSettings,
-  exerciseCatalog,
-  availableReservations,
-  userReservations,
-  userProgress,
-};
+    usernames,
+    UserSettings,
+    ExerciseCatalog,
+    availableReservations,
+    userReservations,
+    userProgress
+    };
