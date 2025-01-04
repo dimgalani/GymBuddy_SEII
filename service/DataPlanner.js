@@ -31,23 +31,50 @@ const exerciseData = {
     default: createDayPlanner(1, []) // Default day planner with no exercises
   };
   
-  // User-specific planner data
-  const usersPlanner = [
-    createUserPlanner("john_doe", "Bench Press", "note1", [70, 80, 80, 80, 85, 90, null, null, null, null], [10, 10, 10, 10, 10, null, null, null, null, null]),
-    createUserPlanner("jane_smith", "Squat", "note2", [100, 110, 110, 110, 110, 110, null, null, null, null], [5, 5, 5, 5, 5, 5, null, null, null, null])
+// Planner data for users
+const usersPlanner = [
+    createUserPlanner({
+      username: "john_doe",
+      exercise: {
+        name: "Bench Press",
+        notes: "note1",
+        weightEntries: [70, 80, 80, 80, 85, 90, null, null, null, null],
+        repetitionEntries: [10, 10, 10, 10, 10, null, null, null, null, null]
+      }
+    }),
+    
+    createUserPlanner({
+      username: "jane_smith",
+      exercise: {
+        name: "Squat",
+        notes: "note2",
+        weightEntries: [100, 110, 110, 110, 110, 110, null, null, null, null],
+        repetitionEntries: [5, 5, 5, 5, 5, 5, null, null, null, null]
+      }
+    })
   ];
   
-  // Helper function to create a user's exercise data
-  function createUserExerciseData(exercises) {
-    return exercises.reduce((acc, { name, ...exercise }) => {
-      acc[formatKey(name)] = { name, ...exercise };
+// Helper function to create a user's exercise data
+function createUserExerciseData(exercises) {
+    return exercises.reduce((acc, exercise) => {
+      if (exercise.name) {
+        const formattedKey = formatKey(exercise.name);
+        acc[formattedKey] = { ...exercise };
+      } else {
+        console.warn('Missing name for exercise:', exercise);  // Add a warning if name is missing
+      }
       return acc;
     }, {});
   }
   
-  // Helper function to create an exercise object
-  function createExercise(name, notes, weightEntries, repetitionEntries) {
-    return { name, notes, weightPerDateEntries: weightEntries, repetitionsPerDateEntries: repetitionEntries };
+// Refactored helper function to create an exercise object
+function createExercise({ name, notes, weightEntries, repetitionEntries }) {
+    return {
+      name,
+      notes,
+      weightPerDateEntries: weightEntries,
+      repetitionsPerDateEntries: repetitionEntries
+    };
   }
   
   // Helper function to create a day planner for a user
@@ -55,16 +82,20 @@ const exerciseData = {
     return { [currentDate]: { currentDate, exercisesList } };
   }
   
-  // Helper function to create a user's planner data
-  function createUserPlanner(username, exerciseName, notes, weightEntries, repetitionEntries) {
+// Refactored helper function to create a user planner
+function createUserPlanner({ username, exercise }) {
     return {
       username,
-      exercise: createExercise(exerciseName, notes, weightEntries, repetitionEntries)
+      exercise: createExercise(exercise)
     };
   }
   
-  // Helper function to format a string into a key
-  function formatKey(str) {
+// Helper function to format a string into a key
+function formatKey(str) {
+    if (typeof str !== 'string') {
+      console.error('Invalid string for formatKey:', str);  // Add an error log if str is not a valid string
+      return '';  // Return an empty string or some default key if invalid input is provided
+    }
     return str.toLowerCase().replace(/\s+/g, '-');
   }
   
