@@ -1,58 +1,13 @@
 // Purpose: Mock data for the database
 const usernames = ["john_doe", "alice_wonder", "jane_smith", "default"];
 
-// Mock dataset: User settings
+//
 const UserSettings = [
-  {
-    username: "john_doe", // The username of the user
-    settings: {
-      bodyweight: null, // The bodyweight of the user
-      gender: "male", // Gender of the user
-      goals: [true, false, true, true], // The goals of the user
-      goalConsistencyNum: 5, // The goal consistency of the user
-      goalBodyWeightNum: 90.0, // The goal bodyweight of the user
-    },
-  },
-  {
-    username: "jane_smith",
-    settings: {
-      bodyweight: 65.0,
-      gender: "female",
-      goals: [false, true, true, true],
-      goalConsistencyNum: 7,
-      goalBodyWeightNum: 55.00,
-    },
-  },
-  {
-    username: "default",
-    settings: {
-      bodyweight: 75.00,
-      gender: "male",
-      goals: [false, false, false, ],
-      goalConsistencyNum: 6,
-      goalBodyWeightNum: 80.0,
-    },
-  },
-  {
-    username: "nathaniel_brooks",
-    settings: {
-      bodyweight: 75.00,
-      gender: "male",
-      goals: [false, false, false, true],
-      goalConsistencyNum: 6,
-      goalBodyWeightNum: null,
-    },
-  },
-  {
-    username: "adrian_carter",
-    settings: {
-      bodyweight: 75.00,
-      gender: "male",
-      goals: [false, false, false, true],
-      goalConsistencyNum: 6,
-      goalBodyWeightNum: 90.00,
-    },
-  },
+  { username: "john_doe", settings: { bodyweight: null, gender: "male", goals: [true, false, true, true], goalConsistencyNum: 5, goalBodyWeightNum: 90.0 } },
+  { username: "jane_smith", settings: { bodyweight: 65.0, gender: "female", goals: [false, true, true, true], goalConsistencyNum: 7, goalBodyWeightNum: 55.0 } },
+  { username: "default", settings: { bodyweight: 75.0, gender: "male", goals: [false, false, false], goalConsistencyNum: 6, goalBodyWeightNum: 80.0 } },
+  { username: "nathaniel_brooks", settings: { bodyweight: 75.0, gender: "male", goals: [false, false, false, true], goalConsistencyNum: 6, goalBodyWeightNum: null } },
+  { username: "adrian_carter", settings: { bodyweight: 75.0, gender: "male", goals: [false, false, false, true], goalConsistencyNum: 6, goalBodyWeightNum: 90.0 } },
 ];
 
 // Mock dataset: Exercise catalog
@@ -139,7 +94,6 @@ const userProgress = {
     1: [false, false, false, false, false],
   },
 };
-
 // Export the mock data
 module.exports = {
     usernames,
