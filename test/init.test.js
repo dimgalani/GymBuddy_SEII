@@ -621,30 +621,30 @@ test("DELETE /user/{username}/reservations with Not Found (Non-existent reservat
  // PUT planner/progress //
 //////////////////////////
 
-// test("PUT /user/{username}/planner/progress updates exercise progress entries successfully", async (t) => {
-//     const day = 8;
-//     const name = "Bench_Press";
-//     const weight = 70;
-//     const reps = 10;
-  
-//     // Send the PUT request
-//     const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress", {
-//         searchParams: {
-//             day: day,
-//             name: name,
-//             weight: weight,
-//             reps: reps
-//         },
-//         responseType: "json"
-//     });
+	test("PUT /user/{username}/planner/progress updates exercise progress entries successfully", async (t) => {
+		const day = 8;
+		const name = "Bench_Press";
+		const weight = 70;
+		const reps = 10;
+	
+		// Send the PUT request
+		const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress", {
+			searchParams: {
+				day: day,
+				name: name,
+				weight: weight,
+				reps: reps
+			},
+			responseType: "json"
+		});
 
-//     // Validate the response
-//     t.is(statusCode, 200);
-  
-//     // Ensure updated progress matches expectations
-//     t.deepEqual(body.updatedProgress.weightPerDateEntries[day - 1], weight, "The updated exercise weight should match");
-//     t.deepEqual(body.updatedProgress.repetitionsPerDateEntries[day - 1], reps, "The updated exercise reps should match");
-//   });
+		// Validate the response
+		t.is(statusCode, 200);
+	
+		// Ensure updated progress matches expectations
+		t.deepEqual(body.updatedProgress.weightPerDateEntries[day - 1], weight, "The updated exercise weight should match");
+		t.deepEqual(body.updatedProgress.repetitionsPerDateEntries[day - 1], reps, "The updated exercise reps should match");
+	});
   
 
     test("PUT /user/{username}/planner/progress with bad request", async (t) => {
