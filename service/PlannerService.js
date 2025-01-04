@@ -1,5 +1,5 @@
 'use strict';
-const { usersPlanner, exerciseData, dayofPlannerData } = require("./Database");
+const { usersPlanner, exerciseData, dayofPlannerData } = require("./DataPlanner");
 /**
  * Returns a list of the existing exercise progress entries for a selected day
  * FR7 - The user must be able to track an exercise to Planner
