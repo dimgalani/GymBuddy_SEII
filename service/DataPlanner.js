@@ -1,8 +1,9 @@
 // Description: This file contains the data for the planner and exercises.
-const exerciseData = getExerciseData();
-const dayofPlannerData = getDayofPlannerData();
-const usersPlanner = getUsersPlanner();
+const exerciseData = getExerciseData(); // Get the exercise data from all users
+const dayofPlannerData = getDayofPlannerData(); // Get the day of planner data
+const usersPlanner = getUsersPlanner(); // Get the users' planner data
 
+// Function to get the exercise data
 function getExerciseData() {
     return {
         john_doe: getJohnDoeExercises(),
@@ -12,6 +13,7 @@ function getExerciseData() {
     };
 }
 
+// Function to get the exercise data for John Doe
 function getJohnDoeExercises() {
     return {
         "lat-pull-down": {
@@ -29,6 +31,7 @@ function getJohnDoeExercises() {
     };
 }
 
+// Function to get the exercise data for Alice Wonders
 function getAliceWondersExercises() {
     return {
         "bulgarian-split-squat": {
@@ -46,6 +49,7 @@ function getAliceWondersExercises() {
     };
 }
 
+// Function to get the exercise data for Jane Smith
 function getJaneSmithExercises() {
     return {
         "bulgarian-split-squat": {
@@ -69,6 +73,7 @@ function getJaneSmithExercises() {
     };
 }
 
+// Function to get the day of planner data
 function getDayofPlannerData() {
     return {
         john_doe: getJohnDoePlanner(),
@@ -77,6 +82,7 @@ function getDayofPlannerData() {
     };
 }
 
+// Function to get the planner data for John Doe
 function getJohnDoePlanner() {
     return {
         1: {
@@ -99,6 +105,7 @@ function getJohnDoePlanner() {
     };
 }
 
+// Function to get the planner data for Jane Smith
 function getJaneSmithPlanner() {
     return {
         2: {
@@ -121,6 +128,7 @@ function getJaneSmithPlanner() {
     };
 }
 
+// Function to get the default planner data
 function getDefaultPlanner() {
     return {
         1: {
@@ -130,6 +138,7 @@ function getDefaultPlanner() {
     };
 }
 
+// Function to get the users' planner data
 function getUsersPlanner() {
     return [
         getJohnDoeUserPlanner(),
@@ -137,6 +146,7 @@ function getUsersPlanner() {
     ];
 }
 
+// Function to get the user planner data for John Doe
 function getJohnDoeUserPlanner() {
     return {
         username: "john_doe",
@@ -149,6 +159,7 @@ function getJohnDoeUserPlanner() {
     };
 }
 
+// Function to get the user planner data for Jane Smith
 function getJaneSmithUserPlanner() {
     return {
         username: "jane_smith",
@@ -161,6 +172,7 @@ function getJaneSmithUserPlanner() {
     };
 }
 
+// Export the data
 module.exports = {
     exerciseData,
     dayofPlannerData,
