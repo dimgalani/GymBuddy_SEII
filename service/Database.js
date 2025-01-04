@@ -7,28 +7,21 @@ const usernames = ["john_doe", "alice_wonder", "jane_smith", "default"];
 
 // Mock dataset: User settings
 const userSettings = [
-  createUserSettings("john_doe", null, "male", [true, false, true, true], 5, 90.0),
-  createUserSettings("jane_smith", 65.0, "female", [false, true, true, true], 7, 55.0),
-  createUserSettings("default", 75.0, "male", [false, false, false], 6, 80.0),
-  createUserSettings("nathaniel_brooks", 75.0, "male", [false, false, false, true], 6, null),
-  createUserSettings("adrian_carter", 75.0, "male", [false, false, false, true], 6, 90.0),
+  createUserSettings("john_doe", { bodyweight: null, gender: "male", goals: [true, false, true, true], goalConsistencyNum: 5, goalBodyWeightNum: 90.0 }),
+  createUserSettings("jane_smith", { bodyweight: 65.0, gender: "female", goals: [false, true, true, true], goalConsistencyNum: 7, goalBodyWeightNum: 55.0 }),
+  createUserSettings("default", { bodyweight: 75.0, gender: "male", goals: [false, false, false], goalConsistencyNum: 6, goalBodyWeightNum: 80.0 }),
+  createUserSettings("nathaniel_brooks", { bodyweight: 75.0, gender: "male", goals: [false, false, false, true], goalConsistencyNum: 6, goalBodyWeightNum: null }),
+  createUserSettings("adrian_carter", { bodyweight: 75.0, gender: "male", goals: [false, false, false, true], goalConsistencyNum: 6, goalBodyWeightNum: 90.0 }),
 ];
 
 /**
  * Creates a user settings object.
  * @param {string} username - The username of the user.
- * @param {number|null} bodyweight - The user's bodyweight.
- * @param {string} gender - The user's gender.
- * @param {boolean[]} goals - Goals array [strength, reps increase, workout consistency, bodyweight].
- * @param {number} goalConsistencyNum - Number representing goal consistency.
- * @param {number|null} goalBodyWeightNum - Goal bodyweight.
+ * @param {Object} settings - An object containing user settings.
  * @returns {Object} User settings object.
  */
-function createUserSettings(username, bodyweight, gender, goals, goalConsistencyNum, goalBodyWeightNum) {
-  return {
-    username,
-    settings: { bodyweight, gender, goals, goalConsistencyNum, goalBodyWeightNum },
-  };
+function createUserSettings(username, settings) {
+  return { username, settings };
 }
 
 // Mock dataset: Exercise catalog
