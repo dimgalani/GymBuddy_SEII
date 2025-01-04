@@ -26,7 +26,7 @@ test("GET /user/{usename}/planner/catalog returns correct response and status co
 	// Verify the body structure
 	t.true(Array.isArray(body.exercises), "Exercises should be an array");
 	t.is(body.exercises[0].name, "Lat Pull Down", "The first exercise name should be 'Lat Pull Down'");
-	t.is(body.exercises[0].notes, "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-do...", "The first exercise notes should be 'Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-do...'");
+	t.is(body.exercises[0].notes, "Targets the latissimus dorsi muscles, which are the large muscles of the back.");
 });
 
 test("GET /user/{usename}/planner/catalog Bad request - invalid username", async (t) => {
@@ -236,7 +236,7 @@ test("GET /user/{usename}/settings/goals with Bad Request ( missing goal BodyWei
 test("POST /user/{username}/planner/catalog with Correct Request (Mock Data)", async (t) => {
 	const newExercise = {
 		name: "Bench Press",
-		notes: "Targets the pectoral muscles, triceps, and anterior deltoids. Setup: Lie on a flat bench with your feet flat on the floor. Grasp the barbell with your hands slightly wider than shoulder-width apart. Lower the bar to your chest, then press it back up to the starting position.",
+		notes: "Targets the pectoral muscles, triceps, and anterior deltoids.",
 	};
 	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
 		json: newExercise,
@@ -621,30 +621,30 @@ test("DELETE /user/{username}/reservations with Not Found (Non-existent reservat
  // PUT planner/progress //
 //////////////////////////
 
-test("PUT /user/{username}/planner/progress updates exercise progress entries successfully", async (t) => {
-    const day = 8;
-    const name = "Bench_Press";
-    const weight = 70;
-    const reps = 10;
-  
-    // Send the PUT request
-    const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress", {
-        searchParams: {
-            day: day,
-            name: name,
-            weight: weight,
-            reps: reps
-        },
-        responseType: "json"
-    });
+	test("PUT /user/{username}/planner/progress updates exercise progress entries successfully", async (t) => {
+		const day = 8;
+		const name = "Bench_Press";
+		const weight = 70;
+		const reps = 10;
+	
+		// Send the PUT request
+		const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress", {
+			searchParams: {
+				day: day,
+				name: name,
+				weight: weight,
+				reps: reps
+			},
+			responseType: "json"
+		});
 
-    // Validate the response
-    t.is(statusCode, 200);
-  
-    // Ensure updated progress matches expectations
-    t.deepEqual(body.updatedProgress.weightPerDateEntries[day - 1], weight, "The updated exercise weight should match");
-    t.deepEqual(body.updatedProgress.repetitionsPerDateEntries[day - 1], reps, "The updated exercise reps should match");
-  });
+		// Validate the response
+		t.is(statusCode, 200);
+	
+		// Ensure updated progress matches expectations
+		t.deepEqual(body.updatedProgress.weightPerDateEntries[day - 1], weight, "The updated exercise weight should match");
+		t.deepEqual(body.updatedProgress.repetitionsPerDateEntries[day - 1], reps, "The updated exercise reps should match");
+	});
   
 
     test("PUT /user/{username}/planner/progress with bad request", async (t) => {
@@ -742,7 +742,7 @@ test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request",
 
 	t.deepEqual(body, {
 		name: "Lat Pull Down",
-	 	notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-down machine with your knees securely under the pads. Adjust the thigh pads to fit comfortably against your thighs. Grasp the wide bar with an overhand grip, hands slightly wider than shoulder-width apart.",
+	 	notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back.",
 		weightPerDateEntries: [40.0, 42.5, 45.0],
 		repetitionsPerDateEntries: [10, 12, 14],
 	  });
