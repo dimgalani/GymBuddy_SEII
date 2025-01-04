@@ -2,26 +2,26 @@
 const usernames = ["john_doe", "alice_wonder", "jane_smith", "default"];
 
 // Function to create user settings
-function createUserSettings(username, bodyweight, gender, goals, goalConsistencyNum, goalBodyWeightNum) {
+function createUserSettings(username, bodyweight, gender, goals) {
   return {
     username,
     settings: {
       bodyweight,
       gender,
-      goals,
-      goalConsistencyNum,
-      goalBodyWeightNum,
+      goals: goals.goals,
+      goalConsistencyNum: goals.goalConsistencyNum,
+      goalBodyWeightNum: goals.goalBodyWeightNum,
     },
   };
 }
 
 // Mock dataset: User settings
 const UserSettings = [
-  createUserSettings("john_doe", null, "male", [true, false, true, true], 5, 90.0),
-  createUserSettings("jane_smith", 65.0, "female", [false, true, true, true], 7, 55.0),
-  createUserSettings("default", 75.0, "male", [false, false, false], 6, 80.0),
-  createUserSettings("nathaniel_brooks", 75.0, "male", [false, false, false, true], 6, null),
-  createUserSettings("adrian_carter", 75.0, "male", [false, false, false, true], 6, 90.0),
+  createUserSettings("john_doe", null, "male", { goals: [true, false, true, true], goalConsistencyNum: 5, goalBodyWeightNum: 90.0 }),
+  createUserSettings("jane_smith", 65.0, "female", { goals: [false, true, true, true], goalConsistencyNum: 7, goalBodyWeightNum: 55.0 }),
+  createUserSettings("default", 75.0, "male", { goals: [false, false, false], goalConsistencyNum: 6, goalBodyWeightNum: 80.0 }),
+  createUserSettings("nathaniel_brooks", 75.0, "male", { goals: [false, false, false, true], goalConsistencyNum: 6, goalBodyWeightNum: null }),
+  createUserSettings("adrian_carter", 75.0, "male", { goals: [false, false, false, true], goalConsistencyNum: 6, goalBodyWeightNum: 90.0 }),
 ];
 
 // Mock dataset: Exercise catalog
