@@ -153,3 +153,47 @@ test("DELETE /user/{username}/reservations with Bad Request (Invalid data types)
     });
     t.is(statusCode, 400)
 });
+
+  //////////////////////////
+ // GET /myreservations  //
+//////////////////////////
+
+test("GET /user/{username}/myreservations with Bad Request Format", async (t) => {
+    const { statusCode, body } = await t.context.got("user/default/myreservations", {
+        throwHttpErrors: false,
+        searchParams: {
+            day: "invalid_day"
+        }
+    });
+
+    t.is(statusCode, 400);
+
+});
+
+test("GET /user/{username}/myreservations returns up to 3 upcoming reservations", async (t) => {
+    const { body, statusCode } = await t.context.got("user/john_doe/myreservations",{
+    });
+
+    t.is(statusCode, 200);
+
+    t.deepEqual(body, [
+        { date: "2024-11-02", muscleGroup: "lower", time: "10:00" },
+        { date: "2024-11-03", muscleGroup: "core", time: "12:00" },
+        { date: "2024-11-04", muscleGroup: "cardio", time: "06:00" }          
+    ]);
+});
+
+test("GET /user/{username}/myreservations returns empty array if no reservations", async (t) => {
+    const { body, statusCode } = await t.context.got("user/default/myreservations");
+    t.is(statusCode, 200);
+    t.deepEqual(body, []); // Empty array
+});
+
+test("GET /user/{username}/myreservations with invalid username", async (t) => {
+    const { statusCode, body } = await t.context.got("user/no_name/myreservations", {
+        throwHttpErrors: false
+    });
+
+    t.is(statusCode, 401);
+
+});
