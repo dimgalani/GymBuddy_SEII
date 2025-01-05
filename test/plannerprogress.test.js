@@ -30,7 +30,7 @@ test("GET /user/{usename}/planner/progress with Bad Request Format", async (t) =
 	const { body, statusCode } = await t.context.got("user/default/planner/progress", {
 		throwHttpErrors: false,
         searchParams: {
-            day: "invalid_day" 
+            day: "invalid_day"	// Simulating an invalid query parameter
         }
 	});
 	t.is(statusCode, 400);
@@ -52,7 +52,7 @@ test("GET /user/{username}/planner/progress returns exercise details successfull
 
     t.is(statusCode, 200);
     
-    t.true(Array.isArray(body.exercises));
+    t.true(Array.isArray(body.exercises));	// response contains an "exercises" array
 
     t.deepEqual(body.exercises, [
         { "notes" : "note1", "name" : "exercise_1", "weightPerDateEntries" : [ 5, 6, 6, 8, 8, 5, 6, 6, 8, 8], "repetitionsPerDateEntries" : [ 10, 10, 15, 10, 10 ] },
@@ -72,7 +72,7 @@ test("DELETE /user/{username}/reservations with Not Found (Non-existent reservat
 	const { body, statusCode } = await t.context.got.delete("user/john_doe/reservations", {
 		searchParams: {
 			day: "2024-11-01",
-			time: "20:00"
+			time: "20:00"	// No reservation at this time
 		},
 		throwHttpErrors: false
 	});
@@ -96,9 +96,9 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
         },
         responseType: "json"
     });
-
+    // Validate the response
     t.is(statusCode, 200);
-  
+    // Ensure updated progress matches expectations
     t.deepEqual(body.updatedProgress.weightPerDateEntries[day - 1], weight, "The updated exercise weight should match");
     t.deepEqual(body.updatedProgress.repetitionsPerDateEntries[day - 1], reps, "The updated exercise reps should match");
   });
@@ -111,7 +111,7 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
             weightPerDateEntries: "1234",
             repetitionsPerDateEntries: 10
         };
-    
+        // Send the PUT request
         const { body, statusCode } = await t.context.got.put("user/john_doe/planner/progress",
             {
                 json: newProgress,
@@ -127,7 +127,7 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
         const name = "Bench_Press";
         const weight = 70;
         const reps = 10;
-    
+        // Send the PUT request
         const { body, statusCode } = await t.context.got.put("user/no_name/planner/progress",
             {
                 throwHttpErrors: false,
@@ -149,7 +149,7 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
         const name = "Bench_Press";
         const weight = 70;
         const reps = 10;
-    
+    	// Send the PUT request
         const { body, statusCode } = await t.context.got.put("user/jane_smith/planner/progress",{
                 throwHttpErrors: false,
                 searchParams: {
@@ -178,7 +178,7 @@ test("GET /user/{usename}/progress/goals with Bad Request (no data for requested
         searchParams: {
             day: 10
         },
-        throwHttpErrors: false
+        throwHttpErrors: false	// Prevent `got` from rejecting the promise on 4xx responses
     });
     t.is(statusCode, 404);
 });
@@ -188,7 +188,7 @@ test("GET /user/{usename}/progress/goals with Bad Request (wrong day datatype)",
         searchParams: {
             day: "hello"
         },
-        throwHttpErrors: false 
+        throwHttpErrors: false	// Prevent `got` from rejecting the promise on 4xx responses
     });
     t.is(statusCode, 400);
 });
@@ -200,5 +200,5 @@ test("GET /user/{usename}/progress/goals with Correct Request (Mock Data)", asyn
         }
     });
     t.is(statusCode, 200);
-    t.deepEqual(body, {message: [true, true, true, true, true], code: 200});
+    t.deepEqual(body, {message: [true, true, true, true, true], code: 200});	// Check with the mock data
 }); 
