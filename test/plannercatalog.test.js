@@ -16,6 +16,14 @@ test.after((t) => {
     t.context.server.close();
 });
 
+/**
+ * This file contains tests for the Planner Catalog API endpoints.
+ * It verifies the functionality of retrieving and managing exercise data,
+ * including getting the entire catalog, adding new exercises, and retrieving
+ * individual exercise details. The tests also cover various edge cases, such
+ * as invalid requests or duplicate data.
+ */
+
  // GET /planner/catalog //
 test("GET /user/{usename}/planner/catalog returns correct response and status code", async (t) => {
 	const { body, statusCode } = await t.context.got("user/default/planner/catalog");
