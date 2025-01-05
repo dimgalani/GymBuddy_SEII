@@ -16,10 +16,7 @@ test.after((t) => {
     t.context.server.close();
 });
 
-
-  //////////////////////////
  // GET /planner/catalog //
-//////////////////////////
 test("GET /user/{usename}/planner/catalog returns correct response and status code", async (t) => {
 	const { body, statusCode } = await t.context.got("user/default/planner/catalog");
 	//t.is(body.message, "Exercises Catalogue");
@@ -38,10 +35,7 @@ test("GET /user/{usename}/planner/catalog Bad request - invalid username", async
 	t.is(statusCode, 401);
 });
 
-  ///////////////////////////////////////////
  // POST /user/{username}/planner/catalog //
-///////////////////////////////////////////
-
 test("POST /user/{username}/planner/catalog with Correct Request (Mock Data)", async (t) => {
 	const newExercise = {
 		name: "Bench Press",
@@ -69,11 +63,7 @@ test("POST /user/{username}/planner/catalog with Bad Request - Already existing 
 	t.deepEqual(body.exercise.name, newExercise.name);
 });
 
-
-/////////////////////////
 // GET /catalog/{exercise-name} //
-///////////////////////// 
-
 test("GET /user/{usename}/planner/catalog/{exercise-name} with Bad Request (invalid exercise_name parameter)", async (t) => {
 	const { body, statusCode } = await t.context.got("user/default/planner/catalog/no_exercise", {
 		throwHttpErrors: false 
