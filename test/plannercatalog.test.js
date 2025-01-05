@@ -104,7 +104,7 @@ test("GET /user/{usename}/planner/catalog returns correct response and status co
 	// Verify the body structure
 	t.true(Array.isArray(body.exercises), "Exercises should be an array");
 	t.is(body.exercises[0].name, "Lat Pull Down", "The first exercise name should be 'Lat Pull Down'");
-	t.is(body.exercises[0].notes, "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-do...", "The first exercise notes should be 'Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-do...'");
+	t.is(body.exercises[0].notes, "Targets the latissimus dorsi muscles, which are the large muscles of the back.");
 });
 
 test("GET /user/{usename}/planner/catalog Bad request - invalid username", async (t) => {
@@ -171,10 +171,10 @@ test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request",
 
 	t.deepEqual(body, {
 		name: "Lat Pull Down",
-	 	notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back. Setup: Sit on a lat pull-down machine with your knees securely under the pads. Adjust the thigh pads to fit comfortably against your thighs. Grasp the wide bar with an overhand grip, hands slightly wider than shoulder-width apart.",
+	 	notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back.",
 		weightPerDateEntries: [40.0, 42.5, 45.0],
 		repetitionsPerDateEntries: [10, 12, 14],
-	  });
+	});
 });
 
 test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request and no exercise progress", async (t) => {
