@@ -117,4 +117,3 @@ describe('Swagger UI: Test CancelReservation Endpoint', () => {
 describe('Swagger UI: Test planner/catalog Endpoint', () => {
   testEndpointCatalog();
 });
-
