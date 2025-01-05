@@ -16,10 +16,8 @@ test.after((t) => {
     t.context.server.close();
 });
 
-///////////////////////
-// GET /settings //
-///////////////////////
 
+// GET /settings //
 test("GET /user/{username}/settings with Correct Request", async (t) => {
     const { body, statusCode } = await t.context.got("user/john_doe/settings", {
       throwHttpErrors: false,
@@ -54,9 +52,7 @@ test("GET /user/{username}/settings with Correct Request", async (t) => {
   }); 
 
 
-  ///////////////////
  // PUT /settings //
-///////////////////
 test("PUT /user/{username}/settings updates the bodyweight and other settings", async (t) => {
     //const username = "default";
     const newPersonalInfo = {
@@ -113,10 +109,8 @@ test("PUT /user/{username}/settings with Bad Request ( username doesn't exists )
     t.deepEqual(body.message, 'Response code 401 (Unauthorized): Not a valid username');
 });
 
-  /////////////////////////////////////////
- // GET /user/{username}/settings/goals //
-/////////////////////////////////////////
 
+ // GET /user/{username}/settings/goals //
 test("GET /user/{usename}/settings/goals with Correct Request ( Achieved Goal!!! )", async (t) => {
     const { body, statusCode } = await t.context.got("user/adrian_carter/settings/goals", {
         searchParams: {
