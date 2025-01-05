@@ -16,10 +16,8 @@ test.after((t) => {
     t.context.server.close();
 });
 
-///////////////////////
-// GET /reservations //
-///////////////////////
 
+// GET /reservations //
 test("GET /user/{username}/reservations with Bad Request (no day parameter)", async (t) => {
     const { body, statusCode } = await t.context.got("user/default/reservations", {
         throwHttpErrors: false // Prevent `got` from rejecting the promise on 400 responses
@@ -60,10 +58,8 @@ test("GET /user/{usename}/reservations with Correct Request", async (t) => {
       ]);  // Check with the mock data
 });
 
-////////////////////////
-// POST /reservations //
-////////////////////////
 
+// POST /reservations //
 test("POST /user/{username}/reservations with Correct Request (Mock Data)", async (t) => {
     const bodyData = {
         date: "2024-11-01",
@@ -129,10 +125,7 @@ test("POST /user/{username}/reservations with Bad Request (Not existing username
  });
 
 
-//////////////////////////
 // DELETE /reservations //
-//////////////////////////
-
 test("DELETE /user/{username}/reservations with Correct Request (Mock Data)", async (t) => {
     const { body, statusCode } = await t.context.got.delete("user/john_doe/reservations", {
         searchParams: {
@@ -154,10 +147,8 @@ test("DELETE /user/{username}/reservations with Bad Request (Invalid data types)
     t.is(statusCode, 400)
 });
 
-  //////////////////////////
- // GET /myreservations  //
-//////////////////////////
 
+ // GET /myreservations  //
 test("GET /user/{username}/myreservations with Bad Request Format", async (t) => {
     const { statusCode, body } = await t.context.got("user/default/myreservations", {
         throwHttpErrors: false,
