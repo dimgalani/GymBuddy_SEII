@@ -15,9 +15,14 @@ test.before(async (t) => {
 test.after((t) => {
     t.context.server.close();
 });
-/*
- * This file contains tests for the Planner Progress API endpoints. The tests include scenarios for both valid 
- * and invalid requests, covering edge cases like missing parameters, incorrect data types, and non-existent users or exercises.
+
+/**
+ * This file contains tests for the Planner Progress API endpoints.
+ * It ensures the correctness of functionalities related to retrieving, updating, 
+ * and managing exercise progress data, as well as validating user-specific 
+ * planner progress and goals. The tests include scenarios for both valid 
+ * and invalid requests, covering edge cases like missing parameters, incorrect 
+ * data types, and non-existent users or exercises.
  */
 
  // GET planner/progress //
