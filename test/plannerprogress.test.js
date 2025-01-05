@@ -16,10 +16,7 @@ test.after((t) => {
     t.context.server.close();
 });
 
-///////////////////////
 // GET /planner //
-///////////////////////
-
 test("GET /user/{username}/planner with Bad Request (no day parameter)", async (t) => {
 	const { body, statusCode } = await t.context.got("user/default/planner", {
 		throwHttpErrors: false,
@@ -93,11 +90,7 @@ test("GET /user/{username}/planner with Default User", async (t) => {
 	});
 });	
 
-
-  //////////////////////////
  // GET planner/progress //
-//////////////////////////
-
 test("GET /user/{usename}/planner/progress with Bad Request Format", async (t) => {
 	const { body, statusCode } = await t.context.got("user/default/planner/progress", {
 		throwHttpErrors: false,
@@ -151,10 +144,7 @@ test("DELETE /user/{username}/reservations with Not Found (Non-existent reservat
 	t.is(statusCode, 404);
 });
 
-  //////////////////////////
  // PUT planner/progress //
-//////////////////////////
-
 test("PUT /user/{username}/planner/progress updates exercise progress entries successfully", async (t) => {
     const day = 8;
     const name = "Bench_Press";
@@ -245,11 +235,7 @@ test("PUT /user/{username}/planner/progress updates exercise progress entries su
         t.is(statusCode, 404);
     });
 
-
- /////////////////////////
  // GET /planner/progress/goals //
-/////////////////////////
-
 test("GET /user/{usename}/progress/goals with Bad Request (no day parameter)", async (t) => {
     const { body, statusCode } = await t.context.got("user/default/planner/progress/goals", {
         throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
