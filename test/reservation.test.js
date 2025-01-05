@@ -16,6 +16,11 @@ test.after((t) => {
     t.context.server.close();
 });
 
+/**
+ * This file contains tests for the reservation-related endpoints in the GymBuddy AUTH API.
+ * It covers GET, POST, and DELETE operations for reservations, as well as validations for correct
+ * and incorrect inputs.
+ */
 
 // GET /reservations //
 test("GET /user/{username}/reservations with Bad Request (no day parameter)", async (t) => {
