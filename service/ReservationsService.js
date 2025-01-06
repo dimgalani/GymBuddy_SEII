@@ -192,9 +192,3 @@ function createReservation(body, username) {
   const newReservation = { date: body.date, muscleGroup: body.muscleGroup, time: body.time };
   userReservations[username].push(newReservation);
 }
-      resolve({
-        message: "Reservation successfully created.",
-        code: 201
-      });
-    });
-  };

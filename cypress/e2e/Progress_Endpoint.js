@@ -7,12 +7,12 @@ function visitSwaggerUI() {
 
 // Function to wait for Swagger UI to load
 function waitForSwaggerUI() {
-  cy.get('div.swagger-ui', { timeout: 10000 }).should('exist');
+  cy.get('div.swagger-ui', { timeout: 10000 }).should('exist'); // Wait for the Swagger UI to load
 }
 
 // Function to check for the /progress endpoint
 function checkProgressEndpoint() {
-  cy.log('Checking for the /progress endpoint');
+  cy.log('Checking for the /progress endpoint'); // Log a message to the console
   cy.contains('/progress', { timeout: 10000 })
     .scrollIntoView()
     .should('be.visible');
@@ -20,23 +20,24 @@ function checkProgressEndpoint() {
 
 // Function to expand the endpoint details
 function expandEndpointDetails() {
-  cy.get('#operations-default-updateExerciseProgress')
+  cy.get('#operations-default-updateExerciseProgress') // Get the endpoint details
     .find('.opblock-summary')
     .click();
 }
 
 // Function to click the "Try it Out" button
 function clickTryItOut() {
-  cy.get('#operations-default-updateExerciseProgress')
+  cy.get('#operations-default-updateExerciseProgress') // Get the endpoint details
     .find('.try-out__btn')
     .click();
 }
 
 // Function to input parameters
 function inputParameters(username, day, exerciseName, weight, reps) {
+  // Input the parameters
   cy.get('input[placeholder="username - the username of the connected person"]')
-    .clear()
-    .type(username);
+    .clear() // Clear the input field
+    .type(username); // And type the username
 
   cy.get('input[placeholder="day - the selected day of the planner"]')
     .clear()
@@ -68,10 +69,10 @@ function validateResponse(expectedStatusCode, expectedMessage) {
   cy.get('#operations-default-updateExerciseProgress')
     .find('.responses-wrapper')
     .should('be.visible');
-
+// Function to validate the status code
   cy.get('.responses-table .response-col_status')
     .should('contain', expectedStatusCode);
-
+// Function to validate the response
   cy.get('.responses-table .response-col_description pre')
     .invoke('text')
     .then((responseBody) => {
@@ -96,7 +97,7 @@ function validateResponse(expectedStatusCode, expectedMessage) {
 // Main function to test the endpoint progress
 export function testEndpointProgress() {
   visitSwaggerUI();
-
+// Function to test the progress endpoint with valid data
   it('should execute the Try it Out button and verify response for john_doe', () => {
     waitForSwaggerUI();
     checkProgressEndpoint();
@@ -106,7 +107,7 @@ export function testEndpointProgress() {
     executeRequest();
     validateResponse(200, 'Progress updated successfully');
   });
-
+// Function to test the progress endpoint with invalid data
   it('should execute the Try it Out button and return error of non-existing exercise', () => {
     waitForSwaggerUI();
     checkProgressEndpoint();
