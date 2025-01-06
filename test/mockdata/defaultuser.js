@@ -20,13 +20,4 @@ const benchPress = {
     name: "Bench Press",
     notes: DEFAULT_NOTES.benchPress,
 }
-
-// used by "POST /user/{username}/planner/catalog with Bad Request - Already existing exercise"
-const newExercise = {name: "Deadlift", notes: DEFAULT_NOTES.deadlift,}
-// used by "GET /user/{username}/planner with Default User"
-const planner = {
-    currentDate: 1,
-    exercisesList: [],
-}
-
-module.exports = {latPullDown, deadlift, benchPress, newExercise, planner}
+module.exports = {latPullDown, deadlift, benchPress}

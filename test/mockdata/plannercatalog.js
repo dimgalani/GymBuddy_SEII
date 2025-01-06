@@ -1,6 +1,6 @@
 // Default notes from different file
-const { DEFAULT_NOTES } = require("./defaultnotes")
-const { latPullDown, deadlift, benchPress, newExercise, planner } = require("./defaultuser")
+const { DEFAULT_NOTES, newExercise, planner } = require("./defaultnotes")
+const { latPullDown, deadlift, benchPress} = require("./defaultuser")
 
 // Data used for john_doe user exercise tests
 const johnDoeLatPulldown = {

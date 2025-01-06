@@ -5,4 +5,12 @@ const DEFAULT_NOTES = {
     benchPress: "Targets the pectoral muscles, triceps, and anterior deltoids.",
 };
 
-module.exports = {DEFAULT_NOTES}
+// used by "POST /user/{username}/planner/catalog with Bad Request - Already existing exercise"
+const newExercise = {name: "Deadlift", notes: DEFAULT_NOTES.deadlift,}
+// used by "GET /user/{username}/planner with Default User"
+const planner = {
+    currentDate: 1,
+    exercisesList: [],
+}
+
+module.exports = {DEFAULT_NOTES, newExercise, planner}
