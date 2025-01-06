@@ -47,7 +47,7 @@ const { usernames, ExerciseCatalog } = require("./Database");
  * no response value expected for this operation
  * POST /user/{username}/planner/catalog
  **/
-  exports.createCustomExercise = function(body, username) {
+  exports.createCustomExercise = function(body, _) {
     return new Promise(function(resolve, reject) {
       // Check if the exercise already exists in the catalog
       const existingExercise = ExerciseCatalog.find(exercise => exercise.name === body.name);
