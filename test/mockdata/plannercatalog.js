@@ -32,6 +32,7 @@ const johnDoeHipThrust = {
     weightPerDateEntries: [80, 85],
 }
 
+// Data used for default user exercise and planner tests
 const defaultUser = {latPullDown, deadlift, benchPress, newExercise, planner}
 
 module.exports = { defaultUser, johnDoeLatPulldown, janeSmithDeadlift, johnDoeDeadlift, johnDoeHipThrust};

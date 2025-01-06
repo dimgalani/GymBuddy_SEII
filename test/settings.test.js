@@ -1,5 +1,6 @@
 const test = require('ava');
 const { app, setupTestContext, teardownTestContext } = require('../test_setup');
+const { correctMale, correctFemale, wrongTypes } = require('./mockdata/settings');
 
 test.before(async (t) => {
     await setupTestContext(t, app);
@@ -14,13 +15,7 @@ test("GET /user/{username}/settings with Correct Request", async (t) => {
     });
 
     t.is(statusCode, 200); // Ensure the status code is 200
-    t.deepEqual(body, {
-      gender: "male",
-      goalConsistencyNum: 4,
-      goalBodyWeightNum: 75,
-      bodyweight: 80.5,
-      goals: [true, false, true],
-    }); // Verify the response body matches expected data
+    t.deepEqual(body, correctMale); // Verify the response body matches expected data
   });
 
  test("GET /user/{username}/settings with Bad Request (invalid username)", async (t) => {
@@ -29,9 +24,7 @@ test("GET /user/{username}/settings with Correct Request", async (t) => {
     });
   
     t.is(statusCode, 401); // Unauthorized
-    //t.true(body.error.includes("Invalid username")); // Verify error message
   });  
-
 
   test("GET /user/{username}/settings with No Data Found", async (t) => {
     const { body, statusCode } = await t.context.got("user/alice_wonder/settings", {
@@ -44,36 +37,17 @@ test("GET /user/{username}/settings with Correct Request", async (t) => {
 
  // PUT /settings //
 test("PUT /user/{username}/settings updates the bodyweight and other settings", async (t) => {
-    //const username = "default";
-    const newPersonalInfo = {
-        bodyweight: 64.0, // Updated bodyweight
-        gender: "female",
-        goals: [false, true, true, true],
-        goalConsistencyNum: 6,
-        goalBodyWeightNum: 55.00,
-    };
-
-    const { body, statusCode } = await t.context.got.put("user/jane_smith/settings",
-        {
-        json: newPersonalInfo,
+    const { body, statusCode } = await t.context.got.put("user/jane_smith/settings", {
+        json: correctFemale, // Updated bodyweight
         responseType: "json",
-        }
-    );
+    });
     t.is(statusCode, 200);
-    t.deepEqual(body.updatedInfo, newPersonalInfo, "The updated personal info should match");
-
+    t.deepEqual(body.updatedInfo, correctFemale, "The updated personal info should match");
 });
 
 test("PUT /user/{username}/settings with Bad Request (wrong datatypes)", async (t) => {
-    const newPersonalInfo = {
-        bodyweight: "hello", 
-        gender: "2744",
-        goals: [false, true, true, true],
-        goalConsistencyNum: 6,
-        goalBodyWeightNum: 55.00,
-    };
     const { body, statusCode } = await t.context.got.put("user/jane_smith/settings",{
-            json: newPersonalInfo,
+            json: wrongTypes,
             responseType: "json",
             throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
         });
@@ -82,15 +56,8 @@ test("PUT /user/{username}/settings with Bad Request (wrong datatypes)", async (
 });
 
 test("PUT /user/{username}/settings with Bad Request ( username doesn't exists )", async (t) => {
-    const newPersonalInfo = {
-        bodyweight: 52.0, 
-        gender: "female",
-        goals: [false, true, true, true],
-        goalConsistencyNum: 6,
-        goalBodyWeightNum: 47.00,
-    };
     const { body, statusCode } = await t.context.got.put("user/dimitra/settings",{
-            json: newPersonalInfo,
+            json: correctFemale,
             responseType: "json",
             throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
         });
@@ -103,9 +70,7 @@ test("PUT /user/{username}/settings with Bad Request ( username doesn't exists )
  // GET /user/{username}/settings/goals //
 test("GET /user/{usename}/settings/goals with Correct Request ( Achieved Goal!!! )", async (t) => {
     const { body, statusCode } = await t.context.got("user/adrian_carter/settings/goals", {
-        searchParams: {
-            currentBodyWeight: "91.00"
-        },
+        searchParams: {currentBodyWeight: "91.00"},
         throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
     });
     t.is(statusCode, 200);
@@ -114,9 +79,7 @@ test("GET /user/{usename}/settings/goals with Correct Request ( Achieved Goal!!!
 
 test("GET /user/{usename}/settings/goals with Correct Request ( User is closer to the goal but hasn't achieved it yet. )", async (t) => {
     const { body, statusCode } = await t.context.got("user/adrian_carter/settings/goals", {
-        searchParams: {
-            currentBodyWeight: "80.00"
-        },
+        searchParams: {currentBodyWeight: "80.00"},
         throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
     });
     t.is(statusCode, 200);
@@ -125,9 +88,7 @@ test("GET /user/{usename}/settings/goals with Correct Request ( User is closer t
 
 test("GET /user/{usename}/settings/goals with Correct Request ( User negative progress )", async (t) => {
     const { body, statusCode } = await t.context.got("user/adrian_carter/settings/goals", {
-        searchParams: {
-            currentBodyWeight: "70.00"
-        },
+        searchParams: {currentBodyWeight: "70.00"},
         throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
     });
     t.is(statusCode, 200);
@@ -136,9 +97,7 @@ test("GET /user/{usename}/settings/goals with Correct Request ( User negative pr
 
 test("GET /user/{usename}/settings/goals with Correct Request ( The goal weight loss/gain is not active)", async (t) => {
     const { body, statusCode } = await t.context.got("user/default/settings/goals", {
-        searchParams: {
-            currentBodyWeight: 81.00
-        }
+        searchParams: {currentBodyWeight: 81.00}
     });
     t.is(statusCode, 200);
     t.deepEqual(body.message, 'No weight loss/gain goal active');
@@ -153,9 +112,7 @@ test("GET /user/{usename}/settings/goals with Bad Request ( missing query param 
 
 test("GET /user/{usename}/settings/goals with Bad Request ( not previous BodyWeight data with goal enabled )", async (t) => {
     const { body, statusCode } = await t.context.got("user/john_doe/settings/goals", {
-        searchParams: {
-            currentBodyWeight: 81.00
-        },
+        searchParams: {currentBodyWeight: 81.00},
         throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
     });
     t.is(statusCode, 404);
@@ -163,9 +120,7 @@ test("GET /user/{usename}/settings/goals with Bad Request ( not previous BodyWei
 
 test("GET /user/{usename}/settings/goals with Bad Request ( wrong currentBodyWeight datatype)", async (t) => {
     const { body, statusCode } = await t.context.got("user/default/settings/goals", {
-        searchParams: {
-            currentBodyWeight: "hello"
-        },
+        searchParams: {currentBodyWeight: "hello"},
         throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
     });
     t.is(statusCode, 400);
@@ -173,9 +128,7 @@ test("GET /user/{usename}/settings/goals with Bad Request ( wrong currentBodyWei
 
 test("GET /user/{usename}/settings/goals with Bad Request ( username doesn't exist)", async (t) => {
     const { body, statusCode } = await t.context.got("user/dimitra/settings/goals", {
-        searchParams: {
-            currentBodyWeight: "55.00"
-        },
+        searchParams: {currentBodyWeight: "55.00"},
         throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
     });
     t.is(statusCode, 401);
@@ -183,9 +136,7 @@ test("GET /user/{usename}/settings/goals with Bad Request ( username doesn't exi
 
 test("GET /user/{usename}/settings/goals with Bad Request ( missing goal BodyWeight )", async (t) => {
     const { body, statusCode } = await t.context.got("user/nathaniel_brooks/settings/goals", {
-        searchParams: {
-            currentBodyWeight: "70.00"
-        },
+        searchParams: {currentBodyWeight: "70.00"},
         throwHttpErrors: false // Prevent `got` from rejecting the promise on 4xx responses
     });
     t.is(statusCode, 404);
