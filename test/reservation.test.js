@@ -1,12 +1,20 @@
+const http = require('node:http');
 const test = require('ava');
-const { app, setupTestContext, teardownTestContext } = require('../test_setup');
-const { reservation1, reservation2, bodyData, bodyDataInvalidTypes, bodyDataInvalidGroup, bodyDataExisting, query1, query2, upcomingReservations } = require('./mockdata/reservation');
+const got = require('got');
+
+const { app, startServer } = require('../test_setup');  // Import both app and startServer
 
 test.before(async (t) => {
-    await setupTestContext(t, app);
+    t.context.server = http.createServer(app);
+    const server = t.context.server.listen();
+    const { port } = server.address();
+
+    t.context.got = got.extend({ responseType: "json", prefixUrl: `http://localhost:${port}` });
 });
 
-test.after(teardownTestContext);
+test.after((t) => {
+    t.context.server.close();
+});
 
 /**
  * This file contains tests for the reservation-related endpoints in the GymBuddy AUTH API.
@@ -24,7 +32,9 @@ test("GET /user/{username}/reservations with Bad Request (no day parameter)", as
 
 test("GET /user/{usename}/reservations with Bad Request (invalid username)", async (t) => {
     const { body, statusCode } = await t.context.got("user/no_name/reservations", {
-        searchParams: {day: 3},
+        searchParams: {
+            day: 3
+        },
         throwHttpErrors: false // Prevent `got` from rejecting the promise on 400 responses
     });
     t.is(statusCode, 401);
@@ -32,7 +42,9 @@ test("GET /user/{usename}/reservations with Bad Request (invalid username)", asy
 
 test("GET /user/{usename}/reservations with Bad Request (no existing data)", async (t) => {
     const { body, statusCode } = await t.context.got("user/default/reservations", {
-        searchParams: {day: 30},
+        searchParams: {
+            day: 30
+        },
         throwHttpErrors: false // Prevent `got` from rejecting the promise on 400 responses
     });
     t.is(statusCode, 404);
@@ -40,15 +52,25 @@ test("GET /user/{usename}/reservations with Bad Request (no existing data)", asy
 
 test("GET /user/{usename}/reservations with Correct Request", async (t) => {
     const { body, statusCode } = await t.context.got("user/john_doe/reservations", {
-        searchParams: {day: 1}
+        searchParams: {
+            day: 1
+        }
     });
     t.is(statusCode, 200);
-    t.deepEqual(body, [reservation1, reservation2]);  // Check with the mock data
+    t.deepEqual(body, [
+        { "date": "2024-11-01", "reservationsPerMuscleGroup": [1, 2, 3, 4, 5], "time": "08:00", "availability": 50 },
+        { "date": "2024-11-01", "reservationsPerMuscleGroup": [0, 0, 0, 0, 0], "time": "10:00", "availability": 50 }
+      ]);  // Check with the mock data
 });
 
 
 // POST /reservations //
 test("POST /user/{username}/reservations with Correct Request (Mock Data)", async (t) => {
+    const bodyData = {
+        date: "2024-11-01",
+        time: "10:00",
+        muscleGroup: "lower",
+    };
     const { body, statusCode } = await t.context.got.post("user/john_doe/reservations", {
         json: bodyData
     });
@@ -56,22 +78,37 @@ test("POST /user/{username}/reservations with Correct Request (Mock Data)", asyn
  });
  
  test("POST /user/{username}/reservations with Bad Request (Invalid data type)", async (t) => {
+    const bodyData = {
+        date: 123,
+        time: 123,
+        muscleGroup: 123,
+    };
     const { body, statusCode } = await t.context.got.post("user/john_doe/reservations", {
-        json: bodyDataInvalidTypes,
+        json: bodyData,
         throwHttpErrors: false
     });
     t.is(statusCode, 400);
  });
 
  test("POST /user/{username}/reservations with Bad Request (Invalid muscle group)", async (t) => {
+    const bodyData = {
+        date: "2024-11-01",
+        time: "10:00",
+        muscleGroup: "legs",
+    };
     const { body, statusCode } = await t.context.got.post("user/john_doe/reservations", {
-        json: bodyDataInvalidGroup,
+        json: bodyData,
         throwHttpErrors: false
     });
     t.is(statusCode, 400);
  });
 
 test("POST /user/{username}/reservations with Bad Request (Not existing username)", async (t) => {
+    const bodyData = {
+        date: "2024-11-01",
+        time: "10:00",
+        muscleGroup: "lower",
+    };
     const { body, statusCode } = await t.context.got.post("user/no_name/reservations", {
         json: bodyData,
         throwHttpErrors: false
@@ -80,8 +117,13 @@ test("POST /user/{username}/reservations with Bad Request (Not existing username
  });
 
  test("POST /user/{username}/reservations with Bad Request (Existing Reservation)", async (t) => {
+    const bodyData = {
+        date: "2024-11-01",
+        time: "10:00",
+        muscleGroup: "upper",
+    };
     const { body, statusCode } = await t.context.got.post("user/john_doe/reservations", {
-        json: bodyDataExisting,
+        json: bodyData,
         throwHttpErrors: false
     });
     t.is(statusCode, 409);
@@ -91,27 +133,37 @@ test("POST /user/{username}/reservations with Bad Request (Not existing username
 // DELETE /reservations //
 test("DELETE /user/{username}/reservations with Correct Request (Mock Data)", async (t) => {
     const { body, statusCode } = await t.context.got.delete("user/john_doe/reservations", {
-        searchParams: query1, // Send query parameters
+        searchParams: {
+            day: "2024-11-01",
+            time: "08:00"
+        }, // Send query parameters
     });
     t.is(statusCode, 202);
 });
 
 test("DELETE /user/{username}/reservations with Bad Request (Invalid data types)", async (t) => {
     const { body, statusCode } = await t.context.got.delete("user/john_doe/reservations", {
-        searchParams: query2,
+        searchParams: {
+            day: undefined, // Invalid data type
+            time: false // Invalid data type
+        },
         throwHttpErrors: false // Ensure the test doesn't throw on error response
     });
     t.is(statusCode, 400)
 });
 
+
  // GET /myreservations  //
 test("GET /user/{username}/myreservations with Bad Request Format", async (t) => {
     const { statusCode, body } = await t.context.got("user/default/myreservations", {
         throwHttpErrors: false,
-        searchParams: {day: "invalid_day"}
+        searchParams: {
+            day: "invalid_day"
+        }
     });
 
     t.is(statusCode, 400);
+
 });
 
 test("GET /user/{username}/myreservations returns up to 3 upcoming reservations", async (t) => {
@@ -120,7 +172,11 @@ test("GET /user/{username}/myreservations returns up to 3 upcoming reservations"
 
     t.is(statusCode, 200);
 
-    t.deepEqual(body, upcomingReservations);
+    t.deepEqual(body, [
+        { date: "2024-11-02", muscleGroup: "lower", time: "10:00" },
+        { date: "2024-11-03", muscleGroup: "core", time: "12:00" },
+        { date: "2024-11-04", muscleGroup: "cardio", time: "06:00" }          
+    ]);
 });
 
 test("GET /user/{username}/myreservations returns empty array if no reservations", async (t) => {

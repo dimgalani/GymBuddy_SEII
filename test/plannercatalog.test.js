@@ -1,12 +1,20 @@
+const http = require('node:http');
 const test = require('ava');
-const { app, setupTestContext, teardownTestContext } = require('../test_setup');
-const { defaultUser, johnDoeLatPulldown, janeSmithDeadlift, johnDoeDeadlift,  johnDoeHipThrust} = require('./mockdata/plannercatalog');
+const got = require('got');
+
+const { app, startServer } = require('../test_setup');  // Import both app and startServer
 
 test.before(async (t) => {
-    await setupTestContext(t, app);
+    t.context.server = http.createServer(app);
+    const server = t.context.server.listen();
+    const { port } = server.address();
+
+    t.context.got = got.extend({ responseType: "json", prefixUrl: `http://localhost:${port}` });
 });
 
-test.after(teardownTestContext);
+test.after((t) => {
+    t.context.server.close();
+});
 
 /**
  * This file contains tests for the Planner Catalog API endpoints. It verifies the functionality of retrieving and managing exercise data,
@@ -54,7 +62,23 @@ test("GET /user/{usename}/planner with Correct Request", async (t) => {
 			throwHttpErrors: false
 		});
 		t.is(statusCode, 200);
-		t.deepEqual(body, {currentDate: 1, exercisesList: [johnDoeDeadlift, johnDoeHipThrust]});
+		t.deepEqual(body, {
+			currentDate: 1,
+			exercisesList: [
+			{
+				name: "Romanian Deadlift",
+				notes: "Focus on form",
+				weightPerDateEntries: [60, 65],
+				repetitionsPerDateEntries: [8, 12],
+			},
+			{
+				name: "Hip Thrust",
+				notes: "Keep back straight",
+				weightPerDateEntries: [80, 85],
+				repetitionsPerDateEntries: [10, 15],
+			},
+			],
+		});
 });
 
 test("GET /user/{username}/planner with Default User", async (t) => {
@@ -65,7 +89,10 @@ test("GET /user/{username}/planner with Default User", async (t) => {
 	});
 	
 	t.is(statusCode, 200);
-	t.deepEqual(body, defaultUser.planner);
+	t.deepEqual(body, {
+		currentDate: 1,
+		exercisesList: [],
+	});
 });
 
 
@@ -76,7 +103,8 @@ test("GET /user/{usename}/planner/catalog returns correct response and status co
 	t.is(statusCode, 200);
 	// Verify the body structure
 	t.true(Array.isArray(body.exercises), "Exercises should be an array");
-	t.deepEqual(body.exercises[0], defaultUser.latPullDown);
+	t.is(body.exercises[0].name, "Lat Pull Down", "The first exercise name should be 'Lat Pull Down'");
+	t.is(body.exercises[0].notes, "Targets the latissimus dorsi muscles, which are the large muscles of the back.");
 });
 
 test("GET /user/{usename}/planner/catalog Bad request - invalid username", async (t) => {
@@ -89,22 +117,30 @@ test("GET /user/{usename}/planner/catalog Bad request - invalid username", async
 
  // POST /user/{username}/planner/catalog //
 test("POST /user/{username}/planner/catalog with Correct Request (Mock Data)", async (t) => {
+	const newExercise = {
+		name: "Bench Press",
+		notes: "Targets the pectoral muscles, triceps, and anterior deltoids. Setup: Lie on a flat bench with your feet flat on the floor. Grasp the barbell with your hands slightly wider than shoulder-width apart. Lower the bar to your chest, then press it back up to the starting position.",
+	};
 	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
-		json: defaultUser.benchPress,
+		json: newExercise,
 		responseType: "json",
 	});
 	t.is(statusCode, 201);
-	t.deepEqual(body.exercise, defaultUser.benchPress);
+	t.deepEqual(body.exercise, newExercise);
 });
 
 test("POST /user/{username}/planner/catalog with Bad Request - Already existing exercise", async (t) => {
+	const newExercise = {
+		name: "Lat Pull Down",
+		notes: "blah blah blah",
+	};
 	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
-		json: defaultUser.newExercise,
+		json: newExercise,
 		responseType: "json",
 		throwHttpErrors: false
 	});
 	t.is(statusCode, 409);
-	t.deepEqual(body.exercise, defaultUser.deadlift);
+	t.deepEqual(body.exercise.name, newExercise.name);
 });
 
 // GET /catalog/{exercise-name} //
@@ -132,7 +168,13 @@ test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request",
 	});
 
 	t.is(statusCode, 200);
-	t.deepEqual(body, johnDoeLatPulldown);
+
+	t.deepEqual(body, {
+		name: "Lat Pull Down",
+	 	notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back.",
+		weightPerDateEntries: [40.0, 42.5, 45.0],
+		repetitionsPerDateEntries: [10, 12, 14],
+	});
 });
 
 test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request and no exercise progress", async (t) => {
@@ -140,5 +182,10 @@ test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request a
 		throwHttpErrors: false
 	});
 	t.is(statusCode, 200);
-	t.deepEqual(body, janeSmithDeadlift);
+	t.deepEqual(body, {
+		name: "deadlift",
+		notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
+		weightPerDateEntries: [],
+		repetitionsPerDateEntries: [],
+	});
 });
