@@ -32,8 +32,19 @@ const johnDoe = {
             repetitionsPerDateEntries: [10, 12, 14],
             weightPerDateEntries: [40.0, 42.5, 45.0],
     },
-    planner: {
-        currentDate: 1,
+}
+
+const janeSmith = {
+    deadlift: {
+        name: "deadlift",
+            notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
+            repetitionsPerDateEntries: [],
+            weightPerDateEntries: [],
+    }
+}
+
+const plannerJohnDoe = {
+    currentDate: 1,
         exercisesList: [
             {
                 name: "Romanian Deadlift",
@@ -48,16 +59,6 @@ const johnDoe = {
                 weightPerDateEntries: [80, 85],
             },
         ],
-    }
 }
 
-const janeSmith = {
-    deadlift: {
-        name: "deadlift",
-            notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
-            repetitionsPerDateEntries: [],
-            weightPerDateEntries: [],
-    }
-}
-
-module.exports = { defaultUser, johnDoe, janeSmith };
+module.exports = { defaultUser, johnDoe, janeSmith, plannerJohnDoe };
