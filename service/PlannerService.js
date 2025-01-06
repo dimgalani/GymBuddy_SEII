@@ -75,43 +75,55 @@ exports.getExerciseProgress = function (username, exerciseName) {
  * no response value expected for this operation
  **/
 exports.updateExerciseProgress = function (day, name, weight, reps, username) {
-    return new Promise(function (resolve, reject) {
-      // Validate username
-      const user = usersPlanner.find((entry) => entry.username === username);
-  
-      if (!day || !name || !weight || !reps) {
-        reject({
-            message: "Missing required fields",
-            code: 400
-        });
-        return;
-    }
-  
-      if (!user) {
-        return reject({
-          message: "User not found",
-          code: 401
-        });
-      }
-  
-      const exercise  = user.exercise;
-      if (!exercise || exercise.name !== name) {
-        return reject({
-          message: "Exercise not found for user",
-          code: 404
-        });
-      }
-      if (!exercise) {
-        return reject({ message: "Exercise not found", code: 404 });
-      }
-  
-      // Update the exercise progress for the specified day (adjusting for zero-based index)
-      user.exercise.weightPerDateEntries[day - 1] = weight;
-      user.exercise.repetitionsPerDateEntries[day - 1] = reps;
+  return new Promise(function (resolve, reject) {
+    try {
+      validateInputs(day, name, weight, reps, username);
+      const user = findUser(username);
+      const exercise = findExercise(user, name);
+      updateProgress(user, exercise, day, weight, reps);
       resolve({
-        updatedProgress: user.exercise,
+        updatedProgress: exercise,
         message: "Progress updated successfully",
         code: 200
       });
-    });
-  };
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+function validateInputs(day, name, weight, reps, username) {
+  if (!day || !name || !weight || !reps) {
+    throw {
+      message: "Missing required fields",
+      code: 400
+    };
+  }
+}
+
+function findUser(username) {
+  const user = usersPlanner.find((entry) => entry.username === username);
+  if (!user) {
+    throw {
+      message: "User not found",
+      code: 401
+    };
+  }
+  return user;
+}
+
+function findExercise(user, name) {
+  const exercise = user.exercise;
+  if (!exercise || exercise.name !== name) {
+    throw {
+      message: "Exercise not found for user",
+      code: 404
+    };
+  }
+  return exercise;
+}
+
+function updateProgress(user, exercise, day, weight, reps) {
+  user.exercise.weightPerDateEntries[day - 1] = weight;
+  user.exercise.repetitionsPerDateEntries[day - 1] = reps;
+}
