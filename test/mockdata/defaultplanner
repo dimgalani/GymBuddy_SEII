@@ -12,5 +12,10 @@ const planner = {
     currentDate: 1,
     exercisesList: [],
 }
+// used by "POST /user/{username}/planner/catalog with Bad Request - Already existing exercise"
+const benchPress = {
+    name: "Bench Press",
+    notes: DEFAULT_NOTES.benchPress,
+}
 
-module.exports = {DEFAULT_NOTES, newExercise, planner}
+module.exports = {DEFAULT_NOTES, newExercise, planner, benchPress}
