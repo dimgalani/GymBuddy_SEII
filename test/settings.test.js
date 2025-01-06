@@ -1,21 +1,11 @@
-const http = require('node:http');
 const test = require('ava');
-const got = require('got');
-
-const { app, startServer } = require('../test_setup');  // Import both app and startServer
+const { app, setupTestContext, teardownTestContext } = require('../test_setup');
 
 test.before(async (t) => {
-    t.context.server = http.createServer(app);
-    const server = t.context.server.listen();
-    const { port } = server.address();
-
-    t.context.got = got.extend({ responseType: "json", prefixUrl: `http://localhost:${port}` });
+    await setupTestContext(t, app);
 });
 
-test.after((t) => {
-    t.context.server.close();
-});
-
+test.after(teardownTestContext);
 
 // GET /settings //
 test("GET /user/{username}/settings with Correct Request", async (t) => {

@@ -4,6 +4,7 @@ var path = require('path');
 var http = require('http');
 var oas3Tools = require('oas3-tools');
 var serverPort = process.env.PORT || 8080;  // Default to 8080 if no PORT is specified
+const got = require('got');
 
 // swaggerRouter configuration
 var options = {
@@ -15,12 +16,18 @@ var options = {
 var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
 var app = expressAppConfig.getApp();
 
-// Create a function to start the server
-function startServer(port = serverPort) {
-    http.createServer(app).listen(port, function () {
-        console.log('Your server is listening on port %d (http://localhost:%d)', port, port);
-        console.log('Swagger-ui is available on http://localhost:%d/docs', port);
+async function setupTestContext(t, app) {
+    t.context.server = http.createServer(app);
+    const server = t.context.server.listen();
+    const { port } = server.address();
+    t.context.got = got.extend({
+        responseType: "json",
+        prefixUrl: `http://localhost:${port}`,
     });
 }
 
-module.exports = { app, startServer };
+function teardownTestContext(t) {
+    t.context.server.close();
+}
+
+module.exports = { app, setupTestContext, teardownTestContext };
