@@ -1,6 +1,6 @@
 const test = require('ava');
 const { app, setupTestContext, teardownTestContext } = require('../test_setup');
-const {exercices, benchPress, newProgress } = require('./mockdata/plannerprogress');
+const {exercises, benchPress, newProgress } = require('./mockdata/plannerprogress');
 
 test.before(async (t) => {
     await setupTestContext(t, app);
@@ -41,7 +41,7 @@ test("GET /user/{username}/planner/progress returns exercise details successfull
     
     t.true(Array.isArray(body.exercises));	// response contains an "exercises" array
 
-    t.deepEqual(body.exercises, exercices);
+    t.deepEqual(body.exercises, exercises);
 });
 
 test("GET /user/{usename}/planner/progress with invalid username", async (t) => {
