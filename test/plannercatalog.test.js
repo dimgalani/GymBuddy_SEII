@@ -1,6 +1,6 @@
 const test = require('ava');
 const { app, setupTestContext, teardownTestContext } = require('../test_setup');
-const { defaultUser, johnDoe, janeSmith, plannerJohnDoe } = require('./mockdata/plannercatalog');
+const { defaultUser, johnDoeLatPulldown, janeSmithDeadlift, johnDoePlanner } = require('./mockdata/plannercatalog');
 
 test.before(async (t) => {
     await setupTestContext(t, app);
@@ -54,7 +54,7 @@ test("GET /user/{usename}/planner with Correct Request", async (t) => {
 			throwHttpErrors: false
 		});
 		t.is(statusCode, 200);
-		t.deepEqual(body, plannerJohnDoe);
+		t.deepEqual(body, johnDoePlanner);
 });
 
 test("GET /user/{username}/planner with Default User", async (t) => {
@@ -132,7 +132,7 @@ test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request",
 	});
 
 	t.is(statusCode, 200);
-	t.deepEqual(body, johnDoe.latPullDown);
+	t.deepEqual(body, johnDoeLatPulldown);
 });
 
 test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request and no exercise progress", async (t) => {
@@ -140,5 +140,5 @@ test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request a
 		throwHttpErrors: false
 	});
 	t.is(statusCode, 200);
-	t.deepEqual(body, janeSmith.deadlift);
+	t.deepEqual(body, janeSmithDeadlift);
 });

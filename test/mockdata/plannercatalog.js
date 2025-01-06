@@ -1,6 +1,7 @@
+// Default notes from different file
 const { DEFAULT_NOTES } = require("./defaultnotes")
 
-// Data used in planner catalog tests
+// Data for the default user exercise and planner tests
 const defaultUser = {
     latPullDown: {
         name: "Lat Pull Down",
@@ -25,25 +26,24 @@ const defaultUser = {
     }
 }
 
-const johnDoe = {
-    latPullDown: {
-        name: "Lat Pull Down",
-            notes: DEFAULT_NOTES.latPullDown,
-            repetitionsPerDateEntries: [10, 12, 14],
-            weightPerDateEntries: [40.0, 42.5, 45.0],
-    },
+// Data used for john_doe user exercise tests
+const johnDoeLatPulldown = {
+    name: "Lat Pull Down",
+        notes: DEFAULT_NOTES.latPullDown,
+        repetitionsPerDateEntries: [10, 12, 14],
+        weightPerDateEntries: [40.0, 42.5, 45.0],
 }
 
-const janeSmith = {
-    deadlift: {
-        name: "deadlift",
-            notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
-            repetitionsPerDateEntries: [],
-            weightPerDateEntries: [],
-    }
+// Data used for jane_smith user exercise tests
+const janeSmithDeadlift = {
+    name: "deadlift",
+        notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
+        repetitionsPerDateEntries: [],
+        weightPerDateEntries: [],
 }
 
-const plannerJohnDoe = {
+// Data used for john_doe user planner tests
+const johnDoePlanner = {
     currentDate: 1,
         exercisesList: [
             {
@@ -61,4 +61,4 @@ const plannerJohnDoe = {
         ],
 }
 
-module.exports = { defaultUser, johnDoe, janeSmith, plannerJohnDoe };
+module.exports = { defaultUser, johnDoeLatPulldown, janeSmithDeadlift, johnDoePlanner };
