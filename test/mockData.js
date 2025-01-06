@@ -1,8 +1,11 @@
+// Default notes object to reduce complexity
 const DEFAULT_NOTES = {
     latPullDown: "Targets the latissimus dorsi muscles, which are the large muscles of the back.",
     deadlift: "It is a compound strength exercise. Targets several muscle groups.",
     benchPress: "Targets the pectoral muscles, triceps, and anterior deltoids.",
 };
+
+// Data used in planner catalog tests
 const plannerCatalog = {
     default: {
         latPullDown: {
