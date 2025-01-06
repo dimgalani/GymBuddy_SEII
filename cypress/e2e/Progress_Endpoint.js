@@ -32,9 +32,8 @@ function clickTryItOut() {
     .click();
 }
 
-// Function to input parameters
-function inputParameters(username, day, exerciseName, weight, reps) {
-  // Input the parameters
+// Function to input user and day parameters
+function inputUserAndDay(username, day) {
   cy.get('input[placeholder="username - the username of the connected person"]')
     .clear() // Clear the input field
     .type(username); // And type the username
@@ -42,7 +41,10 @@ function inputParameters(username, day, exerciseName, weight, reps) {
   cy.get('input[placeholder="day - the selected day of the planner"]')
     .clear()
     .type(day);
+}
 
+// Function to input exercise details
+function inputExerciseDetails(exerciseName, weight, reps) {
   cy.get('input[placeholder="name - exercise name"]')
     .clear()
     .type(exerciseName);
@@ -69,10 +71,12 @@ function validateResponse(expectedStatusCode, expectedMessage) {
   cy.get('#operations-default-updateExerciseProgress')
     .find('.responses-wrapper')
     .should('be.visible');
-// Function to validate the status code
+
+  // Function to validate the status code
   cy.get('.responses-table .response-col_status')
     .should('contain', expectedStatusCode);
-// Function to validate the response
+
+  // Function to validate the response
   cy.get('.responses-table .response-col_description pre')
     .invoke('text')
     .then((responseBody) => {
@@ -97,23 +101,27 @@ function validateResponse(expectedStatusCode, expectedMessage) {
 // Main function to test the endpoint progress
 export function testEndpointProgress() {
   visitSwaggerUI();
-// Function to test the progress endpoint with valid data
+
+  // Function to test the progress endpoint with valid data
   it('should execute the Try it Out button and verify response for john_doe', () => {
     waitForSwaggerUI();
     checkProgressEndpoint();
     expandEndpointDetails();
     clickTryItOut();
-    inputParameters('john_doe', '8', 'Bench_Press', '70', '10');
+    inputUserAndDay('john_doe', '8');
+    inputExerciseDetails('Bench_Press', '70', '10');
     executeRequest();
     validateResponse(200, 'Progress updated successfully');
   });
-// Function to test the progress endpoint with invalid data
+
+  // Function to test the progress endpoint with invalid data
   it('should execute the Try it Out button and return error of non-existing exercise', () => {
     waitForSwaggerUI();
     checkProgressEndpoint();
     expandEndpointDetails();
     clickTryItOut();
-    inputParameters('jane_smith', '8', 'Bench_Press', '70', '10');
+    inputUserAndDay('jane_smith', '8');
+    inputExerciseDetails('Bench_Press', '70', '10');
     executeRequest();
     validateResponse(404, 'Progress updated successfully');
   });
