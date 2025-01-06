@@ -1,6 +1,6 @@
 // Default notes from different file
 const { DEFAULT_NOTES } = require("./defaultnotes")
-const { defaultUser } = require("./defaultuser")
+const { latPullDown, deadlift, benchPress, newExercise, planner } = require("./defaultuser")
 
 // Data used for john_doe user exercise tests
 const johnDoeLatPulldown = {
@@ -32,5 +32,6 @@ const johnDoeHipThrust = {
     weightPerDateEntries: [80, 85],
 }
 
+const defaultUser = {latPullDown, deadlift, benchPress, newExercise, planner}
 
 module.exports = { defaultUser, johnDoeLatPulldown, janeSmithDeadlift, johnDoeDeadlift, johnDoeHipThrust};

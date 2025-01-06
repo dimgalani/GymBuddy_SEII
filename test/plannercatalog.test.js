@@ -99,7 +99,7 @@ test("POST /user/{username}/planner/catalog with Correct Request (Mock Data)", a
 
 test("POST /user/{username}/planner/catalog with Bad Request - Already existing exercise", async (t) => {
 	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
-		json: defaultUser.new,
+		json: defaultUser.newExercise,
 		responseType: "json",
 		throwHttpErrors: false
 	});
