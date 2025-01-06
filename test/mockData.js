@@ -1,52 +1,65 @@
-const planner_catalog = {
-    latPullDown: {
-        default: {
+const DEFAULT_NOTES = {
+    latPullDown: "Targets the latissimus dorsi muscles, which are the large muscles of the back.",
+    deadlift: "It is a compound strength exercise. Targets several muscle groups.",
+    benchPress: "Targets the pectoral muscles, triceps, and anterior deltoids.",
+};
+const plannerCatalog = {
+    default: {
+        latPullDown: {
             name: "Lat Pull Down",
-            notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back.",
-            repetitionsPerDateEntries: [8, 10,],
-            weightPerDateEntries: [40, 40,],
+                notes: DEFAULT_NOTES.latPullDown,
+                repetitionsPerDateEntries: [8, 10],
+                weightPerDateEntries: [40, 40],
         },
-        john_doe: {
-            name: "Lat Pull Down",
-            notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back.",
-            weightPerDateEntries: [40.0, 42.5, 45.0],
-            repetitionsPerDateEntries: [10, 12, 14],
+        deadlift: {
+            name: "Deadlift",
+                notes: DEFAULT_NOTES.deadlift,
+                repetitionsPerDateEntries: [8, 10],
+                weightPerDateEntries: [45, 45],
+        },
+        new: {name: "Deadlift", notes: DEFAULT_NOTES.deadlift,},
+        benchPress: {
+            name: "Bench Press",
+            notes: DEFAULT_NOTES.benchPress,
+        },
+        planner: {
+            currentDate: 1,
+            exercisesList: [],
         }
     },
-    deadlift: {
-        default: {
-            name: "Deadlift",
-            notes: "It is a compound strength exercise. Targets several muscle groups.",
-            repetitionsPerDateEntries: [8, 10,],
-            weightPerDateEntries: [45, 45,],
+    johnDoe: {
+        latPullDown: {
+            name: "Lat Pull Down",
+                notes: DEFAULT_NOTES.latPullDown,
+                repetitionsPerDateEntries: [10, 12, 14],
+                weightPerDateEntries: [40.0, 42.5, 45.0],
         },
-        jane_smith: {
+        planner: {
+            currentDate: 1,
+            exercisesList: [
+                {
+                    name: "Romanian Deadlift",
+                    notes: "Focus on form",
+                    repetitionsPerDateEntries: [8, 12],
+                    weightPerDateEntries: [60, 65],
+                },
+                {
+                    name: "Hip Thrust",
+                    notes: "Keep back straight",
+                    repetitionsPerDateEntries: [10, 15],
+                    weightPerDateEntries: [80, 85],
+                },
+            ],
+        }
+    },
+    janeSmith: {
+        deadlift: {
             name: "deadlift",
-            notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
-            weightPerDateEntries: [],
-            repetitionsPerDateEntries: [],
-        },
-        new: {name: "Deadlift", notes: "It is a compound strength exercise. Targets several muscle groups.",}
+                notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
+                repetitionsPerDateEntries: [],
+                weightPerDateEntries: [],
+        }
     },
-    benchpress: {name: "Bench Press",notes: "Targets the pectoral muscles, triceps, and anterior deltoids. Setup: Lie on a flat bench with your feet flat on the floor. Grasp the barbell with your hands slightly wider than shoulder-width apart. Lower the bar to your chest, then press it back up to the starting position.",},
-    john_doe: {
-        currentDate: 1,
-			exercisesList: [
-			{
-				name: "Romanian Deadlift",
-				notes: "Focus on form",
-				weightPerDateEntries: [60, 65],
-				repetitionsPerDateEntries: [8, 12],
-			},
-			{
-				name: "Hip Thrust",
-				notes: "Keep back straight",
-				weightPerDateEntries: [80, 85],
-				repetitionsPerDateEntries: [10, 15],
-			},
-			],
-    },
-    default: {currentDate: 1,exercisesList: [],	}
-}
 
-module.exports = {planner_catalog };
+};
+module.exports = { plannerCatalog };

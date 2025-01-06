@@ -1,6 +1,6 @@
 const test = require('ava');
 const { app, setupTestContext, teardownTestContext } = require('../test_setup');
-const { planner_catalog } = require('./mockData');
+const { plannerCatalog } = require('./mockData');
 
 test.before(async (t) => {
     await setupTestContext(t, app);
@@ -54,7 +54,7 @@ test("GET /user/{usename}/planner with Correct Request", async (t) => {
 			throwHttpErrors: false
 		});
 		t.is(statusCode, 200);
-		t.deepEqual(body, planner_catalog.john_doe);
+		t.deepEqual(body, plannerCatalog.johnDoe.planner);
 });
 
 test("GET /user/{username}/planner with Default User", async (t) => {
@@ -65,7 +65,7 @@ test("GET /user/{username}/planner with Default User", async (t) => {
 	});
 	
 	t.is(statusCode, 200);
-	t.deepEqual(body, planner_catalog.default);
+	t.deepEqual(body, plannerCatalog.default.planner);
 });
 
 
@@ -76,7 +76,7 @@ test("GET /user/{usename}/planner/catalog returns correct response and status co
 	t.is(statusCode, 200);
 	// Verify the body structure
 	t.true(Array.isArray(body.exercises), "Exercises should be an array");
-	t.deepEqual(body.exercises[0], planner_catalog.latPullDown.default);
+	t.deepEqual(body.exercises[0], plannerCatalog.default.latPullDown);
 });
 
 test("GET /user/{usename}/planner/catalog Bad request - invalid username", async (t) => {
@@ -90,21 +90,21 @@ test("GET /user/{usename}/planner/catalog Bad request - invalid username", async
  // POST /user/{username}/planner/catalog //
 test("POST /user/{username}/planner/catalog with Correct Request (Mock Data)", async (t) => {
 	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
-		json: planner_catalog.benchpress,
+		json: plannerCatalog.default.benchPress,
 		responseType: "json",
 	});
 	t.is(statusCode, 201);
-	t.deepEqual(body.exercise, planner_catalog.benchpress);
+	t.deepEqual(body.exercise, plannerCatalog.default.benchPress);
 });
 
 test("POST /user/{username}/planner/catalog with Bad Request - Already existing exercise", async (t) => {
 	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
-		json: planner_catalog.deadlift.new,
+		json: plannerCatalog.default.new,
 		responseType: "json",
 		throwHttpErrors: false
 	});
 	t.is(statusCode, 409);
-	t.deepEqual(body.exercise, planner_catalog.deadlift.default);
+	t.deepEqual(body.exercise, plannerCatalog.default.deadlift);
 });
 
 // GET /catalog/{exercise-name} //
@@ -132,7 +132,7 @@ test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request",
 	});
 
 	t.is(statusCode, 200);
-	t.deepEqual(body, planner_catalog.latPullDown.john_doe);
+	t.deepEqual(body, plannerCatalog.johnDoe.latPullDown);
 });
 
 test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request and no exercise progress", async (t) => {
@@ -140,5 +140,5 @@ test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request a
 		throwHttpErrors: false
 	});
 	t.is(statusCode, 200);
-	t.deepEqual(body, planner_catalog.deadlift.jane_smith);
+	t.deepEqual(body, plannerCatalog.janeSmith.deadlift);
 });
