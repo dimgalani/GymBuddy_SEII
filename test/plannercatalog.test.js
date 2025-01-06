@@ -1,6 +1,6 @@
 const test = require('ava');
 const { app, setupTestContext, teardownTestContext } = require('../test_setup');
-const { defaultUser, johnDoeLatPulldown, janeSmithDeadlift, johnDoePlanner } = require('./mockdata/plannercatalog');
+const { defaultUser, johnDoeLatPulldown, janeSmithDeadlift, johnDoeDeadlift,  johnDoeHipThrust} = require('./mockdata/plannercatalog');
 
 test.before(async (t) => {
     await setupTestContext(t, app);
@@ -54,7 +54,7 @@ test("GET /user/{usename}/planner with Correct Request", async (t) => {
 			throwHttpErrors: false
 		});
 		t.is(statusCode, 200);
-		t.deepEqual(body, johnDoePlanner);
+		t.deepEqual(body, {currentDate: 1, exercisesList: [johnDoeDeadlift, johnDoeHipThrust]});
 });
 
 test("GET /user/{username}/planner with Default User", async (t) => {

@@ -43,22 +43,18 @@ const janeSmithDeadlift = {
 }
 
 // Data used for john_doe user planner tests
-const johnDoePlanner = {
-    currentDate: 1,
-        exercisesList: [
-            {
-                name: "Romanian Deadlift",
-                notes: "Focus on form",
-                repetitionsPerDateEntries: [8, 12],
-                weightPerDateEntries: [60, 65],
-            },
-            {
-                name: "Hip Thrust",
-                notes: "Keep back straight",
-                repetitionsPerDateEntries: [10, 15],
-                weightPerDateEntries: [80, 85],
-            },
-        ],
+const johnDoeDeadlift = {
+    name: "Romanian Deadlift",
+    notes: "Focus on form",
+    repetitionsPerDateEntries: [8, 12],
+    weightPerDateEntries: [60, 65],
+}
+const johnDoeHipThrust = {
+    name: "Hip Thrust",
+    notes: "Keep back straight",
+    repetitionsPerDateEntries: [10, 15],
+    weightPerDateEntries: [80, 85],
 }
 
-module.exports = { defaultUser, johnDoeLatPulldown, janeSmithDeadlift, johnDoePlanner };
+
+module.exports = { defaultUser, johnDoeLatPulldown, janeSmithDeadlift, johnDoeDeadlift, johnDoeHipThrust};
