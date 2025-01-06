@@ -9,45 +9,58 @@ const { usernames, userReservations, availableReservations } = require("./Databa
  * no response value expected for this operation
  **/
 exports.cancelReservation = function (day, time, username) {
-    return new Promise(function (resolve, reject) {
-      // Step 1: Validate data types
-      if (typeof username !== "string" || typeof day !== "string" || typeof time !== "string") {
-        return reject({
-          message: "Response code 400 (Bad Request): Invalid data types.",
-          code: 400
-        });
-      }
-  
-      // Step 2: Check if the username exists
-      if (!userReservations[username]) {
-        return reject({
-          message: "Response code 401 (Unauthorized): Username not found.",
-          code: 401
-        });
-      }
-  
-      // Step 3: Check if the reservation exists
-      const reservationIndex = userReservations[username].findIndex(
-        (reservation) => reservation.date === day && reservation.time === time
-      );
-  
-      if (reservationIndex === -1) {
-        return reject({
-          message: "Response code 404 (Not Found): Reservation does not exist.",
-          code: 404
-        });
-      }
-  
-      // Step 4: Delete the reservation
-      userReservations[username].splice(reservationIndex, 1);
-  
-      // Return success response
+  return new Promise(function (resolve, reject) {
+    try {
+      validateCancelReservationData(day, time, username);
+      checkUsernameExistsForCancel(username);
+      const reservationIndex = findReservationIndex(day, time, username);
+      deleteReservation(username, reservationIndex);
       resolve({
         message: "Reservation successfully canceled.",
         code: 202
       });
-    });
-  };
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+// Function to validate the reservation data
+function validateCancelReservationData(day, time, username) {
+  if (typeof username !== "string" || typeof day !== "string" || typeof time !== "string") {
+    throw {
+      message: "Response code 400 (Bad Request): Invalid data types.",
+      code: 400
+    };
+  }
+}
+// Function to check if the username exists
+function checkUsernameExistsForCancel(username) {
+  if (!userReservations[username]) {
+    throw {
+      message: "Response code 401 (Unauthorized): Username not found.",
+      code: 401
+    };
+  }
+}
+// Function to find the reservation index
+function findReservationIndex(day, time, username) {
+  const reservationIndex = userReservations[username].findIndex(
+    (reservation) => reservation.date === day && reservation.time === time
+  );
+
+  if (reservationIndex === -1) {
+    throw {
+      message: "Response code 404 (Not Found): Reservation does not exist.",
+      code: 404
+    };
+  }
+
+  return reservationIndex;
+}
+// Function to delete the reservation
+function deleteReservation(username, reservationIndex) {
+  userReservations[username].splice(reservationIndex, 1);
+}
 
   /**
  * Returns all the reservations' details for a specific day (time, available seats)

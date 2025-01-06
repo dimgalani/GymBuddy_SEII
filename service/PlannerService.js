@@ -91,7 +91,7 @@ exports.updateExerciseProgress = function (day, name, weight, reps, username) {
     }
   });
 };
-
+// Function to validate the input data
 function validateInputs(day, name, weight, reps, username) {
   if (!day || !name || !weight || !reps) {
     throw {
@@ -100,7 +100,7 @@ function validateInputs(day, name, weight, reps, username) {
     };
   }
 }
-
+// Function to find the user
 function findUser(username) {
   const user = usersPlanner.find((entry) => entry.username === username);
   if (!user) {
@@ -111,7 +111,7 @@ function findUser(username) {
   }
   return user;
 }
-
+// Function to find the exercise
 function findExercise(user, name) {
   const exercise = user.exercise;
   if (!exercise || exercise.name !== name) {
@@ -122,7 +122,7 @@ function findExercise(user, name) {
   }
   return exercise;
 }
-
+// Function to update the progress
 function updateProgress(user, exercise, day, weight, reps) {
   user.exercise.weightPerDateEntries[day - 1] = weight;
   user.exercise.repetitionsPerDateEntries[day - 1] = reps;

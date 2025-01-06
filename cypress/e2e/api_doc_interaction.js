@@ -12,84 +12,48 @@ export function CountEndpoints() {
 }
 
 export function ResourceNavigationTest() {
-    // Visit the page before each test
-    beforeEach(() => {
-        cy.visit('http://localhost:8080/docs/#/default');
-      });
-    
-      it('Should navigate to the correct URL (getMyReservations) when the resource is clicked', () => {
-        // Target the resource block by its unique ID
-        cy.get('#operations-default-getMyReservations')
-          .within(() => {
-            // Click the resource block
-            cy.get('.opblock-summary-path[data-path="/user/{username}/myreservations"]').click();
-          });
-    
-          // Assert that the URL is updated to the correct resource path
-          //cy.url().should('eq', 'http://localhost:8080/docs/#/default/getMyReservations');
-          cy.url().should('include', '/#/default/getMyReservations');
-      });
-    
-      it('Should navigate to the correct URL (checkGoalsFromInfo) when the resource is clicked', () => {
-        // Target the resource block by its unique ID
-        cy.get('#operations-default-checkGoalsFromInfo')
-          .within(() => {
-            // Click the resource block
-            cy.get('.opblock-summary-path[data-path="/user/{username}/settings/goals"]').click();
-          });
-    
-          // Assert that the URL is updated to the correct resource path
-          cy.url().should('include', '/#/default/checkGoalsFromInfo');
-      });
-    
-      it('Should navigate to the correct URL (getPersonalInfo) when the resource is clicked', () => {
-        // Target the resource block by its unique ID
-        cy.get('#operations-default-getPersonalInfo')
-          .within(() => {
-            // Click the resource block
-            cy.get('.opblock-summary-path[data-path="/user/{username}/settings"]').click();
-          });
-    
-          // Assert that the URL is updated to the correct resource path
-          cy.url().should('include', '/#/default/getPersonalInfo');
-      });
-    
-      it('Should navigate to the correct URL (updatePersonalInfo) when the resource is clicked', () => {
-        // Target the resource block by its unique ID
-        cy.get('#operations-default-updatePersonalInfo')
-          .within(() => {
-            // Click the resource block
-            cy.get('.opblock-summary-path[data-path="/user/{username}/settings"]').click();
-          });
-    
-          // Assert that the URL is updated to the correct resource path
-          cy.url().should('include', '/#/default/updatePersonalInfo');
-      });
-      
-      it('Should navigate to the correct URL (makeReservation) when the resource is clicked', () => {
-        // Target the resource block by its unique ID
-        cy.get('#operations-default-makeReservation')
-          .within(() => {
-            // Click the resource block
-            cy.get('.opblock-summary-path[data-path="/user/{username}/reservations"]').click();
-          });
-    
-          // Assert that the URL is updated to the correct resource path
-          cy.url().should('include', '/#/default/makeReservation');
-      });
-    
-      it('Should navigate to the correct URL (cancelReservation) when the resource is clicked', () => {
-        // Target the resource block by its unique ID
-        cy.get('#operations-default-cancelReservation')
-          .within(() => {
-            // Click the resource block
-            cy.get('.opblock-summary-path[data-path="/user/{username}/reservations"]').click();
-          });
-    
-          // Assert that the URL is updated to the correct resource path
-          cy.url().should('include', '/#/default/cancelReservation');
-      });
-    }
+  // Visit the page before each test
+  beforeEach(() => {
+    cy.visit('http://localhost:8080/docs/#/default');
+  });
+
+  it('Should navigate to the correct URL (getMyReservations) when the resource is clicked', () => {
+    navigateToResource('#operations-default-getMyReservations', '/user/{username}/myreservations', '/#/default/getMyReservations');
+  });
+
+  it('Should navigate to the correct URL (checkGoalsFromInfo) when the resource is clicked', () => {
+    navigateToResource('#operations-default-checkGoalsFromInfo', '/user/{username}/settings/goals', '/#/default/checkGoalsFromInfo');
+  });
+
+  it('Should navigate to the correct URL (getPersonalInfo) when the resource is clicked', () => {
+    navigateToResource('#operations-default-getPersonalInfo', '/user/{username}/settings', '/#/default/getPersonalInfo');
+  });
+
+  it('Should navigate to the correct URL (updatePersonalInfo) when the resource is clicked', () => {
+    navigateToResource('#operations-default-updatePersonalInfo', '/user/{username}/settings', '/#/default/updatePersonalInfo');
+  });
+
+  it('Should navigate to the correct URL (makeReservation) when the resource is clicked', () => {
+    navigateToResource('#operations-default-makeReservation', '/user/{username}/reservations', '/#/default/makeReservation');
+  });
+
+  it('Should navigate to the correct URL (cancelReservation) when the resource is clicked', () => {
+    navigateToResource('#operations-default-cancelReservation', '/user/{username}/reservations', '/#/default/cancelReservation');
+  });
+}
+
+// Helper function to navigate to a resource and verify the URL
+function navigateToResource(resourceId, dataPath, expectedUrl) {
+  // Target the resource block by its unique ID
+  cy.get(resourceId)
+    .within(() => {
+      // Click the resource block
+      cy.get(`.opblock-summary-path[data-path="${dataPath}"]`).click();
+    });
+
+  // Assert that the URL is updated to the correct resource path
+  cy.url().should('include', expectedUrl);
+}
 
 export function DropDownNavigation() {
         // Visit the page before each test
