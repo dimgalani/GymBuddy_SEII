@@ -92,7 +92,7 @@ exports.updateExerciseProgress = function (day, name, weight, reps, username) {
   });
 };
 // Function to validate the input data
-function validateInputs(day, name, weight, reps, username) {
+function validateInputs(day, name, weight, reps, _) {
   if (!day || !name || !weight || !reps) {
     throw {
       message: "Missing required fields",
@@ -123,7 +123,7 @@ function findExercise(user, name) {
   return exercise;
 }
 // Function to update the progress
-function updateProgress(user, exercise, day, weight, reps) {
+function updateProgress(user, _, day, weight, reps) {
   user.exercise.weightPerDateEntries[day - 1] = weight;
   user.exercise.repetitionsPerDateEntries[day - 1] = reps;
 }
