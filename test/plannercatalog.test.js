@@ -1,5 +1,6 @@
 const test = require('ava');
 const { app, setupTestContext, teardownTestContext } = require('../test_setup');
+const { planner_catalog } = require('./mockData');
 
 test.before(async (t) => {
     await setupTestContext(t, app);
@@ -53,23 +54,7 @@ test("GET /user/{usename}/planner with Correct Request", async (t) => {
 			throwHttpErrors: false
 		});
 		t.is(statusCode, 200);
-		t.deepEqual(body, {
-			currentDate: 1,
-			exercisesList: [
-			{
-				name: "Romanian Deadlift",
-				notes: "Focus on form",
-				weightPerDateEntries: [60, 65],
-				repetitionsPerDateEntries: [8, 12],
-			},
-			{
-				name: "Hip Thrust",
-				notes: "Keep back straight",
-				weightPerDateEntries: [80, 85],
-				repetitionsPerDateEntries: [10, 15],
-			},
-			],
-		});
+		t.deepEqual(body, planner_catalog.john_doe);
 });
 
 test("GET /user/{username}/planner with Default User", async (t) => {
@@ -80,10 +65,7 @@ test("GET /user/{username}/planner with Default User", async (t) => {
 	});
 	
 	t.is(statusCode, 200);
-	t.deepEqual(body, {
-		currentDate: 1,
-		exercisesList: [],
-	});
+	t.deepEqual(body, planner_catalog.default);
 });
 
 
@@ -94,8 +76,7 @@ test("GET /user/{usename}/planner/catalog returns correct response and status co
 	t.is(statusCode, 200);
 	// Verify the body structure
 	t.true(Array.isArray(body.exercises), "Exercises should be an array");
-	t.is(body.exercises[0].name, "Lat Pull Down", "The first exercise name should be 'Lat Pull Down'");
-	t.is(body.exercises[0].notes, "Targets the latissimus dorsi muscles, which are the large muscles of the back.");
+	t.deepEqual(body.exercises[0], planner_catalog.latPullDown.default);
 });
 
 test("GET /user/{usename}/planner/catalog Bad request - invalid username", async (t) => {
@@ -108,30 +89,22 @@ test("GET /user/{usename}/planner/catalog Bad request - invalid username", async
 
  // POST /user/{username}/planner/catalog //
 test("POST /user/{username}/planner/catalog with Correct Request (Mock Data)", async (t) => {
-	const newExercise = {
-		name: "Bench Press",
-		notes: "Targets the pectoral muscles, triceps, and anterior deltoids. Setup: Lie on a flat bench with your feet flat on the floor. Grasp the barbell with your hands slightly wider than shoulder-width apart. Lower the bar to your chest, then press it back up to the starting position.",
-	};
 	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
-		json: newExercise,
+		json: planner_catalog.benchpress,
 		responseType: "json",
 	});
 	t.is(statusCode, 201);
-	t.deepEqual(body.exercise, newExercise);
+	t.deepEqual(body.exercise, planner_catalog.benchpress);
 });
 
 test("POST /user/{username}/planner/catalog with Bad Request - Already existing exercise", async (t) => {
-	const newExercise = {
-		name: "Lat Pull Down",
-		notes: "blah blah blah",
-	};
 	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
-		json: newExercise,
+		json: planner_catalog.deadlift.new,
 		responseType: "json",
 		throwHttpErrors: false
 	});
 	t.is(statusCode, 409);
-	t.deepEqual(body.exercise.name, newExercise.name);
+	t.deepEqual(body.exercise, planner_catalog.deadlift.default);
 });
 
 // GET /catalog/{exercise-name} //
@@ -159,13 +132,7 @@ test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request",
 	});
 
 	t.is(statusCode, 200);
-
-	t.deepEqual(body, {
-		name: "Lat Pull Down",
-	 	notes: "Targets the latissimus dorsi muscles, which are the large muscles of the back.",
-		weightPerDateEntries: [40.0, 42.5, 45.0],
-		repetitionsPerDateEntries: [10, 12, 14],
-	});
+	t.deepEqual(body, planner_catalog.latPullDown.john_doe);
 });
 
 test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request and no exercise progress", async (t) => {
@@ -173,10 +140,5 @@ test("GET /user/{usename}/planner/catalog/{exercise_name} with Correct Request a
 		throwHttpErrors: false
 	});
 	t.is(statusCode, 200);
-	t.deepEqual(body, {
-		name: "deadlift",
-		notes: "Focus on keeping a neutral spine and engage your core. Avoid rounding your back during the lift.",
-		weightPerDateEntries: [],
-		repetitionsPerDateEntries: [],
-	});
+	t.deepEqual(body, planner_catalog.deadlift.jane_smith);
 });
