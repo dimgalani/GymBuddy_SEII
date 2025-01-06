@@ -119,7 +119,7 @@ test("GET /user/{usename}/planner/catalog Bad request - invalid username", async
 test("POST /user/{username}/planner/catalog with Correct Request (Mock Data)", async (t) => {
 	const newExercise = {
 		name: "Bench Press",
-		notes: "Targets the pectoral muscles, triceps, and anterior deltoids. Setup: Lie on a flat bench with your feet flat on the floor. Grasp the barbell with your hands slightly wider than shoulder-width apart. Lower the bar to your chest, then press it back up to the starting position.",
+		notes: "Targets the pectoral muscles, triceps, and anterior deltoids.",
 	};
 	const { body, statusCode } = await t.context.got.post("user/default/planner/catalog", {
 		json: newExercise,
