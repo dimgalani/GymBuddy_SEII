@@ -8,7 +8,7 @@ var Planner = require('../service/PlannerService');
 var Reservations = require('../service/ReservationsService');
 
 // Function to cancel a reservation
-module.exports.cancelReservation = function cancelReservation ( _, res, next, username, day, time) {
+module.exports.cancelReservation = function cancelReservation ( _, res, __, username, day, time) {
   Reservations.cancelReservation(username, day, time)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
@@ -19,7 +19,7 @@ module.exports.cancelReservation = function cancelReservation ( _, res, next, us
 };
 
 // Function to check goals based on user information
-module.exports.checkGoalsFromInfo = function checkGoalsFromInfo (_, res, next, username, currentBodyWeight) {
+module.exports.checkGoalsFromInfo = function checkGoalsFromInfo (_, res, _1, username, currentBodyWeight) {
   Goals.checkGoalsFromInfo(username, currentBodyWeight)
     .then(function (response) {
       utils.writeJson(res, response, response.code);
